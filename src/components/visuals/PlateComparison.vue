@@ -34,7 +34,13 @@ watch(
       const minYear = years[0];
       const maxYear = years[years.length - 1];
       const rawYear = minYear + (maxYear - minYear) * progress;
-      selectedYear.value = years.reduce((nearest, year) => (Math.abs(year - rawYear) < Math.abs(nearest - rawYear) ? year : nearest), years[0]);
+      selectedYear.value = years.reduce(
+        (nearest, year) =>
+          Math.abs(year - rawYear) < Math.abs(nearest - rawYear)
+            ? year
+            : nearest,
+        years[0],
+      );
       return;
     }
     selectedYear.value = stepYears[Math.min(nextStep, stepYears.length - 1)];
@@ -118,13 +124,6 @@ const topItems = computed(() =>
         <i :style="{ backgroundColor: color }" />{{ dietCategoryLabels[key] }}
         {{ item[key] }}%
       </span>
-    </div>
-    <div class="plate-ranking">
-      <p class="chart-note">当前占比最高</p>
-      <div v-for="food in topItems" :key="food.key" class="rank-row">
-        <span><i :style="{ backgroundColor: food.color }" />{{ food.label }}</span>
-        <strong>{{ food.value }}%</strong>
-      </div>
     </div>
   </div>
 </template>
