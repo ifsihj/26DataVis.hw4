@@ -7,6 +7,7 @@ import {
 
 const props = defineProps({
   activeStep: { type: Number, default: 0 },
+  progress: { type: Number, default: 0 },
 });
 
 const colors = {
@@ -23,14 +24,28 @@ const colors = {
 const years = dietStructureData.map((item) => item.year);
 const stepYears = [1980, 2000, 2023];
 const selectedYear = ref(stepYears[0]);
+const manualOverride = ref(false);
 
 watch(
-  () => props.activeStep,
-  (nextStep) => {
+  () => [props.activeStep, props.progress],
+  ([nextStep, progress]) => {
+    if (manualOverride.value) return;
+    if (progress > 0) {
+      const minYear = years[0];
+      const maxYear = years[years.length - 1];
+      const rawYear = minYear + (maxYear - minYear) * progress;
+      selectedYear.value = years.reduce((nearest, year) => (Math.abs(year - rawYear) < Math.abs(nearest - rawYear) ? year : nearest), years[0]);
+      return;
+    }
     selectedYear.value = stepYears[Math.min(nextStep, stepYears.length - 1)];
   },
   { immediate: true },
 );
+
+function chooseYear(year) {
+  manualOverride.value = true;
+  selectedYear.value = year;
+}
 
 const item = computed(
   () =>
@@ -68,12 +83,13 @@ const topItems = computed(() =>
       <p class="chart-note">可拖动年份，观察餐盘从主食中心走向多元组合。</p>
       <div class="year-control">
         <input
-          v-model.number="selectedYear"
+          :value="selectedYear"
           type="range"
           :min="years[0]"
           :max="years[years.length - 1]"
           step="5"
           list="diet-years"
+          @input="chooseYear(Number($event.target.value))"
         />
         <datalist id="diet-years">
           <option v-for="year in years" :key="year" :value="year" />
@@ -84,7 +100,7 @@ const topItems = computed(() =>
             :key="year"
             type="button"
             :class="{ 'is-active': selectedYear === year }"
-            @click="selectedYear = year"
+            @click="chooseYear(year)"
           >
             {{ year }}
           </button>

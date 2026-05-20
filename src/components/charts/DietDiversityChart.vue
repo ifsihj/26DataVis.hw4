@@ -6,6 +6,7 @@ import { chartColors, clearSvg, createTooltip, hideTooltip, showTooltip } from '
 
 const props = defineProps({
   activeStep: { type: Number, default: 0 },
+  progress: { type: Number, default: 0 },
 });
 
 const svgRef = ref(null);
@@ -16,7 +17,10 @@ function draw() {
   const margin = { top: 42, right: 28, bottom: 42, left: 52 };
   const svg = clearSvg(svgRef, width, height);
   const tooltip = createTooltip();
-  const data = props.activeStep === 0 ? dietStructureData.slice(0, 5) : dietStructureData;
+  const minYear = dietStructureData[0].year;
+  const maxYear = dietStructureData[dietStructureData.length - 1].year;
+  const currentYear = minYear + (maxYear - minYear) * props.progress;
+  const data = dietStructureData.filter((d) => d.year <= currentYear);
   const x = d3.scaleLinear().domain(d3.extent(dietStructureData, (d) => d.year)).range([margin.left, width - margin.right]);
   const y = d3.scaleLinear().domain([0.3, 0.86]).range([height - margin.bottom, margin.top]);
   const area = d3.area().x((d) => x(d.year)).y0(height - margin.bottom).y1((d) => y(d.diversityIndex)).curve(d3.curveMonotoneX);
@@ -41,7 +45,7 @@ function draw() {
 }
 
 onMounted(draw);
-watch(() => props.activeStep, draw);
+watch(() => [props.activeStep, props.progress], draw);
 </script>
 
 <template>

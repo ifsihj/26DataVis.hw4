@@ -9,6 +9,7 @@ import StapleShareDonut from './components/charts/StapleShareDonut.vue';
 import GrainTimeAxis from './components/charts/GrainTimeAxis.vue';
 import DietStackedAreaChart from './components/charts/DietStackedAreaChart.vue';
 import DietDiversityChart from './components/charts/DietDiversityChart.vue';
+import DietTimeAxis from './components/charts/DietTimeAxis.vue';
 import TakeoutGrowthChart from './components/charts/TakeoutGrowthChart.vue';
 import CarbonBarChart from './components/charts/CarbonBarChart.vue';
 import CarbonBubbleChart from './components/charts/CarbonBubbleChart.vue';
@@ -103,12 +104,13 @@ const sceneThreeSteps = [
       image="/assets/scene-rich-table.png"
     />
     <ScrollSection id="better" tone="table" :steps="sceneTwoSteps">
-      <template #visual="{ activeStep }">
+      <template #visual="{ activeStep, scrollProgress }">
         <div class="scene-grid scene-grid--diet">
-          <PlateComparison :active-step="activeStep" />
-          <DietStackedAreaChart v-if="activeStep < 2" :active-step="activeStep" />
+          <PlateComparison :active-step="activeStep" :progress="scrollProgress" />
+          <DietStackedAreaChart v-if="activeStep < 2" :active-step="activeStep" :progress="scrollProgress" />
           <TakeoutGrowthChart v-else :active-step="activeStep" />
-          <DietDiversityChart :active-step="activeStep" />
+          <DietDiversityChart :active-step="activeStep" :progress="scrollProgress" />
+          <DietTimeAxis :progress="scrollProgress" />
         </div>
       </template>
     </ScrollSection>

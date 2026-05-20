@@ -6,6 +6,7 @@ import { clearSvg, createTooltip, hideTooltip, showTooltip } from '../../utils/c
 
 const props = defineProps({
   activeStep: { type: Number, default: 0 },
+  progress: { type: Number, default: 0 },
 });
 
 const svgRef = ref(null);
@@ -18,7 +19,10 @@ function draw() {
   const margin = { top: 42, right: 32, bottom: 48, left: 54 };
   const svg = clearSvg(svgRef, width, height);
   const tooltip = createTooltip();
-  const data = props.activeStep === 0 ? dietStructureData.slice(0, 3) : dietStructureData;
+  const minYear = dietStructureData[0].year;
+  const maxYear = dietStructureData[dietStructureData.length - 1].year;
+  const currentYear = minYear + (maxYear - minYear) * props.progress;
+  const data = dietStructureData.filter((d) => d.year <= currentYear);
   const x = d3.scaleLinear().domain(d3.extent(dietStructureData, (d) => d.year)).range([margin.left, width - margin.right]);
   const y = d3.scaleLinear().domain([0, 100]).range([height - margin.bottom, margin.top]);
   const color = d3.scaleOrdinal(keys, colors);
@@ -52,11 +56,11 @@ function draw() {
     .attr('class', 'annotation')
     .attr('x', x(2000))
     .attr('y', y(72))
-    .text(props.activeStep === 0 ? '餐桌先从主食中心出发' : '谷物占比下降，多样化食品上升');
+    .text(`推进到 ${Math.round(currentYear)} 年：谷物占比下降，多样化食品上升`);
 }
 
 onMounted(draw);
-watch(() => props.activeStep, draw);
+watch(() => [props.activeStep, props.progress], draw);
 </script>
 
 <template>
