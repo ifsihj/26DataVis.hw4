@@ -4,10 +4,13 @@ import ScrollSection from './components/layout/ScrollSection.vue';
 import SceneTitle from './components/layout/SceneTitle.vue';
 import FinalSection from './components/layout/FinalSection.vue';
 import GrainLineChart from './components/charts/GrainLineChart.vue';
+import AgriTechMiniChart from './components/charts/AgriTechMiniChart.vue';
 import DietStackedAreaChart from './components/charts/DietStackedAreaChart.vue';
+import DietDiversityChart from './components/charts/DietDiversityChart.vue';
 import TakeoutGrowthChart from './components/charts/TakeoutGrowthChart.vue';
 import CarbonBarChart from './components/charts/CarbonBarChart.vue';
 import FoodWasteFlow from './components/charts/FoodWasteFlow.vue';
+import FoodWasteTrendChart from './components/charts/FoodWasteTrendChart.vue';
 import GrainBarnVisual from './components/visuals/GrainBarnVisual.vue';
 import PlateComparison from './components/visuals/PlateComparison.vue';
 import ResponsiblePlate from './components/visuals/ResponsiblePlate.vue';
@@ -78,9 +81,10 @@ const sceneThreeSteps = [
     />
     <ScrollSection id="enough" tone="field" :steps="sceneOneSteps">
       <template #visual="{ activeStep }">
-        <div class="split-visual">
+        <div class="scene-grid scene-grid--grain">
           <GrainLineChart :active-step="activeStep" />
           <GrainBarnVisual :active-step="activeStep" />
+          <AgriTechMiniChart :active-step="activeStep" />
         </div>
       </template>
     </ScrollSection>
@@ -92,10 +96,11 @@ const sceneThreeSteps = [
     />
     <ScrollSection id="better" tone="table" :steps="sceneTwoSteps">
       <template #visual="{ activeStep }">
-        <div class="visual-stack">
+        <div class="scene-grid scene-grid--diet">
           <PlateComparison :active-step="activeStep" />
           <DietStackedAreaChart v-if="activeStep < 2" :active-step="activeStep" />
           <TakeoutGrowthChart v-else :active-step="activeStep" />
+          <DietDiversityChart :active-step="activeStep" />
         </div>
       </template>
     </ScrollSection>
@@ -107,10 +112,11 @@ const sceneThreeSteps = [
     />
     <ScrollSection id="responsible" tone="future" :steps="sceneThreeSteps">
       <template #visual="{ activeStep }">
-        <div class="visual-stack">
+        <div class="scene-grid scene-grid--responsible">
           <FoodWasteFlow v-if="activeStep === 0" :active-step="activeStep" />
           <CarbonBarChart v-else-if="activeStep === 1" :active-step="activeStep" />
           <ResponsiblePlate v-else :active-step="activeStep" />
+          <FoodWasteTrendChart :active-step="activeStep" />
         </div>
       </template>
     </ScrollSection>

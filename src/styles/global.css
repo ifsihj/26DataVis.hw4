@@ -132,14 +132,14 @@ input {
 }
 
 .scene-title {
-  padding: 120px 10vw 90px;
+  padding: 56px 8vw 36px;
   background: var(--cream);
 }
 
 .scene-title h2 {
   margin: 0;
   font-family: Georgia, "Noto Serif SC", serif;
-  font-size: 5rem;
+  font-size: 4.4rem;
   letter-spacing: 0;
 }
 
@@ -152,10 +152,10 @@ input {
 
 .scrolly-section {
   display: grid;
-  grid-template-columns: minmax(720px, 1fr) 430px;
-  gap: 48px;
-  min-height: 290vh;
-  padding: 0 7vw 12vh;
+  grid-template-columns: minmax(860px, 1fr) 380px;
+  gap: 34px;
+  min-height: 185vh;
+  padding: 0 5vw 4vh;
 }
 
 .scrolly-section--field { background: linear-gradient(180deg, #f7efe0, #e8d1a6); }
@@ -164,18 +164,18 @@ input {
 
 .sticky-visual {
   position: sticky;
-  top: 46px;
+  top: 24px;
   display: flex;
   align-items: center;
-  min-height: calc(100vh - 92px);
+  min-height: calc(100vh - 48px);
 }
 
 .scroll-steps {
-  padding: 48vh 0 72vh;
+  padding: 24vh 0 28vh;
 }
 
 .step-card {
-  margin: 0 0 74vh;
+  margin: 0 0 34vh;
   padding: 28px;
   border: 1px solid rgba(255, 249, 237, 0.5);
   border-radius: 8px;
@@ -212,7 +212,7 @@ input {
 
 .split-visual {
   display: grid;
-  grid-template-columns: minmax(520px, 1fr) 260px;
+  grid-template-columns: minmax(620px, 1fr) 290px;
   gap: 24px;
   width: 100%;
   align-items: stretch;
@@ -224,11 +224,37 @@ input {
   gap: 22px;
 }
 
+.scene-grid {
+  display: grid;
+  width: 100%;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.scene-grid--grain {
+  grid-template-columns: minmax(640px, 1.45fr) minmax(250px, 0.58fr);
+}
+
+.scene-grid--grain .chart-card:first-child {
+  grid-row: span 2;
+  min-height: 620px;
+}
+
+.scene-grid--diet,
+.scene-grid--responsible {
+  grid-template-columns: minmax(600px, 1.25fr) minmax(380px, 0.75fr);
+}
+
+.scene-grid--diet > :nth-child(2),
+.scene-grid--responsible > :first-child {
+  min-height: 470px;
+}
+
 .chart-card,
 .barn-card,
 .plate-card {
   width: 100%;
-  min-height: 330px;
+  min-height: 380px;
   border: 1px solid rgba(255, 249, 237, 0.62);
   border-radius: 8px;
   background: rgba(255, 249, 237, 0.78);
@@ -238,6 +264,12 @@ input {
 
 svg.chart-card {
   display: block;
+  height: 100%;
+  min-height: inherit;
+}
+
+.mini-chart {
+  min-height: 250px;
 }
 
 .chart-title {
@@ -374,17 +406,22 @@ svg.chart-card {
 
 .plate-card {
   display: grid;
-  grid-template-columns: 180px 260px 1fr;
-  gap: 20px;
+  grid-template-columns: 220px 300px 1fr;
+  gap: 22px;
   align-items: center;
-  min-height: 230px;
+  min-height: 300px;
   padding: 24px;
+}
+
+.plate-card--interactive {
+  grid-column: span 2;
+  grid-template-columns: 250px 330px 1fr 190px;
 }
 
 .plate {
   display: grid;
-  width: 220px;
-  height: 220px;
+  width: 286px;
+  height: 286px;
   place-items: center;
   border: 14px solid rgba(255, 249, 237, 0.96);
   border-radius: 50%;
@@ -394,13 +431,19 @@ svg.chart-card {
 
 .plate__inner {
   display: grid;
-  width: 88px;
-  height: 88px;
+  width: 112px;
+  height: 112px;
   place-items: center;
   border-radius: 50%;
   background: rgba(255, 249, 237, 0.9);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 800;
+}
+
+.plate__inner span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
 .plate-legend {
@@ -409,6 +452,63 @@ svg.chart-card {
   gap: 10px;
   color: var(--muted);
   font-size: 0.88rem;
+}
+
+.year-control {
+  margin-top: 18px;
+}
+
+.year-control input {
+  width: 100%;
+  accent-color: var(--red);
+}
+
+.year-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.year-buttons button {
+  padding: 6px 9px;
+  border: 1px solid rgba(47, 40, 33, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 249, 237, 0.72);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.year-buttons button.is-active {
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff7e8;
+}
+
+.plate-ranking {
+  display: grid;
+  gap: 10px;
+}
+
+.rank-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.rank-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.rank-row i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
 }
 
 .plate-legend span {
@@ -541,7 +641,7 @@ svg.chart-card {
 }
 
 .final-section {
-  padding: 130px 10vw 150px;
+  padding: 90px 10vw 110px;
   background:
     radial-gradient(circle at 78% 20%, rgba(212, 166, 74, 0.28), transparent 28rem),
     linear-gradient(180deg, #667a66, #2f2821);
