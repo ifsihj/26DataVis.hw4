@@ -8,7 +8,7 @@ html {
 
 body {
   margin: 0;
-  min-width: 1180px;
+  min-width: 0;
   color: var(--ink);
   background:
     radial-gradient(circle at 20% 0%, rgba(212, 166, 74, 0.18), transparent 34rem),
@@ -167,6 +167,9 @@ input {
   top: 24px;
   display: flex;
   align-items: center;
+  align-self: start;
+  overflow: hidden;
+  height: calc(100vh - 48px);
   min-height: calc(100vh - 48px);
 }
 
@@ -227,33 +230,41 @@ input {
 .scene-grid {
   display: grid;
   width: 100%;
+  max-width: 100%;
   gap: 18px;
   align-items: stretch;
+  overflow: hidden;
 }
 
 .scene-grid--grain {
-  grid-template-columns: minmax(640px, 1.45fr) minmax(250px, 0.58fr);
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.62fr);
 }
 
 .scene-grid--grain .chart-card:first-child {
   grid-row: span 2;
-  min-height: 620px;
+  min-height: 590px;
 }
 
 .scene-grid--diet,
 .scene-grid--responsible {
-  grid-template-columns: minmax(600px, 1.25fr) minmax(380px, 0.75fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
 }
 
 .scene-grid--diet > :nth-child(2),
 .scene-grid--responsible > :first-child {
-  min-height: 470px;
+  min-height: 420px;
+}
+
+.scene-grid--responsible > .flow-card,
+.scene-grid--responsible > .responsible-card {
+  grid-column: 1 / -1;
 }
 
 .chart-card,
 .barn-card,
 .plate-card {
   width: 100%;
+  max-width: 100%;
   min-height: 380px;
   border: 1px solid rgba(255, 249, 237, 0.62);
   border-radius: 8px;
@@ -415,13 +426,13 @@ svg.chart-card {
 
 .plate-card--interactive {
   grid-column: span 2;
-  grid-template-columns: 250px 330px 1fr 190px;
+  grid-template-columns: minmax(180px, 0.8fr) 300px minmax(210px, 1fr);
 }
 
 .plate {
   display: grid;
-  width: 286px;
-  height: 286px;
+  width: 270px;
+  height: 270px;
   place-items: center;
   border: 14px solid rgba(255, 249, 237, 0.96);
   border-radius: 50%;
@@ -452,6 +463,10 @@ svg.chart-card {
   gap: 10px;
   color: var(--muted);
   font-size: 0.88rem;
+}
+
+.plate-ranking {
+  grid-column: 3;
 }
 
 .year-control {
@@ -534,9 +549,9 @@ svg.chart-card {
 
 .flow-row {
   display: grid;
-  grid-template-columns: 1fr 58px 1fr 58px 1fr 58px 1fr;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .flow-node {
@@ -563,9 +578,7 @@ svg.chart-card {
 }
 
 .flow-arrow {
-  height: 6px;
-  border-radius: 999px;
-  background: var(--green);
+  display: none;
 }
 
 .flow-arrow::after {
@@ -715,4 +728,116 @@ svg.chart-card {
 .tick text {
   fill: var(--muted);
   font-size: 0.76rem;
+}
+
+@media (max-width: 1180px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .hero h1 {
+    font-size: 4rem;
+  }
+
+  .hero__table {
+    right: 50%;
+    bottom: 8vh;
+    width: 300px;
+    transform: translateX(50%);
+  }
+
+  .scene-title {
+    padding: 48px 32px 30px;
+  }
+
+  .scene-title h2 {
+    font-size: 3.5rem;
+  }
+
+  .scrolly-section {
+    display: block;
+    min-height: auto;
+    padding: 28px 32px 54px;
+  }
+
+  .sticky-visual {
+    position: relative;
+    top: auto;
+    display: block;
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .scroll-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 18px 0 0;
+  }
+
+  .step-card {
+    margin: 0;
+    padding: 20px;
+  }
+
+  .step-card h3 {
+    font-size: 1.16rem;
+  }
+
+  .step-card p {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .scene-grid,
+  .scene-grid--grain,
+  .scene-grid--diet,
+  .scene-grid--responsible {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .scene-grid--grain .chart-card:first-child,
+  .scene-grid--diet > :nth-child(2),
+  .scene-grid--responsible > :first-child {
+    grid-row: auto;
+    min-height: 430px;
+  }
+
+  .scene-grid--responsible > .flow-card,
+  .scene-grid--responsible > .responsible-card,
+  .plate-card--interactive {
+    grid-column: auto;
+  }
+
+  .plate-card,
+  .plate-card--interactive {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .plate-card__meta,
+  .plate-legend,
+  .plate-ranking {
+    width: 100%;
+    grid-column: auto;
+  }
+
+  .plate {
+    width: 260px;
+    height: 260px;
+  }
+
+  .flow-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .final-section {
+    padding: 72px 32px 90px;
+  }
+
+  .final-section h2 {
+    font-size: 3.4rem;
+  }
 }
