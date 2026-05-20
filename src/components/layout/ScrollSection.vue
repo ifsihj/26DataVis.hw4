@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import StepText from './StepText.vue';
 import { useScrollStep } from '../../utils/useScrollStep.js';
 
@@ -8,13 +9,14 @@ const props = defineProps({
   steps: { type: Array, required: true },
 });
 
-const { activeStep, setStepRef } = useScrollStep(props.steps.length);
+const sectionRef = ref(null);
+const { activeStep, scrollProgress, setStepRef } = useScrollStep(props.steps.length, sectionRef);
 </script>
 
 <template>
-  <section class="scrolly-section" :class="`scrolly-section--${tone}`" :id="id">
+  <section ref="sectionRef" class="scrolly-section" :class="`scrolly-section--${tone}`" :id="id">
     <div class="sticky-visual">
-      <slot name="visual" :active-step="activeStep" />
+      <slot name="visual" :active-step="activeStep" :scroll-progress="scrollProgress" />
     </div>
     <div class="scroll-steps">
       <StepText

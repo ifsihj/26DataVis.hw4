@@ -1,7 +1,8 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
-export function useScrollStep(stepCount) {
+export function useScrollStep(stepCount, sectionRef) {
   const activeStep = ref(0);
+  const scrollProgress = ref(0);
   const stepRefs = ref([]);
   let observer;
 
@@ -10,6 +11,14 @@ export function useScrollStep(stepCount) {
   };
 
   const updateClosestStep = () => {
+    const section = sectionRef?.value;
+    if (section) {
+      const rect = section.getBoundingClientRect();
+      const scrollable = Math.max(section.offsetHeight - window.innerHeight, 1);
+      const rawProgress = (window.scrollY - (rect.top + window.scrollY)) / scrollable;
+      scrollProgress.value = Math.max(0, Math.min(1, rawProgress));
+    }
+
     const focusY = window.innerHeight * 0.54;
     let nextStep = null;
     let closestDistance = Number.POSITIVE_INFINITY;
@@ -64,5 +73,5 @@ export function useScrollStep(stepCount) {
     window.removeEventListener('resize', updateClosestStep);
   });
 
-  return { activeStep, setStepRef };
+  return { activeStep, scrollProgress, setStepRef };
 }

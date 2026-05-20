@@ -254,7 +254,7 @@ input {
 }
 
 .scene-grid--grain {
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.62fr);
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.62fr) 76px;
 }
 
 .scene-grid--grain .chart-card:first-child {
@@ -270,6 +270,66 @@ input {
 .scene-grid--grain .mini-chart {
   min-height: 170px;
   height: 170px;
+}
+
+.grain-time-axis {
+  grid-column: 3;
+  grid-row: 1 / span 3;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+  align-self: stretch;
+  min-height: 500px;
+  padding: 12px 0;
+}
+
+.grain-time-axis__year {
+  color: var(--red);
+  font-size: 1rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.grain-time-axis__track {
+  position: relative;
+  width: 3px;
+  margin: 0 auto;
+  border-radius: 999px;
+  background: rgba(47, 40, 33, 0.16);
+}
+
+.grain-time-axis__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--red);
+  transition: height 80ms linear;
+}
+
+.grain-time-axis__tick {
+  position: absolute;
+  left: 12px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  transform: translateY(-50%);
+  transition: color 120ms ease;
+}
+
+.grain-time-axis__tick::before {
+  position: absolute;
+  top: 50%;
+  left: -16px;
+  width: 8px;
+  height: 1px;
+  background: rgba(47, 40, 33, 0.28);
+  content: "";
+}
+
+.grain-time-axis__tick.is-passed {
+  color: var(--red);
 }
 
 .scene-grid--diet,
@@ -894,7 +954,7 @@ svg.chart-card {
   }
 
   .scene-grid--grain {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr)) 34px;
     align-items: stretch;
   }
 
@@ -906,7 +966,7 @@ svg.chart-card {
   }
 
   .scene-grid--grain .chart-card:first-child {
-    grid-column: 1 / -1;
+    grid-column: 1 / 3;
     min-height: 280px;
     height: 280px;
   }
@@ -917,9 +977,26 @@ svg.chart-card {
   }
 
   .scene-grid--grain .mini-chart {
-    grid-column: 1 / -1;
+    grid-column: 1 / 3;
     min-height: 180px;
     height: 180px;
+  }
+
+  .grain-time-axis {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+    min-height: 100%;
+    padding: 2px 0;
+  }
+
+  .grain-time-axis__year {
+    writing-mode: vertical-rl;
+    margin: 0 auto;
+    font-size: 0.88rem;
+  }
+
+  .grain-time-axis__tick {
+    display: none;
   }
 
   .chart-card,

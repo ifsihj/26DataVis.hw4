@@ -6,6 +6,7 @@ import FinalSection from './components/layout/FinalSection.vue';
 import GrainLineChart from './components/charts/GrainLineChart.vue';
 import AgriTechMiniChart from './components/charts/AgriTechMiniChart.vue';
 import StapleShareDonut from './components/charts/StapleShareDonut.vue';
+import GrainTimeAxis from './components/charts/GrainTimeAxis.vue';
 import DietStackedAreaChart from './components/charts/DietStackedAreaChart.vue';
 import DietDiversityChart from './components/charts/DietDiversityChart.vue';
 import TakeoutGrowthChart from './components/charts/TakeoutGrowthChart.vue';
@@ -83,12 +84,13 @@ const sceneThreeSteps = [
       image="/assets/hero-table-grain.png"
     />
     <ScrollSection id="enough" tone="field" :steps="sceneOneSteps">
-      <template #visual="{ activeStep }">
+      <template #visual="{ activeStep, scrollProgress }">
         <div class="scene-grid scene-grid--grain">
-          <GrainLineChart :active-step="activeStep" />
-          <GrainBarnVisual :active-step="activeStep" />
-          <StapleShareDonut :active-step="activeStep" />
+          <GrainLineChart :active-step="activeStep" :progress="scrollProgress" />
+          <GrainBarnVisual :active-step="activeStep" :progress="scrollProgress" />
+          <StapleShareDonut :active-step="activeStep" :progress="scrollProgress" />
           <AgriTechMiniChart :active-step="activeStep" />
+          <GrainTimeAxis :progress="scrollProgress" />
         </div>
       </template>
     </ScrollSection>
