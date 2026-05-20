@@ -310,6 +310,45 @@ input {
   height: 430px;
 }
 
+.insight-section {
+  padding: 86px 6vw 96px;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(143, 47, 36, 0.12), transparent 26rem),
+    linear-gradient(180deg, #667a66, #ead8b7);
+}
+
+.insight-section__header {
+  max-width: 920px;
+  margin: 0 auto 34px;
+  color: #fff7e8;
+  text-align: center;
+}
+
+.insight-section__header h2 {
+  margin: 0 0 16px;
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: 3.6rem;
+  letter-spacing: 0;
+}
+
+.insight-section__header p {
+  margin: 0 auto;
+  max-width: 740px;
+  color: rgba(255, 247, 232, 0.82);
+  line-height: 1.8;
+}
+
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.insight-chart {
+  height: 320px;
+  min-height: 320px;
+}
+
 .grain-time-axis__year {
   color: var(--red);
   font-size: 1rem;
@@ -1167,6 +1206,27 @@ svg.chart-card {
   .tech-section__visual svg.chart-card {
     min-height: 320px;
     height: 320px;
+  }
+
+  .insight-section {
+    padding: 58px 32px 68px;
+  }
+
+  .insight-section__header {
+    text-align: left;
+  }
+
+  .insight-section__header h2 {
+    font-size: 2.55rem;
+  }
+
+  .insight-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insight-chart {
+    height: 300px;
+    min-height: 300px;
   }
 
   .scene-grid--grain .barn {

@@ -4,6 +4,7 @@ import ScrollSection from './components/layout/ScrollSection.vue';
 import SceneTitle from './components/layout/SceneTitle.vue';
 import FinalSection from './components/layout/FinalSection.vue';
 import TechSection from './components/layout/TechSection.vue';
+import InsightSection from './components/layout/InsightSection.vue';
 import GrainLineChart from './components/charts/GrainLineChart.vue';
 import StapleShareDonut from './components/charts/StapleShareDonut.vue';
 import GrainTimeAxis from './components/charts/GrainTimeAxis.vue';
@@ -133,6 +134,7 @@ const sceneThreeSteps = [
       </template>
     </ScrollSection>
 
+    <InsightSection />
     <FinalSection />
   </main>
 </template>
