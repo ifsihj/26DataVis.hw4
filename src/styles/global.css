@@ -258,8 +258,18 @@ input {
 }
 
 .scene-grid--grain .chart-card:first-child {
-  grid-row: span 2;
+  grid-row: span 3;
   min-height: 500px;
+}
+
+.scene-grid--grain .barn-card,
+.scene-grid--grain .donut-card {
+  min-height: 210px;
+}
+
+.scene-grid--grain .mini-chart {
+  min-height: 170px;
+  height: 170px;
 }
 
 .scene-grid--diet,
@@ -877,11 +887,15 @@ svg.chart-card {
   }
 
   .scene-grid,
-  .scene-grid--grain,
   .scene-grid--diet,
   .scene-grid--responsible {
     grid-template-columns: 1fr;
     overflow: visible;
+  }
+
+  .scene-grid--grain {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
   }
 
   .scene-grid--grain .chart-card:first-child,
@@ -891,14 +905,30 @@ svg.chart-card {
     min-height: 360px;
   }
 
+  .scene-grid--grain .chart-card:first-child {
+    grid-column: 1 / -1;
+    min-height: 280px;
+    height: 280px;
+  }
+
+  .scene-grid--grain .barn-card,
+  .scene-grid--grain .donut-card {
+    min-height: 190px;
+  }
+
+  .scene-grid--grain .mini-chart {
+    grid-column: 1 / -1;
+    min-height: 180px;
+    height: 180px;
+  }
+
   .chart-card,
   .barn-card,
   .plate-card {
     min-height: 260px;
   }
 
-  svg.chart-card,
-  .scene-grid--grain svg.chart-card:first-child {
+  svg.chart-card {
     height: 320px;
   }
 
@@ -948,6 +978,56 @@ svg.chart-card {
 
   .flow-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scene-grid--grain svg.chart-card:first-child {
+    height: 260px;
+    min-height: 260px;
+  }
+
+  .scene-grid--grain .barn-card,
+  .scene-grid--grain .donut-card {
+    height: 170px;
+    min-height: 170px;
+    overflow: hidden;
+  }
+
+  .scene-grid--grain .mini-chart {
+    height: 150px;
+    min-height: 150px;
+  }
+
+  .scene-grid--grain .barn {
+    width: 86px;
+  }
+
+  .scene-grid--grain .barn__roof {
+    border-right-width: 45px;
+    border-bottom-width: 34px;
+    border-left-width: 45px;
+  }
+
+  .scene-grid--grain .barn__body {
+    height: 82px;
+    border-width: 6px;
+  }
+
+  .scene-grid--grain .barn-card__copy strong {
+    font-size: 1.65rem;
+  }
+
+  .scene-grid--grain .donut {
+    width: 88px;
+    height: 88px;
+  }
+
+  .scene-grid--grain .donut__inner {
+    width: 56px;
+    height: 56px;
+  }
+
+  .scene-grid--grain .donut__inner strong {
+    font-size: 1.05rem;
   }
 
   .final-section {
