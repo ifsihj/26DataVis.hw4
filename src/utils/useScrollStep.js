@@ -1,40 +1,45 @@
-import { useEffect, useRef, useState } from 'react';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 export function useScrollStep(stepCount) {
-  const [activeStep, setActiveStep] = useState(0);
-  const stepRefs = useRef([]);
+  const activeStep = ref(0);
+  const stepRefs = ref([]);
+  let observer;
 
-  useEffect(() => {
-    const updateClosestStep = () => {
-      const focusY = window.innerHeight * 0.54;
-      let nextStep = null;
-      let closestDistance = Number.POSITIVE_INFINITY;
+  const setStepRef = (index) => (node) => {
+    if (node) stepRefs.value[index] = node.$el ?? node;
+  };
 
-      stepRefs.current.slice(0, stepCount).forEach((node, index) => {
-        if (!node) return;
-        const rect = node.getBoundingClientRect();
-        const distance = Math.abs(rect.top + rect.height / 2 - focusY);
-        const isNearViewport = rect.bottom > 0 && rect.top < window.innerHeight;
+  const updateClosestStep = () => {
+    const focusY = window.innerHeight * 0.54;
+    let nextStep = null;
+    let closestDistance = Number.POSITIVE_INFINITY;
 
-        if (isNearViewport && distance < closestDistance) {
-          closestDistance = distance;
-          nextStep = index;
-        }
-      });
+    stepRefs.value.slice(0, stepCount).forEach((node, index) => {
+      if (!node) return;
+      const rect = node.getBoundingClientRect();
+      const distance = Math.abs(rect.top + rect.height / 2 - focusY);
+      const isNearViewport = rect.bottom > 0 && rect.top < window.innerHeight;
 
-      if (nextStep !== null) {
-        setActiveStep(nextStep);
+      if (isNearViewport && distance < closestDistance) {
+        closestDistance = distance;
+        nextStep = index;
       }
-    };
+    });
 
-    const observer = new IntersectionObserver(
+    if (nextStep !== null) {
+      activeStep.value = nextStep;
+    }
+  };
+
+  onMounted(() => {
+    observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
         if (visible) {
-          setActiveStep(Number(visible.target.dataset.step));
+          activeStep.value = Number(visible.target.dataset.step);
         }
       },
       {
@@ -44,20 +49,20 @@ export function useScrollStep(stepCount) {
       },
     );
 
-    stepRefs.current.slice(0, stepCount).forEach((node) => {
+    stepRefs.value.slice(0, stepCount).forEach((node) => {
       if (node) observer.observe(node);
     });
 
     window.addEventListener('scroll', updateClosestStep, { passive: true });
     window.addEventListener('resize', updateClosestStep);
     updateClosestStep();
+  });
 
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', updateClosestStep);
-      window.removeEventListener('resize', updateClosestStep);
-    };
-  }, [stepCount]);
+  onBeforeUnmount(() => {
+    observer?.disconnect();
+    window.removeEventListener('scroll', updateClosestStep);
+    window.removeEventListener('resize', updateClosestStep);
+  });
 
-  return { activeStep, stepRefs };
+  return { activeStep, setStepRef };
 }

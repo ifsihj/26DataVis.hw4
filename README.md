@@ -2,7 +2,7 @@
 
 ## 项目简介
 
-这是一个基于 React + D3.js 的 scroll-driven storytelling 数据可视化项目，展示中国人的餐桌如何从粮食安全、饮食丰富，走向食品浪费、碳足迹与可持续消费的反思。
+这是一个基于 Vue + D3.js 的 scroll-driven storytelling 数据可视化项目，展示中国人的餐桌如何从粮食安全、饮食丰富，走向食品浪费、碳足迹与可持续消费的反思。
 
 页面采用纵向滚动叙事结构，不是传统 dashboard。用户向下滚动时，会依次进入三个场景：
 
@@ -15,7 +15,7 @@
 ## 技术栈
 
 - Vite
-- React
+- Vue
 - D3.js
 - CSS
 - IntersectionObserver
@@ -56,8 +56,8 @@ http://localhost:5173
 
 ```text
 src/
-  App.jsx
-  main.jsx
+  App.vue
+  main.js
 
   data/
     grainData.js
@@ -68,24 +68,24 @@ src/
 
   components/
     layout/
-      Hero.jsx
-      ScrollSection.jsx
-      SceneTitle.jsx
-      StepText.jsx
-      FinalSection.jsx
+      Hero.vue
+      ScrollSection.vue
+      SceneTitle.vue
+      StepText.vue
+      FinalSection.vue
 
     charts/
-      GrainLineChart.jsx
-      DietStackedAreaChart.jsx
-      TakeoutGrowthChart.jsx
-      CarbonBarChart.jsx
-      FoodWasteFlow.jsx
-      FinalTimeline.jsx
+      GrainLineChart.vue
+      DietStackedAreaChart.vue
+      TakeoutGrowthChart.vue
+      CarbonBarChart.vue
+      FoodWasteFlow.vue
+      FinalTimeline.vue
 
     visuals/
-      GrainBarnVisual.jsx
-      PlateComparison.jsx
-      ResponsiblePlate.jsx
+      GrainBarnVisual.vue
+      PlateComparison.vue
+      ResponsiblePlate.vue
 
   styles/
     global.css

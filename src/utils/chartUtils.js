@@ -12,7 +12,8 @@ export const chartColors = {
 };
 
 export function clearSvg(svgRef, width = 760, height = 420) {
-  const svg = d3.select(svgRef.current);
+  const node = svgRef.value ?? svgRef.current;
+  const svg = d3.select(node);
   svg.selectAll('*').remove();
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img');
   return svg;
