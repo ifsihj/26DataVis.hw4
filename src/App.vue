@@ -5,19 +5,15 @@ import SceneTitle from './components/layout/SceneTitle.vue';
 import FinalSection from './components/layout/FinalSection.vue';
 import TechSection from './components/layout/TechSection.vue';
 import InsightSection from './components/layout/InsightSection.vue';
+import DietJourneySection from './components/layout/DietJourneySection.vue';
 import GrainLineChart from './components/charts/GrainLineChart.vue';
 import StapleShareDonut from './components/charts/StapleShareDonut.vue';
 import GrainTimeAxis from './components/charts/GrainTimeAxis.vue';
-import DietStackedAreaChart from './components/charts/DietStackedAreaChart.vue';
-import DietDiversityChart from './components/charts/DietDiversityChart.vue';
-import DietTimeAxis from './components/charts/DietTimeAxis.vue';
-import TakeoutGrowthChart from './components/charts/TakeoutGrowthChart.vue';
 import CarbonBarChart from './components/charts/CarbonBarChart.vue';
 import CarbonBubbleChart from './components/charts/CarbonBubbleChart.vue';
 import FoodWasteFlow from './components/charts/FoodWasteFlow.vue';
 import FoodWasteTrendChart from './components/charts/FoodWasteTrendChart.vue';
 import GrainBarnVisual from './components/visuals/GrainBarnVisual.vue';
-import PlateComparison from './components/visuals/PlateComparison.vue';
 import ResponsiblePlate from './components/visuals/ResponsiblePlate.vue';
 
 const sceneOneSteps = [
@@ -35,24 +31,6 @@ const sceneOneSteps = [
     kicker: '结构变化',
     title: '主食不再占据全部餐盘',
     body: '主食仍然是底色，但它在餐盘中的比例开始下降。粮食安全构成了中国餐桌现代化的底座，也打开了饮食结构变化的起点。',
-  },
-];
-
-const sceneTwoSteps = [
-  {
-    kicker: '第二幕',
-    title: '从温饱到丰富',
-    body: '当“够不够”逐渐退场，“好不好”成为新的问题。餐桌开始容纳更多肉、蛋、奶、果蔬和水产品。',
-  },
-  {
-    kicker: '丰富性',
-    title: '饮食结构越来越多元',
-    body: '堆叠面积图显示，谷物占比下降，动物性食品和多样化食品上升。餐桌上的变化，是收入、城市化、物流和冷链共同作用的结果。',
-  },
-  {
-    kicker: '城市速度',
-    title: '外卖改变吃饭场景',
-    body: '从米面馒头到肉蛋奶果，从家中厨房到手机下单，吃饭的方式也在被重新定义。城市配送网络让餐桌延伸到街道和屏幕。',
   },
 ];
 
@@ -97,26 +75,7 @@ const sceneThreeSteps = [
     </ScrollSection>
 
     <TechSection />
-
-    <SceneTitle
-      eyebrow="Scene 02"
-      title="吃得好"
-      subtitle="当温饱问题逐渐退场，餐桌从单一走向丰富，吃饭的场景也从厨房延伸到城市网络。"
-      image="/assets/scene-rich-table.png"
-    />
-    <ScrollSection id="better" tone="table" :steps="sceneTwoSteps">
-      <template #visual="{ activeStep, scrollProgress }">
-        <div class="scene-grid scene-grid--diet">
-          <PlateComparison v-if="activeStep === 0" :active-step="activeStep" :progress="scrollProgress" />
-          <div v-else-if="activeStep === 1" class="diet-trend-panel">
-            <DietStackedAreaChart :active-step="activeStep" :progress="scrollProgress" />
-            <DietDiversityChart :active-step="activeStep" :progress="scrollProgress" />
-          </div>
-          <TakeoutGrowthChart v-else :active-step="activeStep" />
-          <DietTimeAxis :progress="scrollProgress" />
-        </div>
-      </template>
-    </ScrollSection>
+    <DietJourneySection />
 
     <SceneTitle
       eyebrow="Scene 03"
