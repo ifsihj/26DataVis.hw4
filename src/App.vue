@@ -107,10 +107,12 @@ const sceneThreeSteps = [
     <ScrollSection id="better" tone="table" :steps="sceneTwoSteps">
       <template #visual="{ activeStep, scrollProgress }">
         <div class="scene-grid scene-grid--diet">
-          <PlateComparison :active-step="activeStep" :progress="scrollProgress" />
-          <DietStackedAreaChart v-if="activeStep < 2" :active-step="activeStep" :progress="scrollProgress" />
+          <PlateComparison v-if="activeStep === 0" :active-step="activeStep" :progress="scrollProgress" />
+          <div v-else-if="activeStep === 1" class="diet-trend-panel">
+            <DietStackedAreaChart :active-step="activeStep" :progress="scrollProgress" />
+            <DietDiversityChart :active-step="activeStep" :progress="scrollProgress" />
+          </div>
           <TakeoutGrowthChart v-else :active-step="activeStep" />
-          <DietDiversityChart :active-step="activeStep" :progress="scrollProgress" />
           <DietTimeAxis :progress="scrollProgress" />
         </div>
       </template>

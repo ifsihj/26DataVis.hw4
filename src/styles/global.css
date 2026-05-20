@@ -404,7 +404,7 @@ input {
 }
 
 .scene-grid--diet {
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) 76px;
+  grid-template-columns: minmax(0, 1fr) 76px;
 }
 
 .scene-grid--diet > :nth-child(2),
@@ -412,23 +412,30 @@ input {
   min-height: 340px;
 }
 
-.scene-grid--diet .plate-card--interactive {
+.diet-time-axis {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.scene-grid--diet > .plate-card,
+.scene-grid--diet > .chart-card,
+.diet-trend-panel {
   grid-column: 1;
 }
 
-.scene-grid--diet > .chart-card:not(.mini-chart) {
-  grid-column: 2;
+.diet-trend-panel {
+  display: grid;
+  gap: 14px;
 }
 
-.scene-grid--diet .mini-chart {
-  grid-column: 1 / 3;
-  height: 180px;
-  min-height: 180px;
+.diet-trend-panel > .chart-card:not(.mini-chart) {
+  height: 390px;
+  min-height: 390px;
 }
 
-.diet-time-axis {
-  grid-column: 3;
-  grid-row: 1 / span 2;
+.diet-trend-panel > .mini-chart {
+  height: 150px;
+  min-height: 150px;
 }
 
 .scene-grid--responsible > .flow-card,
@@ -1066,7 +1073,8 @@ svg.chart-card {
 
   .scene-grid--diet .plate-card--interactive,
   .scene-grid--diet > .chart-card:not(.mini-chart),
-  .scene-grid--diet .mini-chart {
+  .scene-grid--diet .mini-chart,
+  .diet-trend-panel {
     grid-column: 1;
   }
 
@@ -1088,7 +1096,21 @@ svg.chart-card {
 
   .diet-time-axis {
     grid-column: 2;
-    grid-row: 1 / span 3;
+    grid-row: 1;
+  }
+
+  .diet-trend-panel {
+    gap: 10px;
+  }
+
+  .diet-trend-panel > .chart-card:not(.mini-chart) {
+    height: 330px;
+    min-height: 330px;
+  }
+
+  .diet-trend-panel > .mini-chart {
+    height: 120px;
+    min-height: 120px;
   }
 
   .scene-grid--grain .barn-card,
