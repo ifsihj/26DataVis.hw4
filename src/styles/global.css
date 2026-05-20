@@ -258,7 +258,7 @@ input {
 }
 
 .scene-grid--grain .chart-card:first-child {
-  grid-row: span 3;
+  grid-row: span 2;
   min-height: 500px;
 }
 
@@ -267,20 +267,47 @@ input {
   min-height: 210px;
 }
 
-.scene-grid--grain .mini-chart {
-  min-height: 170px;
-  height: 170px;
-}
-
 .grain-time-axis {
   grid-column: 3;
-  grid-row: 1 / span 3;
+  grid-row: 1 / span 2;
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 10px;
   align-self: stretch;
   min-height: 500px;
   padding: 12px 0;
+}
+
+.tech-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(520px, 1.22fr);
+  gap: 42px;
+  align-items: center;
+  padding: 80px 8vw;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(49, 95, 73, 0.16), transparent 26rem),
+    linear-gradient(180deg, #e8d1a6, #ead7b8);
+}
+
+.tech-section__copy h2 {
+  margin: 0 0 18px;
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: 3.4rem;
+  letter-spacing: 0;
+}
+
+.tech-section__copy p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.tech-section__visual .chart-card {
+  min-height: 430px;
+}
+
+.tech-section__visual svg.chart-card {
+  height: 430px;
 }
 
 .grain-time-axis__year {
@@ -977,14 +1004,12 @@ svg.chart-card {
   }
 
   .scene-grid--grain .mini-chart {
-    grid-column: 1 / 3;
-    min-height: 180px;
-    height: 180px;
+    grid-column: auto;
   }
 
   .grain-time-axis {
     grid-column: 3;
-    grid-row: 1 / span 3;
+    grid-row: 1 / span 2;
     min-height: 100%;
     padding: 2px 0;
   }
@@ -1072,6 +1097,22 @@ svg.chart-card {
   .scene-grid--grain .mini-chart {
     height: 150px;
     min-height: 150px;
+  }
+
+  .tech-section {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 56px 32px;
+  }
+
+  .tech-section__copy h2 {
+    font-size: 2.7rem;
+  }
+
+  .tech-section__visual .chart-card,
+  .tech-section__visual svg.chart-card {
+    min-height: 320px;
+    height: 320px;
   }
 
   .scene-grid--grain .barn {

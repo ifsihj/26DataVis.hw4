@@ -3,8 +3,8 @@ import Hero from './components/layout/Hero.vue';
 import ScrollSection from './components/layout/ScrollSection.vue';
 import SceneTitle from './components/layout/SceneTitle.vue';
 import FinalSection from './components/layout/FinalSection.vue';
+import TechSection from './components/layout/TechSection.vue';
 import GrainLineChart from './components/charts/GrainLineChart.vue';
-import AgriTechMiniChart from './components/charts/AgriTechMiniChart.vue';
 import StapleShareDonut from './components/charts/StapleShareDonut.vue';
 import GrainTimeAxis from './components/charts/GrainTimeAxis.vue';
 import DietStackedAreaChart from './components/charts/DietStackedAreaChart.vue';
@@ -89,11 +89,12 @@ const sceneThreeSteps = [
           <GrainLineChart :active-step="activeStep" :progress="scrollProgress" />
           <GrainBarnVisual :active-step="activeStep" :progress="scrollProgress" />
           <StapleShareDonut :active-step="activeStep" :progress="scrollProgress" />
-          <AgriTechMiniChart :active-step="activeStep" />
           <GrainTimeAxis :progress="scrollProgress" />
         </div>
       </template>
     </ScrollSection>
+
+    <TechSection />
 
     <SceneTitle
       eyebrow="Scene 02"
