@@ -1,20 +1,23 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
-import { dietStructureData, dietCategoryLabels } from '../../data/dietStructureData.js';
+import { computed, ref, watch } from "vue";
+import {
+  dietStructureData,
+  dietCategoryLabels,
+} from "../../data/dietStructureData.js";
 
 const props = defineProps({
   activeStep: { type: Number, default: 0 },
 });
 
 const colors = {
-  grain: '#d2a857',
-  meat: '#8f2f24',
-  egg: '#e5c46a',
-  dairy: '#f4e8c5',
-  aquatic: '#4c7b82',
-  vegetables: '#4f7b4b',
-  fruit: '#d08a43',
-  oil: '#7a5b3a',
+  grain: "#d2a857",
+  meat: "#8f2f24",
+  egg: "#e5c46a",
+  dairy: "#f4e8c5",
+  aquatic: "#4c7b82",
+  vegetables: "#4f7b4b",
+  fruit: "#d08a43",
+  oil: "#7a5b3a",
 };
 
 const years = dietStructureData.map((item) => item.year);
@@ -29,7 +32,11 @@ watch(
   { immediate: true },
 );
 
-const item = computed(() => dietStructureData.find((row) => row.year === Number(selectedYear.value)) ?? dietStructureData[0]);
+const item = computed(
+  () =>
+    dietStructureData.find((row) => row.year === Number(selectedYear.value)) ??
+    dietStructureData[0],
+);
 const plateBackground = computed(() => {
   let offset = 0;
   const segments = Object.entries(colors).map(([key, color]) => {
@@ -38,12 +45,17 @@ const plateBackground = computed(() => {
     offset += value;
     return segment;
   });
-  return `conic-gradient(${segments.join(', ')})`;
+  return `conic-gradient(${segments.join(", ")})`;
 });
 
 const topItems = computed(() =>
   Object.keys(colors)
-    .map((key) => ({ key, label: dietCategoryLabels[key], value: item.value[key], color: colors[key] }))
+    .map((key) => ({
+      key,
+      label: dietCategoryLabels[key],
+      value: item.value[key],
+      color: colors[key],
+    }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 4),
 );
@@ -87,7 +99,8 @@ const topItems = computed(() =>
     </div>
     <div class="plate-legend">
       <span v-for="(color, key) in colors" :key="key">
-        <i :style="{ backgroundColor: color }" />{{ dietCategoryLabels[key] }} {{ item[key] }}%
+        <i :style="{ backgroundColor: color }" />{{ dietCategoryLabels[key] }}
+        {{ item[key] }}%
       </span>
     </div>
     <div class="plate-ranking">

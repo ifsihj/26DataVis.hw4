@@ -38,6 +38,7 @@ input {
   overflow: hidden;
   background:
     linear-gradient(rgba(42, 32, 24, 0.2), rgba(42, 32, 24, 0.44)),
+    url('/assets/hero-table-grain.png') center / cover,
     radial-gradient(circle at 50% 35%, rgba(255, 243, 210, 0.55), transparent 24rem),
     linear-gradient(135deg, #8f2f24, #6c4a2f 46%, #2f4f3c);
 }
@@ -132,8 +133,24 @@ input {
 }
 
 .scene-title {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 36px;
+  align-items: center;
   padding: 56px 8vw 36px;
   background: var(--cream);
+}
+
+.scene-title__copy {
+  min-width: 0;
+}
+
+.scene-title__image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: var(--shadow);
 }
 
 .scene-title h2 {
@@ -286,6 +303,68 @@ svg.chart-card {
 .mini-chart {
   min-height: 190px;
   height: 190px;
+}
+
+.donut-card {
+  display: grid;
+  gap: 10px;
+  place-items: center;
+  padding: 16px;
+  min-height: 250px;
+}
+
+.donut {
+  display: grid;
+  width: 128px;
+  height: 128px;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.donut__inner {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 249, 237, 0.96);
+}
+
+.donut__inner strong {
+  color: var(--red);
+  font-size: 1.45rem;
+}
+
+.donut__inner span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.donut-legend {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.donut-legend span {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.donut-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.donut-legend .grain {
+  background: #b88446;
+}
+
+.donut-legend .other {
+  background: #315f49;
 }
 
 .chart-title {
