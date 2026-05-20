@@ -168,7 +168,7 @@ input {
   display: flex;
   align-items: center;
   align-self: start;
-  overflow: hidden;
+  overflow: visible;
   height: calc(100vh - 48px);
   min-height: calc(100vh - 48px);
 }
@@ -231,9 +231,9 @@ input {
   display: grid;
   width: 100%;
   max-width: 100%;
-  gap: 18px;
+  gap: 14px;
   align-items: stretch;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .scene-grid--grain {
@@ -242,7 +242,7 @@ input {
 
 .scene-grid--grain .chart-card:first-child {
   grid-row: span 2;
-  min-height: 590px;
+  min-height: 500px;
 }
 
 .scene-grid--diet,
@@ -252,7 +252,7 @@ input {
 
 .scene-grid--diet > :nth-child(2),
 .scene-grid--responsible > :first-child {
-  min-height: 420px;
+  min-height: 340px;
 }
 
 .scene-grid--responsible > .flow-card,
@@ -265,7 +265,7 @@ input {
 .plate-card {
   width: 100%;
   max-width: 100%;
-  min-height: 380px;
+  min-height: 300px;
   border: 1px solid rgba(255, 249, 237, 0.62);
   border-radius: 8px;
   background: rgba(255, 249, 237, 0.78);
@@ -275,12 +275,17 @@ input {
 
 svg.chart-card {
   display: block;
-  height: 100%;
-  min-height: inherit;
+  height: 340px;
+  min-height: 0;
+}
+
+.scene-grid--grain svg.chart-card:first-child {
+  height: 500px;
 }
 
 .mini-chart {
-  min-height: 250px;
+  min-height: 190px;
+  height: 190px;
 }
 
 .chart-title {
@@ -357,11 +362,12 @@ svg.chart-card {
 .barn-card {
   display: grid;
   place-items: center;
-  padding: 22px;
+  padding: 16px;
+  min-height: 250px;
 }
 
 .barn {
-  width: 150px;
+  width: 118px;
 }
 
 .barn__roof {
@@ -369,13 +375,14 @@ svg.chart-card {
   height: 0;
   margin: 0 auto;
   border-right: 78px solid transparent;
-  border-bottom: 58px solid var(--brown);
-  border-left: 78px solid transparent;
+  border-right-width: 62px;
+  border-bottom: 46px solid var(--brown);
+  border-left-width: 62px;
 }
 
 .barn__body {
   position: relative;
-  height: 190px;
+  height: 132px;
   overflow: hidden;
   border: 8px solid var(--brown);
   border-radius: 6px 6px 18px 18px;
@@ -420,8 +427,8 @@ svg.chart-card {
   grid-template-columns: 220px 300px 1fr;
   gap: 22px;
   align-items: center;
-  min-height: 300px;
-  padding: 24px;
+  min-height: 260px;
+  padding: 20px;
 }
 
 .plate-card--interactive {
@@ -431,8 +438,8 @@ svg.chart-card {
 
 .plate {
   display: grid;
-  width: 270px;
-  height: 270px;
+  width: 220px;
+  height: 220px;
   place-items: center;
   border: 14px solid rgba(255, 249, 237, 0.96);
   border-radius: 50%;
@@ -442,8 +449,8 @@ svg.chart-card {
 
 .plate__inner {
   display: grid;
-  width: 112px;
-  height: 112px;
+  width: 92px;
+  height: 92px;
   place-items: center;
   border-radius: 50%;
   background: rgba(255, 249, 237, 0.9);
@@ -540,11 +547,11 @@ svg.chart-card {
 
 .flow-card,
 .responsible-card {
-  padding: 30px;
+  padding: 22px;
 }
 
 .flow-card__header {
-  margin-bottom: 34px;
+  margin-bottom: 18px;
 }
 
 .flow-row {
@@ -555,8 +562,8 @@ svg.chart-card {
 }
 
 .flow-node {
-  min-height: 118px;
-  padding: 22px 14px;
+  min-height: 86px;
+  padding: 16px 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: rgba(255, 249, 237, 0.72);
@@ -600,7 +607,7 @@ svg.chart-card {
 }
 
 .waste-icons {
-  margin-top: 30px;
+  margin-top: 18px;
   color: var(--red);
   font-size: 1.2rem;
   letter-spacing: 0.34rem;
@@ -623,8 +630,8 @@ svg.chart-card {
 }
 
 .mini-plate {
-  width: 190px;
-  height: 190px;
+  width: 150px;
+  height: 150px;
   border: 12px solid rgba(255, 249, 237, 0.96);
   border-radius: 50%;
   box-shadow: 0 16px 44px rgba(47, 40, 33, 0.16);
@@ -802,7 +809,23 @@ svg.chart-card {
   .scene-grid--diet > :nth-child(2),
   .scene-grid--responsible > :first-child {
     grid-row: auto;
-    min-height: 430px;
+    min-height: 360px;
+  }
+
+  .chart-card,
+  .barn-card,
+  .plate-card {
+    min-height: 260px;
+  }
+
+  svg.chart-card,
+  .scene-grid--grain svg.chart-card:first-child {
+    height: 320px;
+  }
+
+  .mini-chart {
+    min-height: 210px;
+    height: 210px;
   }
 
   .scene-grid--responsible > .flow-card,
@@ -811,22 +834,37 @@ svg.chart-card {
     grid-column: auto;
   }
 
-  .plate-card,
-  .plate-card--interactive {
+  .plate-card {
     grid-template-columns: 1fr;
     justify-items: center;
+  }
+
+  .plate-card--interactive {
+    grid-template-columns: minmax(0, 1fr) 250px;
+    justify-items: stretch;
+    align-items: start;
   }
 
   .plate-card__meta,
   .plate-legend,
   .plate-ranking {
     width: 100%;
-    grid-column: auto;
+    grid-column: 1 / -1;
+  }
+
+  .plate-card--interactive .plate-card__meta {
+    grid-column: 1;
+  }
+
+  .plate-card--interactive .plate {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
   }
 
   .plate {
-    width: 260px;
-    height: 260px;
+    width: 230px;
+    height: 230px;
   }
 
   .flow-row {
