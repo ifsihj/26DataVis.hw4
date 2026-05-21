@@ -68,9 +68,38 @@ onBeforeUnmount(() => {
 
 <template>
   <section id="responsible" class="responsible-waste">
+    <div class="waste-opening">
+      <div class="waste-opening__copy">
+        <p class="eyebrow">Scene 03 / 一盘剩饭</p>
+        <h2>浪费很少以宏大的样子出现。</h2>
+        <p>
+          它常常只是餐盘里剩下的一点饭菜、冰箱深处忘记的一盒食物、聚餐后没有打包的一桌菜。
+          第三幕先从一个具体场景开始，再把它放大成数字，最后回到每个人能做的选择。
+        </p>
+      </div>
+
+      <div class="waste-opening__plate" aria-hidden="true">
+        <div class="public-plate">
+          <span class="public-plate__rice" />
+          <span class="public-plate__leaf" />
+          <span class="public-plate__sauce" />
+        </div>
+        <div class="public-caption">
+          <strong>一顿饭剩 10%</strong>
+          <span>看起来很少，乘以时间和人数就不再小。</span>
+        </div>
+      </div>
+
+      <div class="broadcast-beats" aria-label="第三幕叙事节奏">
+        <span><b>01</b> 先看见一盘剩饭</span>
+        <span><b>02</b> 再放大成社会数字</span>
+        <span><b>03</b> 最后回到行动选择</span>
+      </div>
+    </div>
+
     <div class="waste-counter">
       <div class="waste-counter__copy">
-        <p class="eyebrow">Scene 03 / Food Waste</p>
+        <p class="eyebrow">数字放大</p>
         <h2>{{ wasteCounterCopy.headline }}</h2>
         <p>{{ wasteCounterCopy.note }}</p>
       </div>
@@ -90,9 +119,11 @@ onBeforeUnmount(() => {
 
     <div class="responsible-panel responsible-panel--fridge">
       <div class="responsible-panel__copy">
-        <p class="eyebrow">家庭冰箱</p>
+        <p class="eyebrow">回到家庭</p>
         <h3>浪费常常不是“故意的”，而是被忘记的。</h3>
-        <p>点击冰箱里的食物，看看常见的浪费原因。宏大的 10 亿吨，最终会落到每个家庭的购买、储存和处理习惯上。</p>
+        <p>
+          点击冰箱里的食物，看看常见的浪费原因。宏大的 10 亿吨，最终会落到每个家庭的购买、储存和处理习惯上。
+        </p>
       </div>
 
       <div class="fridge-interactive">
@@ -122,7 +153,7 @@ onBeforeUnmount(() => {
 
     <div class="responsible-panel responsible-panel--plate">
       <div class="responsible-panel__copy">
-        <p class="eyebrow">餐盘剩余模拟器</p>
+        <p class="eyebrow">个人模拟</p>
         <h3>每顿饭剩下一点点，放大到一年就不再小。</h3>
         <p>选择一顿饭的剩余比例，看看它如何被换算成一周、一年，以及一个千万人口城市的浪费量。</p>
       </div>
@@ -165,7 +196,7 @@ onBeforeUnmount(() => {
 
     <div class="responsible-panel responsible-panel--slider">
       <div class="responsible-panel__copy">
-        <p class="eyebrow">减少浪费滑块</p>
+        <p class="eyebrow">行动反馈</p>
         <h3>责任不是突然改变一切，而是从减少一点开始。</h3>
         <p>拖动滑块，看看如果全球食品浪费减少一部分，能够节约多少食物，并减少多少隐含碳排。</p>
       </div>
@@ -213,6 +244,9 @@ onBeforeUnmount(() => {
           <p>最后理解食物的代价。</p>
         </article>
       </div>
+      <p class="responsible-timeline__closing">
+        吃得负责，不是回到匮乏，而是在丰盛之后学会珍惜。
+      </p>
     </div>
   </section>
 </template>
@@ -226,6 +260,7 @@ onBeforeUnmount(() => {
   color: #2d241a;
 }
 
+.waste-opening,
 .waste-counter,
 .responsible-panel,
 .responsible-timeline {
@@ -237,14 +272,18 @@ onBeforeUnmount(() => {
   box-shadow: 0 28px 70px rgba(45, 36, 26, 0.16);
 }
 
-.waste-counter {
+.waste-opening {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 26px;
-  align-items: end;
-  padding: 34px;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 30px;
+  align-items: center;
+  padding: 36px;
+  background:
+    linear-gradient(135deg, rgba(255, 249, 237, 0.9), rgba(234, 216, 183, 0.86)),
+    #fff9ed;
 }
 
+.waste-opening__copy h2,
 .waste-counter__copy h2,
 .responsible-panel__copy h3,
 .responsible-timeline h3 {
@@ -256,12 +295,121 @@ onBeforeUnmount(() => {
   letter-spacing: 0;
 }
 
+.waste-opening__copy p:last-child,
 .waste-counter__copy p:last-child,
 .responsible-panel__copy p:last-child {
   max-width: 690px;
   color: rgba(45, 36, 26, 0.68);
   font-size: 1rem;
   line-height: 1.85;
+}
+
+.waste-opening__plate {
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+}
+
+.public-plate {
+  position: relative;
+  width: 270px;
+  aspect-ratio: 1;
+  border: 18px solid #fff9ed;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 36%, #fff3c6 0 18px, transparent 19px),
+    radial-gradient(circle at 62% 58%, #9a4034 0 22px, transparent 23px),
+    radial-gradient(circle at 45% 66%, #537c4a 0 18px, transparent 19px),
+    #f1dfbf;
+  box-shadow: 0 30px 60px rgba(45, 36, 26, 0.2);
+}
+
+.public-plate::after {
+  position: absolute;
+  right: 34px;
+  bottom: 24px;
+  width: 86px;
+  height: 40px;
+  border-radius: 50%;
+  content: "";
+  background: rgba(143, 51, 40, 0.22);
+  transform: rotate(-18deg);
+}
+
+.public-plate__rice,
+.public-plate__leaf,
+.public-plate__sauce {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+}
+
+.public-plate__rice {
+  left: 78px;
+  top: 62px;
+  width: 74px;
+  height: 46px;
+  background: #fff5d6;
+}
+
+.public-plate__leaf {
+  right: 66px;
+  top: 84px;
+  width: 48px;
+  height: 26px;
+  background: #537c4a;
+  transform: rotate(-24deg);
+}
+
+.public-plate__sauce {
+  left: 96px;
+  bottom: 68px;
+  width: 54px;
+  height: 34px;
+  background: #a94a3a;
+}
+
+.public-caption {
+  display: grid;
+  gap: 4px;
+  max-width: 280px;
+  color: rgba(45, 36, 26, 0.68);
+  text-align: center;
+}
+
+.public-caption strong {
+  color: #8f3328;
+  font-size: 1.18rem;
+}
+
+.broadcast-beats {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.broadcast-beats span {
+  padding: 14px 16px;
+  border: 1px solid rgba(45, 36, 26, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.42);
+  color: rgba(45, 36, 26, 0.72);
+  font-weight: 800;
+}
+
+.broadcast-beats b {
+  margin-right: 8px;
+  color: #8f3328;
+}
+
+.waste-counter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 26px;
+  align-items: end;
+  margin-top: 28px;
+  padding: 34px;
 }
 
 .waste-counter__number {
@@ -575,12 +723,21 @@ onBeforeUnmount(() => {
   font-size: 1.24rem;
 }
 
-.responsible-timeline__nodes p {
+.responsible-timeline__nodes p,
+.responsible-timeline__closing {
   margin: 0;
   color: rgba(45, 36, 26, 0.66);
 }
 
+.responsible-timeline__closing {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 1.08rem;
+  font-weight: 800;
+}
+
 @media (max-width: 1180px) {
+  .waste-opening,
   .waste-counter,
   .responsible-panel,
   .fridge-interactive,
@@ -592,6 +749,7 @@ onBeforeUnmount(() => {
     justify-items: start;
   }
 
+  .broadcast-beats,
   .waste-counter__sources,
   .impact-grid,
   .responsible-timeline__nodes {
