@@ -1,19 +1,42 @@
 <template>
   <section class="hero">
-    <div class="hero__grain" />
+    <div class="hero__backdrop" />
+    <div class="hero__noise" />
+
+    <div class="hero__chrome hero__chrome--top">
+      <span>SCROLL DATA STORY</span>
+      <i />
+      <span>CHINA TABLE / 1980-2023</span>
+    </div>
+
     <div class="hero__content">
-      <p class="eyebrow" style="color: rgba(255,247,232,0.7)">Scroll-driven data story</p>
-      <h1>从吃得饱<br />到吃得好，<br />再到吃得负责</h1>
+      <p class="eyebrow">A documentary data narrative</p>
+      <h1>
+        从吃得饱
+        <span>到吃得好</span>
+        再到吃得负责
+      </h1>
       <p class="hero__subtitle">一部关于中国人餐桌变迁的数据故事</p>
     </div>
-    <div class="hero__table" aria-hidden="true">
-      <span class="bowl bowl--rice" />
-      <span class="bowl bowl--veg" />
-      <span class="bowl bowl--meat" />
-      <span class="chopsticks" />
+
+    <div class="hero__plate" aria-hidden="true">
+      <span class="hero__plate-ring hero__plate-ring--outer" />
+      <span class="hero__plate-ring hero__plate-ring--inner" />
+      <span class="hero__food hero__food--rice" />
+      <span class="hero__food hero__food--veg" />
+      <span class="hero__food hero__food--meat" />
+      <span class="hero__food hero__food--fruit" />
+      <span class="hero__chopsticks" />
     </div>
+
+    <div class="hero__chapters" aria-label="故事章节">
+      <span><b>01</b> 粮食安全</span>
+      <span><b>02</b> 饮食丰富</span>
+      <span><b>03</b> 可持续消费</span>
+    </div>
+
     <div class="scroll-hint">
-      <span>向下滚动探索</span>
+      <span>向下滚动</span>
       <div class="scroll-hint__line" />
     </div>
   </section>
@@ -22,113 +45,250 @@
 <style scoped>
 .hero {
   position: relative;
-  display: grid;
   min-height: 100vh;
-  place-items: center;
   overflow: hidden;
-  background:
-    linear-gradient(rgba(42, 32, 24, 0.2), rgba(42, 32, 24, 0.44)),
-    url('/assets/hero-table-grain.png') center / cover,
-    radial-gradient(circle at 50% 35%, rgba(255, 243, 210, 0.55), transparent 24rem),
-    linear-gradient(135deg, #8f2f24, #6c4a2f 46%, #2f4f3c);
+  background: #050403;
+  color: #fff7e8;
 }
 
-.hero__grain {
+.hero__backdrop {
   position: absolute;
   inset: 0;
-  opacity: 0.24;
+  background:
+    linear-gradient(90deg, rgba(5, 4, 3, 0.9), rgba(5, 4, 3, 0.32) 48%, rgba(5, 4, 3, 0.82)),
+    linear-gradient(180deg, rgba(5, 4, 3, 0.26), rgba(5, 4, 3, 0.92)),
+    url('/assets/hero-table-grain.png') center / cover;
+  transform: scale(1.04);
+  animation: heroSlowZoom 12s ease-in-out infinite alternate;
+}
+
+.hero__noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
   background-image:
-    linear-gradient(30deg, rgba(255, 255, 255, 0.08) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.08) 87.5%),
-    linear-gradient(150deg, rgba(255, 255, 255, 0.08) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.08) 87.5%);
-  background-size: 64px 112px;
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px);
+  background-size: 24px 24px, 38px 38px;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.hero__chrome {
+  position: absolute;
+  z-index: 3;
+  left: 48px;
+  right: 48px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: rgba(255, 247, 232, 0.62);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+}
+
+.hero__chrome--top {
+  top: 34px;
+}
+
+.hero__chrome i {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 247, 232, 0.22);
 }
 
 .hero__content {
   position: relative;
   z-index: 2;
-  width: min(980px, 82vw);
-  color: #fff7e8;
-  text-align: center;
-  text-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+  display: grid;
+  min-height: 100vh;
+  align-content: center;
+  width: min(1120px, 88vw);
+  margin: 0 auto;
+  padding: 10vh 0 18vh;
 }
 
 .hero h1 {
+  display: grid;
+  gap: 0.04em;
+  max-width: 980px;
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(4rem, 7vw, 7.8rem);
+  font-size: clamp(4.8rem, 9.2vw, 10.8rem);
   font-weight: 900;
-  line-height: 1.12;
-  letter-spacing: 0.02em;
+  line-height: 0.92;
+  letter-spacing: 0;
+  text-shadow: 0 18px 70px rgba(0, 0, 0, 0.5);
+}
+
+.hero h1 span {
+  padding-left: 0.42em;
+  color: #f0c86b;
+  font-style: italic;
 }
 
 .hero__subtitle {
-  margin: 26px auto 0;
-  max-width: 660px;
-  font-size: 1.35rem;
-  color: rgba(255, 247, 232, 0.86);
-  font-weight: 300;
+  max-width: 720px;
+  margin: 28px 0 0;
+  color: rgba(255, 247, 232, 0.78);
+  font-size: 1.28rem;
+  line-height: 1.8;
 }
 
-.hero__table {
+.hero__plate {
   position: absolute;
-  right: 8vw;
-  bottom: 10vh;
-  width: 360px;
-  height: 160px;
+  right: min(8vw, 112px);
+  bottom: 14vh;
+  z-index: 2;
+  width: 300px;
+  aspect-ratio: 1;
   border-radius: 50%;
-  background: rgba(77, 45, 30, 0.58);
-  box-shadow: inset 0 0 38px rgba(255, 240, 190, 0.18), var(--shadow-lg);
+  background: rgba(255, 249, 232, 0.06);
+  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.48));
 }
 
-.bowl {
+.hero__plate-ring {
   position: absolute;
-  width: 86px;
-  height: 44px;
-  border-radius: 8px 8px 44px 44px;
-  background: #fff2d2;
-  box-shadow: inset 0 -12px rgba(75, 45, 30, 0.18);
+  inset: 0;
+  border: 1px solid rgba(255, 247, 232, 0.22);
+  border-radius: 50%;
 }
 
-.bowl--rice { left: 76px; top: 44px; }
-.bowl--veg { left: 178px; top: 32px; background: #bdd69a; }
-.bowl--meat { left: 142px; top: 92px; background: #c7684d; }
+.hero__plate-ring--outer {
+  animation: rotatePlate 18s linear infinite;
+}
 
-.chopsticks {
+.hero__plate-ring--inner {
+  inset: 62px;
+  border-color: rgba(240, 200, 107, 0.26);
+  animation: rotatePlate 12s linear infinite reverse;
+}
+
+.hero__food {
   position: absolute;
-  right: 60px;
-  top: 44px;
-  width: 150px;
-  height: 6px;
-  background: #f5cf87;
-  transform: rotate(-24deg);
-  box-shadow: 0 14px 0 #e4b96f;
+  display: block;
+  border-radius: 999px;
+  box-shadow: inset 0 -10px rgba(0, 0, 0, 0.16);
+}
+
+.hero__food--rice {
+  top: 92px;
+  left: 86px;
+  width: 82px;
+  height: 54px;
+  background: #fff0c8;
+}
+
+.hero__food--veg {
+  top: 74px;
+  right: 82px;
+  width: 66px;
+  height: 66px;
+  background: #5f8d4e;
+}
+
+.hero__food--meat {
+  right: 94px;
+  bottom: 82px;
+  width: 88px;
+  height: 52px;
+  background: #a54235;
+}
+
+.hero__food--fruit {
+  left: 82px;
+  bottom: 88px;
+  width: 58px;
+  height: 58px;
+  background: #d88d40;
+}
+
+.hero__chopsticks {
+  position: absolute;
+  top: 76px;
+  right: -18px;
+  width: 190px;
+  height: 5px;
+  border-radius: 999px;
+  background: #e6bd72;
+  transform: rotate(-28deg);
+  box-shadow: 0 16px 0 #c89652;
+}
+
+.hero__chapters {
+  position: absolute;
+  right: 48px;
+  bottom: 42px;
+  z-index: 3;
+  display: flex;
+  gap: 18px;
+  color: rgba(255, 247, 232, 0.68);
+  font-size: 0.82rem;
+}
+
+.hero__chapters span {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 247, 232, 0.16);
+  border-radius: 999px;
+  background: rgba(5, 4, 3, 0.32);
+  backdrop-filter: blur(12px);
+}
+
+.hero__chapters b {
+  margin-right: 8px;
+  color: #f0c86b;
 }
 
 .scroll-hint {
   position: absolute;
-  bottom: 34px;
-  left: 50%;
-  z-index: 2;
+  bottom: 42px;
+  left: 48px;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  color: rgba(255, 247, 232, 0.75);
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  transform: translateX(-50%);
+  gap: 12px;
+  color: rgba(255, 247, 232, 0.72);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
   animation: floatHint 3s ease-in-out infinite;
 }
 
 .scroll-hint__line {
   width: 1px;
-  height: 42px;
-  background: linear-gradient(180deg, rgba(255, 247, 232, 0.75), transparent);
+  height: 52px;
+  background: linear-gradient(180deg, rgba(255, 247, 232, 0.7), transparent);
+}
+
+@keyframes heroSlowZoom {
+  from { transform: scale(1.04); }
+  to { transform: scale(1.1); }
+}
+
+@keyframes rotatePlate {
+  to { transform: rotate(360deg); }
 }
 
 @keyframes floatHint {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-8px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (max-width: 980px) {
+  .hero__plate,
+  .hero__chapters {
+    display: none;
+  }
+
+  .hero__chrome {
+    left: 28px;
+    right: 28px;
+  }
+
+  .scroll-hint {
+    left: 28px;
+  }
 }
 </style>
