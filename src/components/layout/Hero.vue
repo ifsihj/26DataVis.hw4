@@ -1,6 +1,14 @@
+<script setup>
+const heroBackground = `
+  linear-gradient(90deg, rgba(5, 4, 3, 0.9), rgba(5, 4, 3, 0.32) 48%, rgba(5, 4, 3, 0.82)),
+  linear-gradient(180deg, rgba(5, 4, 3, 0.26), rgba(5, 4, 3, 0.92)),
+  url('${import.meta.env.BASE_URL}assets/hero-table-grain.png') center / cover
+`;
+</script>
+
 <template>
   <section class="hero">
-    <div class="hero__backdrop" />
+    <div class="hero__backdrop" :style="{ background: heroBackground }" />
     <div class="hero__noise" />
 
     <div class="hero__chrome hero__chrome--top">
@@ -54,10 +62,6 @@
 .hero__backdrop {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(5, 4, 3, 0.9), rgba(5, 4, 3, 0.32) 48%, rgba(5, 4, 3, 0.82)),
-    linear-gradient(180deg, rgba(5, 4, 3, 0.26), rgba(5, 4, 3, 0.92)),
-    url('/assets/hero-table-grain.png') center / cover;
   transform: scale(1.04);
   animation: heroSlowZoom 12s ease-in-out infinite alternate;
 }

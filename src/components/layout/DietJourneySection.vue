@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import { dietStructureData } from '../../data/dietStructureData.js';
 import { takeoutData } from '../../data/takeoutData.js';
 
+const assetUrl = (fileName) => `${import.meta.env.BASE_URL}assets/${fileName}`;
 const sectionRef = ref(null);
 const activeStep = ref(0);
 const progress = ref(0);
@@ -165,7 +166,7 @@ onBeforeUnmount(() => {
           以及外卖如何把“吃饭”扩展到城市网络。
         </p>
       </div>
-      <img src="/assets/scene-rich-table.png" alt="卡通风格的中国家庭餐桌" />
+      <img :src="assetUrl('scene-rich-table.png')" alt="卡通风格的中国家庭餐桌" />
     </div>
 
     <div class="diet-journey__sticky">
