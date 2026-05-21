@@ -14,6 +14,6 @@ defineProps({
       <h2>{{ title }}</h2>
       <p>{{ subtitle }}</p>
     </div>
-    <img v-if="image" class="scene-title__image" :src="image" alt="" />
+    <img v-if="image" class="scene-title__image" :src="image" alt="" loading="lazy" />
   </section>
 </template>

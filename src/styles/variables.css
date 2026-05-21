@@ -1,13 +1,39 @@
 :root {
-  --cream: #f7efe0;
-  --cream-deep: #ead8b7;
-  --paper: #fff9ed;
-  --ink: #2f2821;
-  --muted: #867766;
-  --red: #8f2f24;
-  --green: #315f49;
-  --brown: #6c4a2f;
-  --amber: #d4a64a;
-  --line: rgba(47, 40, 33, 0.16);
-  --shadow: 0 24px 80px rgba(47, 40, 33, 0.18);
+  /* Brand palette — warm earth tones for a food/agriculture narrative */
+  --cream:        #f7efe0;
+  --cream-deep:   #ead8b7;
+  --paper:        #fff9ed;
+  --ink:          #2d241a;
+  --ink-soft:     #5a4a3a;
+  --muted:        #8f7a66;
+  --muted-light:  #b8a894;
+
+  /* Semantic accents */
+  --red:          #8f2f24;
+  --red-light:    #b84a3a;
+  --green:        #315f49;
+  --green-light:  #4a8a66;
+  --brown:        #6c4a2f;
+  --amber:        #d4a64a;
+  --amber-light:  #e8c86a;
+
+  /* Surface & chrome */
+  --line:         rgba(45, 36, 26, 0.12);
+  --line-light:   rgba(45, 36, 26, 0.06);
+  --shadow-sm:    0 4px 20px rgba(45, 36, 26, 0.08);
+  --shadow-md:    0 12px 40px rgba(45, 36, 26, 0.12);
+  --shadow-lg:    0 24px 80px rgba(45, 36, 26, 0.18);
+  --radius-sm:    6px;
+  --radius-md:    10px;
+  --radius-lg:    16px;
+
+  /* Typography */
+  --font-serif:   "Noto Serif SC", Georgia, "Noto Serif CJK SC", serif;
+  --font-sans:    "Noto Sans SC", Inter, "Microsoft YaHei", system-ui, sans-serif;
+
+  /* Transitions */
+  --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:     200ms;
+  --dur-slow:     500ms;
 }
