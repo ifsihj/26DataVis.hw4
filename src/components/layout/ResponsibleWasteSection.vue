@@ -1,25 +1,38 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import { fridgeWasteItems } from '../../data/fridgeWasteData.js';
-import { plateWasteScenario, reductionScenario } from '../../data/wasteReductionData.js';
-import { wasteCounterCopy, wasteImpactData } from '../../data/wasteImpactData.js';
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { fridgeWasteItems } from "../../data/fridgeWasteData.js";
+import {
+  plateWasteScenario,
+  reductionScenario,
+} from "../../data/wasteReductionData.js";
+import {
+  wasteCounterCopy,
+  wasteImpactData,
+} from "../../data/wasteImpactData.js";
 
 const secondsOnPage = ref(0);
 const selectedFridgeItemId = ref(fridgeWasteItems[0].id);
 const leftoverPercent = ref(10);
 const reductionPercent = ref(20);
 
-const selectedFridgeItem = computed(() =>
-  fridgeWasteItems.find((item) => item.id === selectedFridgeItemId.value) || fridgeWasteItems[0],
+const selectedFridgeItem = computed(
+  () =>
+    fridgeWasteItems.find((item) => item.id === selectedFridgeItemId.value) ||
+    fridgeWasteItems[0],
 );
 
-const wastePerSecondTonnes = wasteImpactData.annualWasteTonnes / (365 * 24 * 60 * 60);
-const liveWasteTonnes = computed(() => Math.round(secondsOnPage.value * wastePerSecondTonnes));
+const wastePerSecondTonnes =
+  wasteImpactData.annualWasteTonnes / (365 * 24 * 60 * 60);
+const liveWasteTonnes = computed(() =>
+  Math.round(secondsOnPage.value * wastePerSecondTonnes),
+);
 
 const plateWaste = computed(() => {
-  const wastePerMealGram = plateWasteScenario.mealWeightGram * (leftoverPercent.value / 100);
+  const wastePerMealGram =
+    plateWasteScenario.mealWeightGram * (leftoverPercent.value / 100);
   const weekKg = (wastePerMealGram * plateWasteScenario.mealsPerDay * 7) / 1000;
-  const yearKg = (wastePerMealGram * plateWasteScenario.mealsPerDay * 365) / 1000;
+  const yearKg =
+    (wastePerMealGram * plateWasteScenario.mealsPerDay * 365) / 1000;
   const cityYearTonnes = (yearKg * plateWasteScenario.cityPopulation) / 1000;
   return {
     wastePerMealGram,
@@ -30,7 +43,8 @@ const plateWaste = computed(() => {
 });
 
 const reductionImpact = computed(() => {
-  const savedTonnes = reductionScenario.baselineWasteTonnes * (reductionPercent.value / 100);
+  const savedTonnes =
+    reductionScenario.baselineWasteTonnes * (reductionPercent.value / 100);
   const savedKg = savedTonnes * 1000;
   return {
     savedTonnes,
@@ -46,7 +60,9 @@ const plateLeftoverStyle = computed(() => ({
 let timerId;
 
 function formatNumber(value, maximumFractionDigits = 0) {
-  return new Intl.NumberFormat('zh-CN', { maximumFractionDigits }).format(value);
+  return new Intl.NumberFormat("zh-CN", { maximumFractionDigits }).format(
+    value,
+  );
 }
 
 function formatLargeTonnes(value) {
@@ -71,10 +87,11 @@ onBeforeUnmount(() => {
     <div class="waste-opening">
       <div class="waste-opening__copy">
         <p class="eyebrow">Scene 03 / 一盘剩饭</p>
-        <h2>浪费很少以宏大的样子出现。</h2>
+        <h2>浪费</h2>
         <p>
-          它常常只是餐盘里剩下的一点饭菜、冰箱深处忘记的一盒食物、聚餐后没有打包的一桌菜。
-          第三幕先从一个具体场景开始，再把它放大成数字，最后回到每个人能做的选择。
+          食品浪费加剧了粮食不安全，并导致了1/3全球温室气体排放，其中餐饮业浪费尤为突出。中国作为最大的发展中国家，减少事物浪费对实现国家<strong>双碳</strong>目标和联合国<strong
+            >SDG 12.3</strong
+          >目标具有重要意义。明晰食物浪费现状、组成及特征是实施有效干预的基础。
         </p>
       </div>
 
@@ -88,12 +105,6 @@ onBeforeUnmount(() => {
           <strong>一顿饭剩 10%</strong>
           <span>看起来很少，乘以时间和人数就不再小。</span>
         </div>
-      </div>
-
-      <div class="broadcast-beats" aria-label="第三幕叙事节奏">
-        <span><b>01</b> 先看见一盘剩饭</span>
-        <span><b>02</b> 再放大成社会数字</span>
-        <span><b>03</b> 最后回到行动选择</span>
       </div>
     </div>
 
@@ -110,118 +121,20 @@ onBeforeUnmount(() => {
       </div>
       <div class="waste-counter__sources">
         <article v-for="sector in wasteImpactData.sectors" :key="sector.key">
-          <i :style="{ backgroundColor: sector.color, width: `${sector.share}%` }" />
+          <i
+            :style="{
+              backgroundColor: sector.color,
+              width: `${sector.share}%`,
+            }"
+          />
           <span>{{ sector.label }}</span>
           <strong>{{ sector.share }}%</strong>
         </article>
       </div>
     </div>
 
-    <div class="responsible-panel responsible-panel--fridge">
-      <div class="responsible-panel__copy">
-        <p class="eyebrow">回到家庭</p>
-        <h3>浪费常常不是“故意的”，而是被忘记的。</h3>
-        <p>
-          点击冰箱里的食物，看看常见的浪费原因。宏大的 10 亿吨，最终会落到每个家庭的购买、储存和处理习惯上。
-        </p>
-      </div>
-
-      <div class="fridge-interactive">
-        <div class="fridge-box" aria-label="可点击的家庭冰箱">
-          <button
-            v-for="item in fridgeWasteItems"
-            :key="item.id"
-            class="fridge-food"
-            :class="{ 'is-active': selectedFridgeItemId === item.id }"
-            :style="{ left: `${item.position.left}%`, top: `${item.position.top}%` }"
-            type="button"
-            @click="selectedFridgeItemId = item.id"
-          >
-            <span>{{ item.icon }}</span>
-            <small>{{ item.name }}</small>
-          </button>
-        </div>
-
-        <article class="fridge-card">
-          <p>{{ selectedFridgeItem.name }}</p>
-          <h4>{{ selectedFridgeItem.reason }}</h4>
-          <span>{{ selectedFridgeItem.detail }}</span>
-          <strong>{{ selectedFridgeItem.suggestion }}</strong>
-        </article>
-      </div>
-    </div>
-
-    <div class="responsible-panel responsible-panel--plate">
-      <div class="responsible-panel__copy">
-        <p class="eyebrow">个人模拟</p>
-        <h3>每顿饭剩下一点点，放大到一年就不再小。</h3>
-        <p>选择一顿饭的剩余比例，看看它如何被换算成一周、一年，以及一个千万人口城市的浪费量。</p>
-      </div>
-
-      <div class="plate-simulator">
-        <div class="plate-simulator__visual">
-          <div class="leftover-plate">
-            <div class="leftover-plate__food" :style="plateLeftoverStyle" />
-            <span>{{ leftoverPercent }}%</span>
-          </div>
-          <div class="leftover-buttons">
-            <button
-              v-for="option in plateWasteScenario.leftoverOptions"
-              :key="option"
-              :class="{ 'is-active': leftoverPercent === option }"
-              type="button"
-              @click="leftoverPercent = option"
-            >
-              剩 {{ option }}%
-            </button>
-          </div>
-        </div>
-
-        <div class="impact-grid">
-          <article>
-            <span>一周</span>
-            <strong>{{ formatNumber(plateWaste.weekKg, 1) }} kg</strong>
-          </article>
-          <article>
-            <span>一年</span>
-            <strong>{{ formatNumber(plateWaste.yearKg, 1) }} kg</strong>
-          </article>
-          <article>
-            <span>一座城市一年</span>
-            <strong>{{ formatLargeTonnes(plateWaste.cityYearTonnes) }}</strong>
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="responsible-panel responsible-panel--slider">
-      <div class="responsible-panel__copy">
-        <p class="eyebrow">行动反馈</p>
-        <h3>责任不是突然改变一切，而是从减少一点开始。</h3>
-        <p>拖动滑块，看看如果全球食品浪费减少一部分，能够节约多少食物，并减少多少隐含碳排。</p>
-      </div>
-
-      <div class="reduction-control">
-        <label>
-          <span>减少 {{ reductionPercent }}% 浪费</span>
-          <input v-model.number="reductionPercent" min="0" max="50" step="5" type="range" />
-        </label>
-
-        <div class="impact-grid impact-grid--green">
-          <article>
-            <span>节约食物</span>
-            <strong>{{ formatLargeTonnes(reductionImpact.savedTonnes) }}</strong>
-          </article>
-          <article>
-            <span>减少碳排</span>
-            <strong>{{ formatLargeTonnes(reductionImpact.carbonTonnes) }} CO2e</strong>
-          </article>
-          <article>
-            <span>相当于供餐</span>
-            <strong>{{ formatNumber(reductionImpact.peopleDays / 100000000, 2) }} 亿人天</strong>
-          </article>
-        </div>
-      </div>
+    <div class="responsible-panel">
+      <h2>浪费数量及构成</h2>
     </div>
 
     <div class="responsible-timeline">
@@ -255,7 +168,11 @@ onBeforeUnmount(() => {
 .responsible-waste {
   padding: 56px 5vw 88px;
   background:
-    radial-gradient(circle at 18% 8%, rgba(143, 51, 40, 0.15), transparent 26rem),
+    radial-gradient(
+      circle at 18% 8%,
+      rgba(143, 51, 40, 0.15),
+      transparent 26rem
+    ),
     linear-gradient(180deg, #efe1c7 0%, #d5c09e 42%, #60745f 100%);
   color: #2d241a;
 }
@@ -279,7 +196,11 @@ onBeforeUnmount(() => {
   align-items: center;
   padding: 36px;
   background:
-    linear-gradient(135deg, rgba(255, 249, 237, 0.9), rgba(234, 216, 183, 0.86)),
+    linear-gradient(
+      135deg,
+      rgba(255, 249, 237, 0.9),
+      rgba(234, 216, 183, 0.86)
+    ),
     #fff9ed;
 }
 
@@ -476,7 +397,11 @@ onBeforeUnmount(() => {
   border: 10px solid #f8efe0;
   border-radius: 28px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(214, 231, 218, 0.78)),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.72),
+      rgba(214, 231, 218, 0.78)
+    ),
     #d6e8dc;
   box-shadow: inset 0 0 0 2px rgba(49, 95, 73, 0.15);
 }
@@ -491,8 +416,12 @@ onBeforeUnmount(() => {
   background: rgba(49, 95, 73, 0.16);
 }
 
-.fridge-box::before { top: 38%; }
-.fridge-box::after { top: 68%; }
+.fridge-box::before {
+  top: 38%;
+}
+.fridge-box::after {
+  top: 68%;
+}
 
 .fridge-food {
   position: absolute;
@@ -506,7 +435,9 @@ onBeforeUnmount(() => {
   color: #2d241a;
   cursor: pointer;
   transform: translate(-50%, -50%);
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .fridge-food span {
