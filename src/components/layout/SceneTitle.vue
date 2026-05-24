@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <section class="scene-title" :class="{ 'scene-title--with-image': image }">
-    <div class="scene-title__index">{{ eyebrow }}</div>
+    <div class="scene-title__index">{{ eyebrow.replace('Scene ', '') }}</div>
     <div class="scene-title__copy">
       <p class="eyebrow">{{ eyebrow }}</p>
       <h2>{{ title }}</h2>

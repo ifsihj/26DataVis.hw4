@@ -1,7 +1,10 @@
 <template>
   <section class="story-marquee" aria-label="故事关键词">
-    <div class="story-marquee__track">
+    <div class="story-marquee__track story-marquee__track--forward">
       <span v-for="item in repeatedWords" :key="item.id">{{ item.word }}</span>
+    </div>
+    <div class="story-marquee__track story-marquee__track--reverse" aria-hidden="true">
+      <span v-for="item in repeatedWords" :key="'r-' + item.id">{{ item.word }}</span>
     </div>
   </section>
 </template>

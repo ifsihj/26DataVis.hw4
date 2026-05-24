@@ -9,6 +9,9 @@ import {
   wasteCounterCopy,
   wasteImpactData,
 } from "../../data/wasteImpactData.js";
+import CarbonFootprintBarChart from "../charts/CarbonFootprintBarChart.vue";
+import FoodWasteCompositionChart from "../charts/FoodWasteCompositionChart.vue";
+import FoodWasteTrendChart from "../charts/FoodWasteTrendChart.vue";
 
 const secondsOnPage = ref(0);
 const selectedFridgeItemId = ref(fridgeWasteItems[0].id);
@@ -133,8 +136,17 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div class="responsible-panel">
-      <h2>浪费数量及构成</h2>
+    <div class="waste-charts">
+      <div class="waste-charts__header">
+        <p class="eyebrow">Data View</p>
+        <h2>浪费构成、碳足迹与浪费趋势</h2>
+        <p>先看不同食物类别的浪费数量及人均每餐浪费量，再对照碳足迹和长期趋势，理解“吃得负责”背后的结构性问题。</p>
+      </div>
+      <div class="waste-charts__grid">
+        <FoodWasteCompositionChart />
+        <CarbonFootprintBarChart />
+        <FoodWasteTrendChart />
+      </div>
     </div>
 
     <div class="responsible-timeline">
@@ -382,6 +394,45 @@ onBeforeUnmount(() => {
   align-items: center;
   margin-top: 28px;
   padding: 30px;
+}
+
+.waste-charts {
+  max-width: 1120px;
+  margin: 28px auto 0;
+  padding: 34px;
+  border: 1px solid rgba(45, 36, 26, 0.13);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 249, 237, 0.92), rgba(234, 216, 183, 0.84)),
+    #fff9ed;
+  box-shadow: 0 28px 70px rgba(45, 36, 26, 0.16);
+}
+
+.waste-charts__header {
+  margin-bottom: 24px;
+}
+
+.waste-charts__header h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-serif);
+  color: #2d241a;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.waste-charts__header p:last-child {
+  max-width: 720px;
+  margin: 0;
+  color: rgba(45, 36, 26, 0.66);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.waste-charts__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
 .fridge-interactive {
@@ -682,6 +733,7 @@ onBeforeUnmount(() => {
 
   .broadcast-beats,
   .waste-counter__sources,
+  .waste-charts__grid,
   .impact-grid,
   .responsible-timeline__nodes {
     grid-template-columns: 1fr;
