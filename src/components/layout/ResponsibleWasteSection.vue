@@ -92,12 +92,17 @@ onBeforeUnmount(() => {
     <div class="waste-opening">
       <div class="waste-opening__copy">
         <p class="eyebrow">Scene 03 / 一盘剩饭</p>
-        <h2>浪费</h2>
+        <h2>吃得负责</h2>
         <p>
           食品浪费加剧了粮食不安全，并导致了1/3全球温室气体排放，其中餐饮业浪费尤为突出。中国作为最大的发展中国家，减少事物浪费对实现国家<strong>双碳</strong>目标和联合国<strong
             >SDG 12.3</strong
           >目标具有重要意义。明晰食物浪费现状、组成及特征是实施有效干预的基础。
         </p>
+        <div class="broadcast-beats">
+          <span><b>从餐盘看见浪费</b>剩下的一口饭，不只是餐桌上的残余，也是已经投入的土地、水、能源和劳动。</span>
+          <span><b>从类别看见差异</b>有些食物浪费总量更大，有些食物单次浪费不显眼，却在频繁消费中累积。</span>
+          <span><b>从选择看见未来</b>负责任的饮食不是降低生活质量，而是在丰盛之后学会更准确地珍惜。</span>
+        </div>
       </div>
 
       <div class="waste-opening__plate" aria-hidden="true">
@@ -117,7 +122,10 @@ onBeforeUnmount(() => {
       <div class="waste-counter__copy">
         <p class="eyebrow">数字放大</p>
         <h2>{{ wasteCounterCopy.headline }}</h2>
-        <p>{{ wasteCounterCopy.note }}</p>
+        <p>
+          {{ wasteCounterCopy.note }}
+          数字每秒跳动，是为了把“全球每年十亿吨级”的抽象规模，压缩成用户正在阅读时也会发生的时间感。
+        </p>
       </div>
       <div class="waste-counter__number">
         <span>已浪费约</span>
@@ -145,7 +153,22 @@ onBeforeUnmount(() => {
         <p>
           蓝色柱表示各类食物的浪费总量，已经按从高到低排序；橙色点表示平均每人每餐浪费了多少克。
           这张图不是为了责备某一种食物，而是提醒我们：浪费既有总量差异，也有日常餐桌上的习惯差异。
+          第二张图进一步把“消费量”和“浪费率”放在一起看；第三张图则把浪费背后的环境足迹拆开，让一盘剩饭连接到土地、水、氮磷投入与碳排放。
         </p>
+      </div>
+      <div class="chart-reading-guide">
+        <article>
+          <strong>先看总量</strong>
+          <span>哪些食物浪费最多，决定了治理时最应该优先看见哪里。</span>
+        </article>
+        <article>
+          <strong>再看比例</strong>
+          <span>消费量大的类别需要规模化管理，浪费率高的类别需要更细的储存和烹饪策略。</span>
+        </article>
+        <article>
+          <strong>最后看代价</strong>
+          <span>浪费不是一个末端动作，它会把前面所有资源投入一并带走。</span>
+        </article>
       </div>
       <div class="waste-charts__grid">
         <FoodWasteCompositionChart />
@@ -177,7 +200,7 @@ onBeforeUnmount(() => {
         </article>
       </div>
       <p class="responsible-timeline__closing">
-        吃得负责，不是回到匮乏，而是在丰盛之后学会珍惜。
+        吃得负责，不是回到匮乏，而是在丰盛之后学会珍惜。中国餐桌的下一步，不只是在“更多”里获得满足，也是在“更少浪费”里建立新的文明尺度。
       </p>
     </div>
   </section>
@@ -440,6 +463,34 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+}
+
+.chart-reading-guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 22px;
+}
+
+.chart-reading-guide article {
+  display: grid;
+  gap: 7px;
+  min-height: 110px;
+  padding: 16px;
+  border: 1px solid rgba(45, 36, 26, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 249, 237, 0.58);
+}
+
+.chart-reading-guide strong {
+  color: #8f3328;
+  font-size: 1rem;
+}
+
+.chart-reading-guide span {
+  color: rgba(45, 36, 26, 0.68);
+  font-size: 0.9rem;
+  line-height: 1.65;
 }
 
 .fridge-interactive {
@@ -740,6 +791,7 @@ onBeforeUnmount(() => {
 
   .broadcast-beats,
   .waste-counter__sources,
+  .chart-reading-guide,
   .waste-charts__grid,
   .impact-grid,
   .responsible-timeline__nodes {
