@@ -11,6 +11,7 @@ import {
 } from "../../data/wasteImpactData.js";
 import CarbonFootprintBarChart from "../charts/CarbonFootprintBarChart.vue";
 import FoodWasteCompositionChart from "../charts/FoodWasteCompositionChart.vue";
+import FoodWasteRateChart from "../charts/FoodWasteRateChart.vue";
 import FoodWasteTrendChart from "../charts/FoodWasteTrendChart.vue";
 
 const secondsOnPage = ref(0);
@@ -147,6 +148,7 @@ onBeforeUnmount(() => {
       </div>
       <div class="waste-charts__grid">
         <FoodWasteCompositionChart />
+        <FoodWasteRateChart />
         <CarbonFootprintBarChart />
         <FoodWasteTrendChart />
       </div>
