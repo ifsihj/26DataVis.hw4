@@ -4,9 +4,8 @@ export const fridgeWasteItems = [
     name: '蔬菜',
     icon: '🥬',
     reason: '买多了，来不及吃',
-    detail:
-      '绿叶菜和新鲜蔬菜最怕“囤”。如果没有提前计划菜单，几天后就会失水、变黄，最后被丢掉。',
-    suggestion: '按 2-3 天食量购买，先吃更容易变质的食材。',
+    detail: '绿叶菜和新鲜蔬菜最怕“囤”。如果没有提前计划菜单，几天后就会失水、变黄，最后被丢掉。',
+    suggestion: '按 2-3 天食量购买，先吃易腐食材。',
     position: { left: 22, top: 22 },
   },
   {
@@ -14,18 +13,16 @@ export const fridgeWasteItems = [
     name: '牛奶',
     icon: '🥛',
     reason: '过期了',
-    detail:
-      '很多浪费不是因为不想吃，而是标签日期被忽略。冰箱深处的奶制品尤其容易被忘记。',
+    detail: '很多浪费不是因为不想吃，而是标签日期被忽略。冰箱深处的奶制品尤其容易被忘记。',
     suggestion: '把临期食品放在视线最容易看到的位置。',
     position: { left: 58, top: 20 },
   },
   {
     id: 'leftovers',
     name: '剩菜',
-    icon: '🍱',
+    icon: '🍲',
     reason: '不知道怎么处理',
-    detail:
-      '剩菜常常因为“不够一顿”或“不知道怎么搭配”被搁置。它需要被重新设计成下一餐。',
+    detail: '剩菜常常因为“不够一顿”或“不知道怎么搭配”被搁置。它需要被重新设计成下一餐。',
     suggestion: '给剩菜贴日期，第二天优先做成炒饭、汤面或便当。',
     position: { left: 27, top: 52 },
   },
@@ -34,8 +31,7 @@ export const fridgeWasteItems = [
     name: '水果',
     icon: '🍎',
     reason: '忘在角落',
-    detail:
-      '水果常被放进抽屉后消失在视线里。等想起来时，已经变软或发霉。',
+    detail: '水果常被放进抽屉后消失在视线里。等想起来时，已经变软或发霉。',
     suggestion: '把水果放在透明盒或桌面果盘中。',
     position: { left: 64, top: 52 },
   },
@@ -44,8 +40,7 @@ export const fridgeWasteItems = [
     name: '肉类',
     icon: '🥩',
     reason: '解冻后没有及时烹饪',
-    detail:
-      '肉类从冷冻到解冻需要计划。一旦解冻却没有烹饪，浪费风险会迅速上升。',
+    detail: '肉类从冷冻到解冻需要计划。一旦解冻却没有烹饪，浪费风险会迅速上升。',
     suggestion: '分装冷冻，每次只解冻一餐需要的量。',
     position: { left: 45, top: 76 },
   },

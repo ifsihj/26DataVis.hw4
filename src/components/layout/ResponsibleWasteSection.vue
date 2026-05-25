@@ -1,19 +1,19 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import { fridgeWasteItems } from '../../data/fridgeWasteData.js';
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { fridgeWasteItems } from "../../data/fridgeWasteData.js";
 import {
   plateWasteScenario,
   reductionScenario,
-} from '../../data/wasteReductionData.js';
+} from "../../data/wasteReductionData.js";
 import {
   wasteCounterCopy,
   wasteImpactData,
-} from '../../data/wasteImpactData.js';
-import CarbonFootprintBarChart from '../charts/CarbonFootprintBarChart.vue';
-import FoodWasteCompositionChart from '../charts/FoodWasteCompositionChart.vue';
-import FoodWasteEnvironmentalImpactChart from '../charts/FoodWasteEnvironmentalImpactChart.vue';
-import FoodWasteRateChart from '../charts/FoodWasteRateChart.vue';
-import FoodWasteTrendChart from '../charts/FoodWasteTrendChart.vue';
+} from "../../data/wasteImpactData.js";
+import CarbonFootprintBarChart from "../charts/CarbonFootprintBarChart.vue";
+import FoodWasteCompositionChart from "../charts/FoodWasteCompositionChart.vue";
+import FoodWasteEnvironmentalImpactChart from "../charts/FoodWasteEnvironmentalImpactChart.vue";
+import FoodWasteRateChart from "../charts/FoodWasteRateChart.vue";
+import FoodWasteTrendChart from "../charts/FoodWasteTrendChart.vue";
 
 const secondsOnPage = ref(0);
 const selectedFridgeItemId = ref(fridgeWasteItems[0].id);
@@ -65,7 +65,7 @@ const plateLeftoverStyle = computed(() => ({
 let timerId;
 
 function formatNumber(value, maximumFractionDigits = 0) {
-  return new Intl.NumberFormat('zh-CN', { maximumFractionDigits }).format(
+  return new Intl.NumberFormat("zh-CN", { maximumFractionDigits }).format(
     value,
   );
 }
@@ -92,16 +92,12 @@ onBeforeUnmount(() => {
     <div class="waste-opening">
       <div class="waste-opening__copy">
         <p class="eyebrow">Scene 03 / 一盘剩饭</p>
-        <h2>吃得负责</h2>
+        <h2>浪费</h2>
         <p>
-          丰盛之后，餐桌上的问题换了形态：不是有没有食物，而是食物有没有被认真对待。
-          食品浪费会把土地、水、能源、运输和劳动一起浪费掉，也让“吃得好”之后的餐桌开始面对新的责任。
+          食品浪费加剧了粮食不安全，并导致了1/3全球温室气体排放，其中餐饮业浪费尤为突出。中国作为最大的发展中国家，减少事物浪费对实现国家<strong>双碳</strong>目标和联合国<strong
+            >SDG 12.3</strong
+          >目标具有重要意义。明晰食物浪费现状、组成及特征是实施有效干预的基础。
         </p>
-        <div class="broadcast-beats">
-          <span><b>看见总量</b>浪费不是餐盘边缘的一点残渣，而是不断累积的系统性损失。</span>
-          <span><b>看见原因</b>买多、忘记、过期、不会处理，常常发生在最普通的一顿饭里。</span>
-          <span><b>看见改变</b>减少 10% 的浪费，也会在一周、一年、一座城市里被放大。</span>
-        </div>
       </div>
 
       <div class="waste-opening__plate" aria-hidden="true">
@@ -119,15 +115,12 @@ onBeforeUnmount(() => {
 
     <div class="waste-counter">
       <div class="waste-counter__copy">
-        <p class="eyebrow">实时计数器</p>
+        <p class="eyebrow">数字放大</p>
         <h2>{{ wasteCounterCopy.headline }}</h2>
-        <p>
-          {{ wasteCounterCopy.note }}
-          这个数字不是精确监测，而是把宏观数据换算成正在发生的时间感。
-        </p>
+        <p>{{ wasteCounterCopy.note }}</p>
       </div>
       <div class="waste-counter__number">
-        <span>进入本页后已浪费约</span>
+        <span>已浪费约</span>
         <strong>{{ formatNumber(liveWasteTonnes) }}</strong>
         <em>吨食物</em>
       </div>
@@ -145,151 +138,19 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div class="responsible-panel">
-      <div class="responsible-panel__copy">
-        <p class="eyebrow">家庭冰箱</p>
-        <h3>浪费常常从“先放着”开始</h3>
-        <p>
-          点击冰箱里的食物，看看它们为什么容易被浪费。这里的交互把“食品浪费”从抽象数字拉回日常生活：
-          很多损失不是发生在遥远的供应链，而是发生在一次购物、一只抽屉、一个被忘记的保鲜盒里。
-        </p>
-      </div>
-      <div class="fridge-interactive">
-        <div class="fridge-box" aria-label="可点击的家庭冰箱">
-          <button
-            v-for="item in fridgeWasteItems"
-            :key="item.id"
-            class="fridge-food"
-            :class="{ 'is-active': selectedFridgeItemId === item.id }"
-            :style="{
-              left: `${item.position.left}%`,
-              top: `${item.position.top}%`,
-            }"
-            type="button"
-            @click="selectedFridgeItemId = item.id"
-          >
-            <span>{{ item.icon }}</span>
-            <small>{{ item.name }}</small>
-          </button>
-        </div>
-        <article class="fridge-card">
-          <p>{{ selectedFridgeItem.name }}为什么会被浪费？</p>
-          <h4>{{ selectedFridgeItem.reason }}</h4>
-          <span>{{ selectedFridgeItem.detail }}</span>
-          <strong>可以这样做：{{ selectedFridgeItem.suggestion }}</strong>
-        </article>
-      </div>
-    </div>
-
-    <div class="responsible-panel">
-      <div class="responsible-panel__copy">
-        <p class="eyebrow">剩余模拟器</p>
-        <h3>一口剩饭，乘以时间</h3>
-        <p>
-          选择一顿饭大约剩下多少。页面会把它换算成一周、一年和一座千万人口城市的浪费量。
-          这个模拟不是为了制造焦虑，而是让“少剩一点”变得可感知。
-        </p>
-      </div>
-      <div class="plate-simulator">
-        <div>
-          <div class="leftover-plate">
-            <div class="leftover-plate__food" :style="plateLeftoverStyle" />
-            <span>{{ leftoverPercent }}%</span>
-          </div>
-          <div class="leftover-buttons">
-            <button
-              v-for="option in plateWasteScenario.leftoverOptions"
-              :key="option"
-              :class="{ 'is-active': leftoverPercent === option }"
-              type="button"
-              @click="leftoverPercent = option"
-            >
-              剩 {{ option }}%
-            </button>
-          </div>
-        </div>
-        <div class="impact-grid">
-          <article>
-            <span>每顿剩下</span>
-            <strong>{{ formatNumber(plateWaste.wastePerMealGram, 1) }} 克</strong>
-          </article>
-          <article>
-            <span>一周约</span>
-            <strong>{{ formatNumber(plateWaste.weekKg, 1) }} 千克</strong>
-          </article>
-          <article>
-            <span>一年约</span>
-            <strong>{{ formatNumber(plateWaste.yearKg, 0) }} 千克</strong>
-          </article>
-          <article>
-            <span>千万人口城市一年约</span>
-            <strong>{{ formatLargeTonnes(plateWaste.cityYearTonnes) }}</strong>
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="responsible-panel">
-      <div class="responsible-panel__copy">
-        <p class="eyebrow">减少浪费</p>
-        <h3>责任不是口号，是可以计算的改变</h3>
-        <p>
-          拖动滑块，观察减少浪费带来的连锁影响。节约的不是一个孤立数字，而是食物、碳排和更多人的餐食机会。
-        </p>
-      </div>
-      <div class="reduction-control">
-        <label>
-          <span>减少 {{ reductionPercent }}% 浪费</span>
-          <input v-model.number="reductionPercent" type="range" min="0" max="50" step="5" />
-        </label>
-        <div class="impact-grid impact-grid--green">
-          <article>
-            <span>可节约食物</span>
-            <strong>{{ formatLargeTonnes(reductionImpact.savedTonnes) }}</strong>
-          </article>
-          <article>
-            <span>可减少碳排</span>
-            <strong>{{ formatLargeTonnes(reductionImpact.carbonTonnes) }}</strong>
-          </article>
-          <article>
-            <span>约可供餐</span>
-            <strong>{{ formatNumber(reductionImpact.peopleDays / 100000000, 1) }} 亿人天</strong>
-          </article>
-        </div>
-      </div>
-    </div>
-
     <div class="waste-charts">
       <div class="waste-charts__header">
         <p class="eyebrow">数据放大镜</p>
-        <h2>浪费最多的，不一定只是“最该被责备”的</h2>
+        <h2>哪些食物浪费得最多？</h2>
         <p>
-          接下来的图表把浪费拆成三层：先看各类食物浪费总量和人均每餐浪费量，
-          再看消费规模与浪费率，最后看浪费背后对应的环境足迹。请把鼠标移到图形上查看细节，也可以点击柱子或色块锁定关注对象。
+          蓝色柱表示各类食物的浪费总量，已经按从高到低排序；橙色点表示平均每人每餐浪费了多少克。
+          这张图不是为了责备某一种食物，而是提醒我们：浪费既有总量差异，也有日常餐桌上的习惯差异。
         </p>
       </div>
-      <div class="chart-story-card chart-story-card--wide">
-        <div class="chart-story-card__copy">
-          <strong>第一层：谁贡献了更多浪费总量？</strong>
-          <p>蓝色柱越高，说明该类别累计浪费越多；橙色点则提醒我们，一顿饭里的“几克”也会不断累积。</p>
-        </div>
-        <FoodWasteCompositionChart />
-      </div>
-      <div class="chart-story-card chart-story-card--wide">
-        <div class="chart-story-card__copy">
-          <strong>第二层：消费多，还是浪费率高？</strong>
-          <p>肉类、蔬菜、谷物有更大的消费基数；根茎薯类虽然消费量小，但浪费率更突出，治理策略不能只看总量。</p>
-        </div>
-        <FoodWasteRateChart />
-      </div>
-      <div class="chart-story-card chart-story-card--wide">
-        <div class="chart-story-card__copy">
-          <strong>第三层：浪费损失的是哪一种环境代价？</strong>
-          <p>同样是浪费，不同食物背后的土地、水、氮、磷和碳足迹并不相同。点击色块可以看某一类食物在五种足迹中的位置。</p>
-        </div>
-        <FoodWasteEnvironmentalImpactChart />
-      </div>
       <div class="waste-charts__grid">
+        <FoodWasteCompositionChart />
+        <FoodWasteRateChart />
+        <FoodWasteEnvironmentalImpactChart />
         <CarbonFootprintBarChart />
         <FoodWasteTrendChart />
       </div>
@@ -462,10 +323,10 @@ onBeforeUnmount(() => {
 }
 
 .broadcast-beats {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  margin-top: 22px;
 }
 
 .broadcast-beats span {
@@ -475,12 +336,10 @@ onBeforeUnmount(() => {
   background: rgba(255, 255, 255, 0.42);
   color: rgba(45, 36, 26, 0.72);
   font-weight: 800;
-  line-height: 1.5;
 }
 
 .broadcast-beats b {
-  display: block;
-  margin-bottom: 4px;
+  margin-right: 8px;
   color: #8f3328;
 }
 
@@ -537,7 +396,7 @@ onBeforeUnmount(() => {
 
 .responsible-panel {
   display: grid;
-  grid-template-columns: 0.78fr 1.22fr;
+  grid-template-columns: 0.82fr 1.18fr;
   gap: 30px;
   align-items: center;
   margin-top: 28px;
@@ -570,45 +429,17 @@ onBeforeUnmount(() => {
 }
 
 .waste-charts__header p:last-child {
-  max-width: 820px;
+  max-width: 720px;
   margin: 0;
   color: rgba(45, 36, 26, 0.66);
   font-size: 0.95rem;
   line-height: 1.75;
 }
 
-.chart-story-card {
-  display: grid;
-  gap: 16px;
-  margin-top: 20px;
-  padding: 18px;
-  border: 1px solid rgba(45, 36, 26, 0.11);
-  border-radius: 8px;
-  background: rgba(255, 249, 237, 0.58);
-}
-
-.chart-story-card__copy {
-  display: grid;
-  gap: 6px;
-}
-
-.chart-story-card__copy strong {
-  color: #8f3328;
-  font-size: 1.08rem;
-}
-
-.chart-story-card__copy p {
-  max-width: 850px;
-  margin: 0;
-  color: rgba(45, 36, 26, 0.66);
-  line-height: 1.7;
-}
-
 .waste-charts__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  margin-top: 20px;
 }
 
 .fridge-interactive {
@@ -646,7 +477,6 @@ onBeforeUnmount(() => {
 .fridge-box::before {
   top: 38%;
 }
-
 .fridge-box::after {
   top: 68%;
 }
@@ -785,7 +615,7 @@ onBeforeUnmount(() => {
 
 .impact-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -828,10 +658,6 @@ onBeforeUnmount(() => {
 .reduction-control input {
   width: 100%;
   accent-color: #315f49;
-}
-
-.impact-grid--green {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .impact-grid--green strong {
@@ -916,7 +742,6 @@ onBeforeUnmount(() => {
   .waste-counter__sources,
   .waste-charts__grid,
   .impact-grid,
-  .impact-grid--green,
   .responsible-timeline__nodes {
     grid-template-columns: 1fr;
   }

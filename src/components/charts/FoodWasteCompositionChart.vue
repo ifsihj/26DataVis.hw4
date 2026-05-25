@@ -12,15 +12,13 @@ const sortedData = computed(() =>
 
 function draw() {
   const width = 900;
-  const height = 480;
-  const margin = { top: 64, right: 92, bottom: 102, left: 76 };
+  const height = 460;
+  const margin = { top: 58, right: 86, bottom: 96, left: 72 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
   const data = sortedData.value;
-  let focusedCategory = data[0].category;
 
-  const svg = clearSvg(svgRef, width, height)
-    .attr('preserveAspectRatio', 'xMidYMid meet');
+  const svg = clearSvg(svgRef, width, height);
   const tooltip = createTooltip();
 
   const x = d3.scaleBand()
@@ -29,12 +27,12 @@ function draw() {
     .padding(0.32);
 
   const yLeft = d3.scaleLinear()
-    .domain([0, d3.max(data, (d) => d.wasteQuantityMt) * 1.2])
+    .domain([0, d3.max(data, (d) => d.wasteQuantityMt) * 1.18])
     .nice()
     .range([innerH, 0]);
 
   const yRight = d3.scaleLinear()
-    .domain([0, d3.max(data, (d) => d.perMealGram) * 1.15])
+    .domain([0, d3.max(data, (d) => d.perMealGram) * 1.14])
     .nice()
     .range([innerH, 0]);
 
@@ -51,8 +49,8 @@ function draw() {
   svg.append('text')
     .attr('class', 'chart-note')
     .attr('x', margin.left)
-    .attr('y', 50)
-    .text('点击柱子或圆点锁定类别；蓝色柱为浪费总量，橙色点为人均每餐浪费量。');
+    .attr('y', 48)
+    .text('蓝色柱为浪费总量，按降序排列；橙色点为人均每餐浪费量。');
 
   g.append('g')
     .call(d3.axisLeft(yLeft).ticks(5).tickSize(-innerW).tickFormat(''))
@@ -97,74 +95,32 @@ function draw() {
     .text('食物浪费数量（百万吨）');
 
   svg.append('text')
-    .attr('x', width - 24)
+    .attr('x', width - 22)
     .attr('y', margin.top + innerH / 2)
-    .attr('transform', `rotate(90, ${width - 24}, ${margin.top + innerH / 2})`)
+    .attr('transform', `rotate(90, ${width - 22}, ${margin.top + innerH / 2})`)
     .attr('fill', 'var(--muted)')
     .attr('font-size', '0.85rem')
     .attr('font-weight', 700)
     .attr('text-anchor', 'middle')
     .text('人均每餐浪费量（克）');
 
-  const focusText = svg.append('g')
-    .attr('transform', `translate(${width - 270}, 58)`);
-
-  focusText.append('rect')
-    .attr('width', 230)
-    .attr('height', 60)
-    .attr('rx', 8)
-    .attr('fill', 'rgba(255,249,237,0.86)')
-    .attr('stroke', 'rgba(45,36,26,0.12)');
-
-  const focusTitle = focusText.append('text')
-    .attr('x', 14)
-    .attr('y', 24)
-    .attr('fill', '#8f3328')
-    .attr('font-size', '0.86rem')
-    .attr('font-weight', 900);
-
-  const focusNote = focusText.append('text')
-    .attr('x', 14)
-    .attr('y', 44)
-    .attr('fill', 'rgba(45,36,26,0.68)')
-    .attr('font-size', '0.76rem')
-    .attr('font-weight', 700);
-
-  function setFocus(category) {
-    focusedCategory = category;
-    const datum = data.find((d) => d.category === category);
-    focusTitle.text(`当前关注：${datum.category}`);
-    focusNote.text(`浪费 ${datum.wasteQuantityMt.toFixed(2)} 百万吨 / 每餐 ${datum.perMealGram.toFixed(1)} 克`);
-    g.selectAll('.composition-bar')
-      .attr('opacity', (d) => (d.category === focusedCategory ? 1 : 0.34))
-      .attr('stroke', (d) => (d.category === focusedCategory ? '#8f3328' : 'none'))
-      .attr('stroke-width', (d) => (d.category === focusedCategory ? 2 : 0));
-    g.selectAll('.composition-dot')
-      .attr('opacity', (d) => (d.category === focusedCategory ? 1 : 0.38))
-      .attr('r', (d) => (d.category === focusedCategory ? 9 : 6.5));
-    g.selectAll('.composition-value')
-      .attr('opacity', (d) => (d.category === focusedCategory ? 1 : 0.48));
-  }
-
   g.selectAll('.composition-bar')
     .data(data)
     .join('rect')
     .attr('class', 'composition-bar')
     .attr('data-category', (d) => d.category)
+    .attr('data-waste', (d) => d.wasteQuantityMt)
     .attr('x', (d) => x(d.category))
     .attr('y', innerH)
     .attr('width', x.bandwidth())
     .attr('height', 0)
     .attr('rx', 4)
     .attr('fill', '#2f6eb8')
-    .attr('cursor', 'pointer')
-    .on('click', (_, d) => setFocus(d.category))
     .on('mousemove', (event, d) => {
       showTooltip(tooltip, event, `
         <strong>${d.category}</strong><br/>
         浪费数量：${d.wasteQuantityMt.toFixed(2)} 百万吨<br/>
-        人均每餐：${d.perMealGram.toFixed(1)} 克<br/>
-        点击可锁定高亮
+        人均每餐：${d.perMealGram.toFixed(1)} 克
       `);
     })
     .on('mouseleave', () => hideTooltip(tooltip))
@@ -173,10 +129,7 @@ function draw() {
     .delay((_, i) => i * 45)
     .ease(d3.easeCubicOut)
     .attr('y', (d) => yLeft(d.wasteQuantityMt))
-    .attr('height', (d) => innerH - yLeft(d.wasteQuantityMt))
-    .on('end', (_, i) => {
-      if (i === data.length - 1) setFocus(focusedCategory);
-    });
+    .attr('height', (d) => innerH - yLeft(d.wasteQuantityMt));
 
   g.selectAll('.composition-dot')
     .data(data)
@@ -188,13 +141,11 @@ function draw() {
     .attr('fill', '#f28c28')
     .attr('stroke', '#fff9ed')
     .attr('stroke-width', 3)
-    .attr('cursor', 'pointer')
-    .on('click', (_, d) => setFocus(d.category))
     .on('mousemove', (event, d) => {
       showTooltip(tooltip, event, `
         <strong>${d.category}</strong><br/>
         人均每餐浪费量：${d.perMealGram.toFixed(1)} 克<br/>
-        浪费总量：${d.wasteQuantityMt.toFixed(2)} 百万吨
+        蓝色柱排序值：${d.wasteQuantityMt.toFixed(2)} 百万吨
       `);
     })
     .on('mouseleave', () => hideTooltip(tooltip))
@@ -221,7 +172,7 @@ function draw() {
     .attr('opacity', 1);
 
   const legend = svg.append('g')
-    .attr('transform', `translate(${width / 2 - 178}, ${height - 20})`);
+    .attr('transform', `translate(${width / 2 - 170}, ${height - 18})`);
 
   legend.append('rect')
     .attr('width', 14)
@@ -236,12 +187,12 @@ function draw() {
     .text('食物浪费数量（百万吨）');
 
   legend.append('circle')
-    .attr('cx', 226)
+    .attr('cx', 216)
     .attr('cy', 7)
     .attr('r', 7)
     .attr('fill', '#f28c28');
   legend.append('text')
-    .attr('x', 240)
+    .attr('x', 230)
     .attr('y', 12)
     .attr('fill', 'var(--muted)')
     .attr('font-size', '0.82rem')
@@ -257,10 +208,11 @@ onMounted(draw);
 
 <style scoped>
 .food-waste-composition-chart {
+  grid-column: 1 / -1;
   display: block;
   width: 100%;
   max-width: 100%;
-  min-height: 480px;
-  height: 480px;
+  min-height: 460px;
+  height: 460px;
 }
 </style>
