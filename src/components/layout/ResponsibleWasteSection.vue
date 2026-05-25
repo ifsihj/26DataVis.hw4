@@ -11,6 +11,7 @@ import {
 } from "../../data/wasteImpactData.js";
 import CarbonFootprintBarChart from "../charts/CarbonFootprintBarChart.vue";
 import FoodWasteCompositionChart from "../charts/FoodWasteCompositionChart.vue";
+import FoodWasteEnvironmentalImpactChart from "../charts/FoodWasteEnvironmentalImpactChart.vue";
 import FoodWasteRateChart from "../charts/FoodWasteRateChart.vue";
 import FoodWasteTrendChart from "../charts/FoodWasteTrendChart.vue";
 
@@ -149,6 +150,7 @@ onBeforeUnmount(() => {
       <div class="waste-charts__grid">
         <FoodWasteCompositionChart />
         <FoodWasteRateChart />
+        <FoodWasteEnvironmentalImpactChart />
         <CarbonFootprintBarChart />
         <FoodWasteTrendChart />
       </div>
