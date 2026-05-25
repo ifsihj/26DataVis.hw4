@@ -153,6 +153,23 @@ function draw() {
     .delay((_, i) => 220 + i * 45)
     .attr('r', 7);
 
+  g.selectAll('.rate-value')
+    .data(data)
+    .join('text')
+    .attr('class', 'rate-value')
+    .attr('x', (d) => x(d.category) + x.bandwidth() / 2)
+    .attr('y', (d) => yLeft(d.consumptionMt) - 8)
+    .attr('text-anchor', 'middle')
+    .attr('fill', '#b85f14')
+    .attr('font-size', '0.72rem')
+    .attr('font-weight', 800)
+    .attr('opacity', 0)
+    .text((d) => `${d.consumptionMt.toFixed(d.consumptionMt >= 10 ? 0 : 1)}百万吨`)
+    .transition()
+    .duration(360)
+    .delay((_, i) => 300 + i * 45)
+    .attr('opacity', 1);
+
   const legend = svg.append('g')
     .attr('transform', `translate(${width / 2 - 164}, ${height - 18})`);
 

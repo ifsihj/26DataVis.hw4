@@ -165,7 +165,7 @@ function draw() {
     .attr('font-size', '0.72rem')
     .attr('font-weight', 800)
     .attr('opacity', 0)
-    .text((d) => d.wasteQuantityMt.toFixed(2))
+    .text((d) => `${d.wasteQuantityMt.toFixed(2)}百万吨`)
     .transition()
     .duration(360)
     .delay((_, i) => 300 + i * 45)
