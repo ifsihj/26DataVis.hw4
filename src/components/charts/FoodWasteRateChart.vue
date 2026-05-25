@@ -12,13 +12,15 @@ const sortedData = computed(() =>
 
 function draw() {
   const width = 900;
-  const height = 460;
-  const margin = { top: 58, right: 86, bottom: 96, left: 72 };
+  const height = 480;
+  const margin = { top: 64, right: 92, bottom: 102, left: 76 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
   const data = sortedData.value;
+  let focusedCategory = data[0].category;
 
-  const svg = clearSvg(svgRef, width, height);
+  const svg = clearSvg(svgRef, width, height)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
   const tooltip = createTooltip();
 
   const x = d3.scaleBand()
@@ -48,8 +50,8 @@ function draw() {
   svg.append('text')
     .attr('class', 'chart-note')
     .attr('x', margin.left)
-    .attr('y', 48)
-    .text('橙色柱为食物消费量，按降序排列；蓝绿色点为该类别浪费率。');
+    .attr('y', 50)
+    .text('点击柱子或圆点锁定类别；橙色柱为食物消费量，蓝绿色点为浪费率。');
 
   g.append('g')
     .call(d3.axisLeft(yLeft).ticks(5).tickSize(-innerW).tickFormat(''))
@@ -94,32 +96,74 @@ function draw() {
     .text('食物消费量（百万吨）');
 
   svg.append('text')
-    .attr('x', width - 22)
+    .attr('x', width - 24)
     .attr('y', margin.top + innerH / 2)
-    .attr('transform', `rotate(90, ${width - 22}, ${margin.top + innerH / 2})`)
+    .attr('transform', `rotate(90, ${width - 24}, ${margin.top + innerH / 2})`)
     .attr('fill', 'var(--muted)')
     .attr('font-size', '0.85rem')
     .attr('font-weight', 700)
     .attr('text-anchor', 'middle')
     .text('食物浪费率（%）');
 
+  const focusText = svg.append('g')
+    .attr('transform', `translate(${width - 270}, 58)`);
+
+  focusText.append('rect')
+    .attr('width', 230)
+    .attr('height', 60)
+    .attr('rx', 8)
+    .attr('fill', 'rgba(255,249,237,0.86)')
+    .attr('stroke', 'rgba(45,36,26,0.12)');
+
+  const focusTitle = focusText.append('text')
+    .attr('x', 14)
+    .attr('y', 24)
+    .attr('fill', '#8f3328')
+    .attr('font-size', '0.86rem')
+    .attr('font-weight', 900);
+
+  const focusNote = focusText.append('text')
+    .attr('x', 14)
+    .attr('y', 44)
+    .attr('fill', 'rgba(45,36,26,0.68)')
+    .attr('font-size', '0.76rem')
+    .attr('font-weight', 700);
+
+  function setFocus(category) {
+    focusedCategory = category;
+    const datum = data.find((d) => d.category === category);
+    focusTitle.text(`当前关注：${datum.category}`);
+    focusNote.text(`消费 ${datum.consumptionMt.toFixed(1)} 百万吨 / 浪费率 ${datum.wasteRate.toFixed(1)}%`);
+    g.selectAll('.rate-bar')
+      .attr('opacity', (d) => (d.category === focusedCategory ? 1 : 0.34))
+      .attr('stroke', (d) => (d.category === focusedCategory ? '#8f3328' : 'none'))
+      .attr('stroke-width', (d) => (d.category === focusedCategory ? 2 : 0));
+    g.selectAll('.rate-dot')
+      .attr('opacity', (d) => (d.category === focusedCategory ? 1 : 0.38))
+      .attr('r', (d) => (d.category === focusedCategory ? 9 : 6.5));
+    g.selectAll('.rate-value')
+      .attr('opacity', (d) => (d.category === focusedCategory ? 1 : 0.48));
+  }
+
   g.selectAll('.rate-bar')
     .data(data)
     .join('rect')
     .attr('class', 'rate-bar')
     .attr('data-category', (d) => d.category)
-    .attr('data-consumption', (d) => d.consumptionMt)
     .attr('x', (d) => x(d.category))
     .attr('y', innerH)
     .attr('width', x.bandwidth())
     .attr('height', 0)
     .attr('rx', 4)
     .attr('fill', '#f28c28')
+    .attr('cursor', 'pointer')
+    .on('click', (_, d) => setFocus(d.category))
     .on('mousemove', (event, d) => {
       showTooltip(tooltip, event, `
         <strong>${d.category}</strong><br/>
         食物消费量：${d.consumptionMt.toFixed(1)} 百万吨<br/>
-        浪费率：${d.wasteRate.toFixed(1)}%
+        浪费率：${d.wasteRate.toFixed(1)}%<br/>
+        点击可锁定高亮
       `);
     })
     .on('mouseleave', () => hideTooltip(tooltip))
@@ -128,7 +172,10 @@ function draw() {
     .delay((_, i) => i * 45)
     .ease(d3.easeCubicOut)
     .attr('y', (d) => yLeft(d.consumptionMt))
-    .attr('height', (d) => innerH - yLeft(d.consumptionMt));
+    .attr('height', (d) => innerH - yLeft(d.consumptionMt))
+    .on('end', (_, i) => {
+      if (i === data.length - 1) setFocus(focusedCategory);
+    });
 
   g.selectAll('.rate-dot')
     .data(data)
@@ -140,11 +187,13 @@ function draw() {
     .attr('fill', '#2f6f73')
     .attr('stroke', '#f0b13e')
     .attr('stroke-width', 2.5)
+    .attr('cursor', 'pointer')
+    .on('click', (_, d) => setFocus(d.category))
     .on('mousemove', (event, d) => {
       showTooltip(tooltip, event, `
         <strong>${d.category}</strong><br/>
         浪费率：${d.wasteRate.toFixed(1)}%<br/>
-        橙色柱排序值：${d.consumptionMt.toFixed(1)} 百万吨
+        食物消费量：${d.consumptionMt.toFixed(1)} 百万吨
       `);
     })
     .on('mouseleave', () => hideTooltip(tooltip))
@@ -171,7 +220,7 @@ function draw() {
     .attr('opacity', 1);
 
   const legend = svg.append('g')
-    .attr('transform', `translate(${width / 2 - 164}, ${height - 18})`);
+    .attr('transform', `translate(${width / 2 - 170}, ${height - 20})`);
 
   legend.append('rect')
     .attr('width', 14)
@@ -186,14 +235,14 @@ function draw() {
     .text('食物消费量（百万吨）');
 
   legend.append('circle')
-    .attr('cx', 206)
+    .attr('cx', 216)
     .attr('cy', 7)
     .attr('r', 7)
     .attr('fill', '#2f6f73')
     .attr('stroke', '#f0b13e')
     .attr('stroke-width', 2.5);
   legend.append('text')
-    .attr('x', 220)
+    .attr('x', 230)
     .attr('y', 12)
     .attr('fill', 'var(--muted)')
     .attr('font-size', '0.82rem')
@@ -209,11 +258,10 @@ onMounted(draw);
 
 <style scoped>
 .food-waste-rate-chart {
-  grid-column: 1 / -1;
   display: block;
   width: 100%;
   max-width: 100%;
-  min-height: 460px;
-  height: 460px;
+  min-height: 480px;
+  height: 480px;
 }
 </style>

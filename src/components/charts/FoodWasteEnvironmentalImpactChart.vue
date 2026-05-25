@@ -11,13 +11,15 @@ const svgRef = ref(null);
 
 function draw() {
   const width = 980;
-  const height = 520;
-  const margin = { top: 58, right: 34, bottom: 118, left: 92 };
+  const height = 540;
+  const margin = { top: 66, right: 34, bottom: 122, left: 92 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
   const barHeight = 42;
+  let focusedCategory = environmentalImpactCategories[0].key;
 
-  const svg = clearSvg(svgRef, width, height);
+  const svg = clearSvg(svgRef, width, height)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
   const tooltip = createTooltip();
 
   const x = d3.scaleLinear().domain([0, 100]).range([0, innerW]);
@@ -39,8 +41,8 @@ function draw() {
   svg.append('text')
     .attr('class', 'chart-note')
     .attr('x', margin.left)
-    .attr('y', 48)
-    .text('每一行表示一种环境足迹，色块表示不同食物类别对该足迹的贡献比例。');
+    .attr('y', 50)
+    .text('点击任意色块或图例锁定食物类别，查看它在不同环境足迹中的占比。');
 
   g.append('g')
     .attr('transform', `translate(0,${innerH})`)
@@ -61,6 +63,62 @@ function draw() {
     .attr('font-weight', 800);
 
   g.selectAll('.domain').attr('stroke', 'var(--line)');
+
+  const focusText = svg.append('g')
+    .attr('transform', `translate(${width - 282}, 58)`);
+
+  focusText.append('rect')
+    .attr('width', 244)
+    .attr('height', 72)
+    .attr('rx', 8)
+    .attr('fill', 'rgba(255,249,237,0.88)')
+    .attr('stroke', 'rgba(45,36,26,0.12)');
+
+  const focusTitle = focusText.append('text')
+    .attr('x', 14)
+    .attr('y', 24)
+    .attr('fill', '#8f3328')
+    .attr('font-size', '0.86rem')
+    .attr('font-weight', 900);
+
+  const focusNote1 = focusText.append('text')
+    .attr('x', 14)
+    .attr('y', 44)
+    .attr('fill', 'rgba(45,36,26,0.68)')
+    .attr('font-size', '0.76rem')
+    .attr('font-weight', 700);
+
+  const focusNote2 = focusText.append('text')
+    .attr('x', 14)
+    .attr('y', 61)
+    .attr('fill', 'rgba(45,36,26,0.68)')
+    .attr('font-size', '0.76rem')
+    .attr('font-weight', 700);
+
+  function setFocus(categoryKey) {
+    focusedCategory = categoryKey;
+    const category = environmentalImpactCategories.find((item) => item.key === categoryKey);
+    const values = foodWasteEnvironmentalImpactData.map((row) => ({
+      label: row.label,
+      value: row.values[categoryKey] || 0,
+    }));
+    const top = [...values].sort((a, b) => b.value - a.value)[0];
+
+    focusTitle.text(`当前关注：${category.label}`);
+    focusNote1.text(`${top.label}中占比最高：${top.value}%`);
+    focusNote2.text('颜色越醒目，说明该类别越需要被看见。');
+
+    g.selectAll('.impact-segment')
+      .attr('opacity', (d) => (d.key === focusedCategory ? 0.96 : 0.22))
+      .attr('stroke', (d) => (d.key === focusedCategory ? '#2d241a' : 'none'))
+      .attr('stroke-width', (d) => (d.key === focusedCategory ? 1.4 : 0));
+
+    g.selectAll('.impact-label')
+      .attr('opacity', (d) => (d.key === focusedCategory || d.value >= 12 ? 0.82 : 0.24));
+
+    svg.selectAll('.impact-legend-item')
+      .attr('opacity', (d) => (d.key === focusedCategory ? 1 : 0.45));
+  }
 
   foodWasteEnvironmentalImpactData.forEach((row) => {
     let offset = 0;
@@ -85,17 +143,21 @@ function draw() {
     rowG.selectAll('rect')
       .data(segments)
       .join('rect')
+      .attr('class', 'impact-segment')
       .attr('x', (d) => x(d.x0))
       .attr('y', 0)
       .attr('width', 0)
       .attr('height', barHeight)
       .attr('fill', (d) => d.color)
       .attr('opacity', 0.9)
+      .attr('cursor', 'pointer')
+      .on('click', (_, d) => setFocus(d.key))
       .on('mousemove', (event, d) => {
         showTooltip(tooltip, event, `
           <strong>${d.row}</strong><br/>
           ${d.category}：${d.value}%<br/>
-          表示该类别食物浪费对这一环境足迹的占比
+          表示该类别食物浪费对这一环境足迹的占比<br/>
+          点击可锁定高亮
         `);
       })
       .on('mouseleave', () => hideTooltip(tooltip))
@@ -108,6 +170,7 @@ function draw() {
     rowG.selectAll('text')
       .data(segments.filter((d) => d.value >= 2))
       .join('text')
+      .attr('class', 'impact-label')
       .attr('x', (d) => x((d.x0 + d.x1) / 2))
       .attr('y', barHeight / 2 + 5)
       .attr('text-anchor', 'middle')
@@ -124,7 +187,7 @@ function draw() {
 
   svg.append('text')
     .attr('x', margin.left + innerW / 2)
-    .attr('y', height - 76)
+    .attr('y', height - 78)
     .attr('text-anchor', 'middle')
     .attr('fill', 'var(--muted)')
     .attr('font-size', '0.86rem')
@@ -132,13 +195,17 @@ function draw() {
     .text('各食物类别在环境足迹中的占比（%）');
 
   const legend = svg.append('g')
-    .attr('transform', `translate(${margin.left}, ${height - 48})`);
+    .attr('transform', `translate(${margin.left}, ${height - 50})`);
 
   environmentalImpactCategories.forEach((category, index) => {
     const col = index % 5;
     const row = Math.floor(index / 5);
     const item = legend.append('g')
-      .attr('transform', `translate(${col * 168}, ${row * 22})`);
+      .datum(category)
+      .attr('class', 'impact-legend-item')
+      .attr('transform', `translate(${col * 168}, ${row * 22})`)
+      .attr('cursor', 'pointer')
+      .on('click', (_, d) => setFocus(d.key));
 
     item.append('rect')
       .attr('width', 12)
@@ -153,6 +220,8 @@ function draw() {
       .attr('font-size', '0.8rem')
       .text(category.label);
   });
+
+  window.setTimeout(() => setFocus(focusedCategory), 720);
 }
 
 onMounted(draw);
@@ -164,11 +233,10 @@ onMounted(draw);
 
 <style scoped>
 .food-waste-impact-chart {
-  grid-column: 1 / -1;
   display: block;
   width: 100%;
   max-width: 100%;
-  min-height: 520px;
-  height: 520px;
+  min-height: 540px;
+  height: 540px;
 }
 </style>

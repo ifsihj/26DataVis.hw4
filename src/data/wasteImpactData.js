@@ -13,5 +13,6 @@ export const wasteImpactData = {
 
 export const wasteCounterCopy = {
   headline: '当你阅读这一页时，全球又有多少食物被浪费？',
-  note: '以下换算基于 UNEP 2024 报告中的 2022 年全球食品浪费估计值，用于页面实时叙事展示。',
+  note:
+    '以下换算基于 UNEP 2024 报告中的 2022 年全球食品浪费估计值，用于页面实时叙事展示。',
 };
