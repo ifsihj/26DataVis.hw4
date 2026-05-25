@@ -138,9 +138,12 @@ onBeforeUnmount(() => {
 
     <div class="waste-charts">
       <div class="waste-charts__header">
-        <p class="eyebrow">Data View</p>
-        <h2>浪费构成、碳足迹与浪费趋势</h2>
-        <p>先看不同食物类别的浪费数量及人均每餐浪费量，再对照碳足迹和长期趋势，理解“吃得负责”背后的结构性问题。</p>
+        <p class="eyebrow">数据放大镜</p>
+        <h2>哪些食物浪费得最多？</h2>
+        <p>
+          蓝色柱表示各类食物的浪费总量，已经按从高到低排序；橙色点表示平均每人每餐浪费了多少克。
+          这张图不是为了责备某一种食物，而是提醒我们：浪费既有总量差异，也有日常餐桌上的习惯差异。
+        </p>
       </div>
       <div class="waste-charts__grid">
         <FoodWasteCompositionChart />

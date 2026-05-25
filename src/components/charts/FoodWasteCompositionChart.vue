@@ -44,13 +44,13 @@ function draw() {
     .attr('x', width / 2)
     .attr('y', 28)
     .attr('text-anchor', 'middle')
-    .text('浪费数量及构成');
+    .text('不同食物类别的浪费数量及构成');
 
   svg.append('text')
     .attr('class', 'chart-note')
     .attr('x', margin.left)
     .attr('y', 48)
-    .text('按浪费数量（蓝色柱）降序排列；橙色点表示人均每餐浪费量。');
+    .text('蓝色柱为浪费总量，按降序排列；橙色点为人均每餐浪费量。');
 
   g.append('g')
     .call(d3.axisLeft(yLeft).ticks(5).tickSize(-innerW).tickFormat(''))
