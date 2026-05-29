@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>吃得饱 — 中国粮食安全数据叙事</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <!-- ====== 报纸报头 ====== -->
+  <header class="masthead">
+    <div class="issue-date">数据可视化 · 2026 年 5 月 · 第贰期</div>
+    <h1>从二百公斤到五百公斤</h1>
+    <div class="subtitle">—— 七十六年数据回望中国人如何解决"吃饱"的问题</div>
+    <div class="data-source">数据来源：国家统计局年度数据 (1949-2025) / FAO · 真实统计数据集</div>
+  </header>
+
+  <!-- ====== 仪表盘页 ====== -->
+  <section id="page-dashboard" class="page active">
+    <!-- 关键指标 -->
+    <h2 class="section-title">关键指标一览</h2>
+    <div id="metric-cards" class="metric-row"></div>
+
+    <div class="divider">┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ 图表区域 ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄</div>
+
+    <!-- Row 1 -->
+    <div class="chart-grid">
+      <div id="chart-1" class="chart-box">
+        <div class="chart-title">人均粮食占有量 <span class="view-more" onclick="Router.go('deep/1')">查看详情 →</span></div>
+        <div class="chart-svg"></div>
+        <div class="chart-note">FAO安全线为400kg · 点击查看深度分析</div>
+      </div>
+      <div id="chart-2" class="chart-box">
+        <div class="chart-title">粮食总产量（分品种） <span class="view-more" onclick="Router.go('deep/2')">查看详情 →</span></div>
+        <div class="chart-svg"></div>
+        <div class="chart-note">堆叠面积图 · 点击查看各品种详情</div>
+      </div>
+    </div>
+
+    <!-- Row 2: 消费结构流图（全宽） -->
+    <div class="chart-grid">
+      <div id="chart-stream" class="chart-box full-width">
+        <div class="chart-title">主食消费结构变迁 <span class="view-more" onclick="Router.go('deep/3')">查看详情 →</span></div>
+        <div class="chart-svg"></div>
+        <div class="chart-note">流图展示六类食物消费占比的76年变迁</div>
+      </div>
+    </div>
+
+    <!-- Row 3: 全球对比 + 粮食安全雷达 -->
+    <div class="chart-grid">
+      <div id="chart-4" class="chart-box">
+        <div class="chart-title">全球人均粮食占有量对比 <span class="view-more" onclick="Router.go('deep/1')">查看详情 →</span></div>
+        <div class="chart-svg"></div>
+        <div class="chart-note">2023年截面数据 · 点击对比趋势</div>
+      </div>
+      <div id="chart-radar" class="chart-box">
+        <div class="chart-title">粮食安全综合雷达 <span class="view-more" onclick="Router.go('deep/5')">查看详情 →</span></div>
+        <div class="chart-svg"></div>
+        <div class="chart-note">五维综合评价 · 点击查看详情</div>
+      </div>
+    </div>
+
+    <!-- Row 4: 关键事件时间线（全宽） -->
+    <div class="chart-grid">
+      <div id="chart-timeline" class="chart-box full-width">
+        <div class="chart-title">关键历史节点 <span class="view-more" onclick="Router.go('deep/6')">查看75年全景 →</span></div>
+        <div class="chart-svg"></div>
+        <div class="chart-note">1949—2025 · 76年粮食发展大事记</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== 深度页 1：人均粮食占有量 ====== -->
+  <section id="page-deep-1" class="page deep-page">
+    <div class="deep-header">
+      <div class="back-btn" onclick="Router.back()">← 返回仪表盘</div>
+      <h2>人均粮食占有量：从不足到安全的跨越</h2>
+      <div class="deep-subtitle">FAO 认定人均 400kg 为粮食安全线，中国用了几十年从 209kg 走到 508kg</div>
+    </div>
+    <div class="control-panel">
+      <label>对比国家：</label>
+      <select id="d1-country">
+        <option value="">仅中国</option>
+        <option value="india">印度</option>
+        <option value="usa">美国</option>
+        <option value="world">世界平均</option>
+      </select>
+      <label>显示 FAO 安全线</label>
+      <button id="d1-toggle-ref" class="active">400kg</button>
+      <label style="margin-left:12px;">时间范围：</label>
+      <select id="d1-range">
+        <option value="all">全部 (1949-2025)</option>
+        <option value="1978" selected>改革开放后 (1978-2025)</option>
+        <option value="2000">21世纪 (2000-2025)</option>
+      </select>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>人均粮食占有量变化趋势</h3>
+        <span class="chart-source">单位：kg/年</span>
+      </div>
+      <div id="d1-main-chart" class="chart-svg" style="height:420px;"></div>
+      <div id="d1-annotations" class="annotation-panel"></div>
+    </div>
+    <!-- Connected scatter: per capita vs total output -->
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>人均占有量 vs 总产量 (连接散点图)</h3>
+        <span class="chart-source">X轴：总产量(亿吨) · Y轴：人均(kg)</span>
+      </div>
+      <div id="d1-connected" class="chart-svg" style="height:380px;"></div>
+    </div>
+  </section>
+
+  <!-- ====== 深度页 2：粮食总产量 ====== -->
+  <section id="page-deep-2" class="page deep-page">
+    <div class="deep-header">
+      <div class="back-btn" onclick="Router.back()">← 返回仪表盘</div>
+      <h2>粮食总产量：七亿吨背后的结构之变</h2>
+      <div class="deep-subtitle">稻麦稳、玉米增、豆类减——品种结构反映的餐桌与饲料革命</div>
+    </div>
+    <div class="control-panel">
+      <label>视图：</label>
+      <button id="d2-view-abs" class="active">绝对量</button>
+      <button id="d2-view-pct">百分比</button>
+      <label style="margin-left:16px;">品种：</label>
+      <button id="d2-all" class="active">全部</button>
+      <button id="d2-rice">稻谷</button>
+      <button id="d2-wheat">小麦</button>
+      <button id="d2-corn">玉米</button>
+      <button id="d2-soybean">大豆</button>
+      <button id="d2-tubers">薯类</button>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>各粮食品种产量变化</h3>
+        <span class="chart-source">单位：万吨</span>
+      </div>
+      <div id="d2-main-chart" class="chart-svg" style="height:420px;"></div>
+      <div id="d2-annotations" class="annotation-panel"></div>
+    </div>
+  </section>
+
+  <!-- ====== 深度页 3：主食消费结构 ====== -->
+  <section id="page-deep-3" class="page deep-page">
+    <div class="deep-header">
+      <div class="back-btn" onclick="Router.back()">← 返回仪表盘</div>
+      <h2>主食消费结构：从吃饱到吃好</h2>
+      <div class="deep-subtitle">七十六年间，谷物直接消费占比从 75% 降至 28%，肉蛋奶持续上升</div>
+    </div>
+    <div class="control-panel">
+      <label>视图：</label>
+      <button id="d3-view-pct" class="active">百分比</button>
+      <button id="d3-view-abs">人均消费量</button>
+      <label style="margin-left:16px;">图表类型：</label>
+      <button id="d3-type-stream" class="active">流图</button>
+      <button id="d3-type-stacked">堆叠面积</button>
+      <label style="margin-left:16px;">自动播放：</label>
+      <button id="d3-play" class="play-btn">▶ 播放年份</button>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>食物消费结构变迁</h3>
+        <span class="chart-source">数据来源：基于国家统计局居民消费调查趋势估算</span>
+      </div>
+      <div id="d3-main-chart" class="chart-svg" style="height:420px;"></div>
+    </div>
+  </section>
+
+  <!-- ====== 深度页 4：科技驱动增产 ====== -->
+  <section id="page-deep-4" class="page deep-page">
+    <div class="deep-header">
+      <div class="back-btn" onclick="Router.back()">← 返回仪表盘</div>
+      <h2>科技驱动增产：从品种改良到专利爆发</h2>
+      <div class="deep-subtitle">亩产从 69kg 到 394kg——杂交稻、新技术、专利浪潮</div>
+    </div>
+    <div class="control-panel">
+      <label>显示指标：</label>
+      <button id="d4-show-yield" class="active">亩产</button>
+      <button id="d4-show-patents" class="active">专利</button>
+      <button id="d4-show-papers" class="active">论文</button>
+    </div>
+    <div class="deep-split">
+      <div class="deep-chart-area main-chart">
+        <div class="chart-header">
+          <h3>亩产与科技创新</h3>
+          <span class="chart-source">左轴：亩产 (kg) · 右轴：专利/论文数</span>
+        </div>
+        <div id="d4-main-chart" class="chart-svg" style="height:380px;"></div>
+      </div>
+      <div class="deep-chart-area side-chart">
+        <div class="chart-header">
+          <h3>杂交稻推广覆盖率</h3>
+          <span class="chart-source">占水稻播种面积 %</span>
+        </div>
+        <div id="d4-side-chart" class="chart-svg" style="height:280px;"></div>
+      </div>
+    </div>
+    <div id="d4-annotations" class="annotation-panel"></div>
+  </section>
+
+  <!-- ====== 深度页 5：粮食安全综合指标 ====== -->
+  <section id="page-deep-5" class="page deep-page">
+    <div class="deep-header">
+      <div class="back-btn" onclick="Router.back()">← 返回仪表盘</div>
+      <h2>粮食安全综合指标：口粮绝对安全与大豆之忧</h2>
+      <div class="deep-subtitle">稻麦自给率近 100%，但大豆从自给走向高度进口依赖</div>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>主要粮食品种自给率 (棒棒糖图)</h3>
+        <span class="chart-source">%</span>
+      </div>
+      <div id="d5-lollipop" class="chart-svg" style="height:240px;"></div>
+    </div>
+    <div class="deep-split">
+      <div class="deep-chart-area main-chart">
+        <div class="chart-header">
+          <h3>耕地面积与 18 亿亩红线</h3>
+          <span class="chart-source">单位：亿亩</span>
+        </div>
+        <div id="d5-land" class="chart-svg" style="height:300px;"></div>
+      </div>
+      <div class="deep-chart-area side-chart">
+        <div class="chart-header">
+          <h3>自给率变化趋势</h3>
+          <span class="chart-source">稻谷·小麦·玉米·大豆</span>
+        </div>
+        <div id="d5-ss-trend" class="chart-svg" style="height:300px;"></div>
+      </div>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>主要国家粮食自给率对比</h3>
+        <span class="chart-source">数据来源：FAO / 估算</span>
+      </div>
+      <div id="d5-world" class="chart-svg" style="height:300px;"></div>
+    </div>
+  </section>
+
+  <!-- ====== 深度页 6：75年产量全景 ====== -->
+  <section id="page-deep-6" class="page deep-page">
+    <div class="deep-header">
+      <div class="back-btn" onclick="Router.back()">← 返回仪表盘</div>
+      <h2>75年产量全景：从 1.1 亿吨到 7.1 亿吨</h2>
+      <div class="deep-subtitle">1949-2025 年粮食产量的完整图景，见证中国农业的跨越式发展</div>
+    </div>
+    <div class="control-panel">
+      <label>图表类型：</label>
+      <button id="d6-type-heat" class="active">热力图</button>
+      <button id="d6-type-bump">排名变化</button>
+      <button id="d6-type-radial">径向柱状</button>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3 id="d6-title">各粮食品种产量热力图 (1949-2025)</h3>
+        <span class="chart-source">颜色越深产量越高</span>
+      </div>
+      <div id="d6-main-chart" class="chart-svg" style="height:440px;"></div>
+    </div>
+  </section>
+
+  <!-- ====== 深度页 7：FAO 生产价值分析 ====== -->
+  <section id="page-deep-7" class="page deep-page">
+    <div class="deep-header">
+      <div class="back-btn" onclick="Router.back()">← 返回仪表盘</div>
+      <h2>FAO 农业生产价值分析 (1961年至今)</h2>
+      <div class="deep-subtitle">从FAO数据看中国农业生产价值的结构性变化</div>
+    </div>
+    <div class="control-panel">
+      <label>视图：</label>
+      <button id="d7-view-abs" class="active">绝对量</button>
+      <button id="d7-view-pct">百分比</button>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>各大类农产品生产价值趋势</h3>
+        <span class="chart-source">单位：1000 Int$ (constant 2014-2016)</span>
+      </div>
+      <div id="d7-main-chart" class="chart-svg" style="height:420px;"></div>
+    </div>
+  </section>
+
+  <!-- ====== 深度页 8：作物结构演变 ====== -->
+  <section id="page-deep-8" class="page deep-page">
+    <div class="deep-header">
+      <div class="back-btn" onclick="Router.back()">← 返回仪表盘</div>
+      <h2>作物结构演变：从单一到多元</h2>
+      <div class="deep-subtitle">粮食作物内部结构的76年变迁，反映了农业政策和市场需求的双重驱动</div>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>粮食品种占比演变 (堆叠面积图)</h3>
+        <span class="chart-source">百分比 %</span>
+      </div>
+      <div id="d8-structure" class="chart-svg" style="height:380px;"></div>
+    </div>
+    <div class="deep-chart-area">
+      <div class="chart-header">
+        <h3>玉米 vs 稻谷产量增长对比</h3>
+        <span class="chart-source">单位：万吨</span>
+      </div>
+      <div id="d8-comparison" class="chart-svg" style="height:340px;"></div>
+    </div>
+  </section>
+
+  <!-- ====== Footer ====== -->
+  <footer style="text-align:center;padding:32px 0 24px;border-top:1px solid #E2DCD0;margin-top:32px;">
+    <p style="font-size:0.7rem;color:#B0B0B0;font-family:'Songti SC',serif;">
+      数据可视化课程团队项目 · 场景一：吃得饱<br>
+      数据来源：国家统计局年度数据 (1949-2025) / FAO · 部分指标为基于公开趋势的估算
+    </p>
+  </footer>
+</div>
+
+<!-- ====== Scripts ====== -->
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/data-loader.js"></script>
+<script src="js/charts/line-chart.js"></script>
+<script src="js/charts/area-chart.js"></script>
+<script src="js/charts/stacked-area.js"></script>
+<script src="js/charts/grouped-bar.js"></script>
+<script src="js/charts/radar.js"></script>
+<script src="js/charts/lollipop.js"></script>
+<script src="js/charts/radial-bar.js"></script>
+<script src="js/charts/connected-scatter.js"></script>
+<script src="js/charts/streamgraph.js"></script>
+<script src="js/charts/heatmap.js"></script>
+<script src="js/charts/treemap.js"></script>
+<script src="js/charts/bump-chart.js"></script>
+<script src="js/charts/donut.js"></script>
+<script src="js/router.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/deep-pages.js"></script>
+
+<script>
+// --- 初始化 ---
+document.addEventListener('DOMContentLoaded', async () => {
+  Tooltip.init();
+  Router.init();
+
+  // 渲染仪表盘
+  await Dashboard.render();
+
+  // 深度页渲染由路由切换触发
+  DeepPages.init();
+
+  // 监听路由变化
+  document.addEventListener('route-change', (e) => {
+    const { route } = e.detail;
+    if (route !== 'dashboard') {
+      DeepPages.render(route);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

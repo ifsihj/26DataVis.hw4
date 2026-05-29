@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# Fake data (not needed for production)
+data/假数据/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
