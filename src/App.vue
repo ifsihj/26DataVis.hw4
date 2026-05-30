@@ -8,27 +8,30 @@ import FinalSection from './components/layout/FinalSection.vue';
 import TechSection from './components/layout/TechSection.vue';
 import InsightSection from './components/layout/InsightSection.vue';
 import ResponsibleWasteSection from './components/layout/ResponsibleWasteSection.vue';
-import GrainLineChart from './components/charts/GrainLineChart.vue';
-import StapleShareDonut from './components/charts/StapleShareDonut.vue';
-import GrainTimeAxis from './components/charts/GrainTimeAxis.vue';
 import SceneTwoChart from './components/charts/SceneTwoChart.vue';
-import GrainBarnVisual from './components/visuals/GrainBarnVisual.vue';
+// Scene 1 — 真实数据图表
+import MetricCards from './components/charts/MetricCards.vue';
+import PerCapitaLineChart from './components/charts/PerCapitaLineChart.vue';
+import GrainStackedArea from './components/charts/GrainStackedArea.vue';
+import WorldComparisonBar from './components/charts/WorldComparisonBar.vue';
+import FoodSecurityRadar from './components/charts/FoodSecurityRadar.vue';
+import KeyEventsTimeline from './components/charts/KeyEventsTimeline.vue';
 
 const sceneOneSteps = [
   {
-    kicker: '第一幕',
-    title: '粮食安全是起点',
-    body: '餐桌变迁的第一步，不是丰盛，而是稳定。只有当“有没有饭吃”不再悬在日常生活之上，更多选择才有了生长的空间。',
+    kicker: '第一幕 · 全景',
+    title: '从 209kg 到 508kg',
+    body: '1949 年人均粮食占有量仅 209kg，2025 年达到 508kg，跨越 FAO 400kg 安全线。餐桌变迁的第一步不是丰盛，而是稳定——当”有没有饭吃”不再悬在生活之上，更多选择才开始生长。',
   },
   {
     kicker: '粮仓充盈',
-    title: '人均粮食占有量上升',
-    body: '从 1980 年代到今天，mock 数据呈现出人均粮食占有量和粮食总产量的共同上升。当粮仓逐渐充盈，“吃饭”才从生存问题变成生活问题。',
+    title: '粮食总产量突破 7 亿吨',
+    body: '稻谷稳、玉米增、大豆减——品种结构之变折射出从”吃饱”到”吃好”的深层逻辑。玉米从 1242 万吨增至 3 亿吨，成为饲料与工业驱动的缩影。',
   },
   {
-    kicker: '结构变化',
-    title: '主食不再占据全部餐盘',
-    body: '主食仍然是底色，但它在餐盘中的比例开始下降。粮食安全构成了中国餐桌现代化的底座，也打开了饮食结构变化的起点。',
+    kicker: '安全与对比',
+    title: '口粮绝对安全，大豆之忧',
+    body: '稻麦自给率保持在 96% 以上，但大豆从几乎完全自给走向 14%——中国粮食安全最突出的结构性矛盾。全球对比中，人均占有量超世界平均但不及美国的一半。',
   },
 ];
 
@@ -86,12 +89,37 @@ onBeforeUnmount(() => {
     />
     <ScrollSection id="enough" tone="field" :steps="sceneOneSteps">
       <template #visual="{ activeStep, scrollProgress }">
-        <div class="scene-grid scene-grid--grain">
-          <GrainLineChart :active-step="activeStep" :progress="scrollProgress" />
-          <GrainBarnVisual :active-step="activeStep" :progress="scrollProgress" />
-          <StapleShareDonut :active-step="activeStep" :progress="scrollProgress" />
-          <GrainTimeAxis :progress="scrollProgress" />
-        </div>
+        <!-- Step 0: Overview with metric cards + per capita line chart -->
+        <template v-if="activeStep === 0">
+          <div class="scene1-visual">
+            <MetricCards :active-step="activeStep" :progress="scrollProgress" />
+            <PerCapitaLineChart :active-step="activeStep" :progress="scrollProgress" />
+          </div>
+        </template>
+        <!-- Step 1: Stacked area + world comparison -->
+        <template v-else-if="activeStep === 1">
+          <div class="scene1-visual">
+            <div class="scene1-chart-row scene1-chart-row--split">
+              <GrainStackedArea :active-step="activeStep" :progress="scrollProgress" />
+              <WorldComparisonBar :active-step="activeStep" :progress="scrollProgress" />
+            </div>
+          </div>
+        </template>
+        <!-- Step 2: Security radar + key events timeline -->
+        <template v-else>
+          <div class="scene1-visual">
+            <div class="scene1-chart-row scene1-chart-row--split">
+              <div class="scene1-side-stack">
+                <div class="chart-card-title">粮食安全综合雷达</div>
+                <FoodSecurityRadar :active-step="activeStep" :progress="scrollProgress" />
+              </div>
+              <div class="scene1-side-stack">
+                <div class="chart-card-title">关键历史节点 (1949-2025)</div>
+                <KeyEventsTimeline :active-step="activeStep" :progress="scrollProgress" />
+              </div>
+            </div>
+          </div>
+        </template>
       </template>
     </ScrollSection>
 

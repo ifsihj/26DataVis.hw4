@@ -353,16 +353,6 @@ button, input { font: inherit; }
   grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.62fr) 76px;
 }
 
-.scene-grid--grain .chart-card:first-child {
-  grid-row: span 2;
-  min-height: 500px;
-}
-
-.scene-grid--grain .barn-card,
-.scene-grid--grain .donut-card {
-  min-height: 210px;
-}
-
 .grain-time-axis {
   grid-column: 3;
   grid-row: 1 / span 2;
@@ -554,7 +544,6 @@ button, input { font: inherit; }
 /* ---- Chart / Barn / Plate cards ---- */
 
 .chart-card,
-.barn-card,
 .plate-card {
   width: 100%;
   max-width: 100%;
@@ -571,10 +560,6 @@ svg.chart-card {
   min-height: 0;
 }
 
-.scene-grid--grain svg.chart-card:first-child {
-  height: 500px;
-}
-
 /* ---- Mini chart ---- */
 
 .mini-chart {
@@ -582,71 +567,7 @@ svg.chart-card {
   height: 190px;
 }
 
-/* ---- Donut card ---- */
-
-.donut-card {
-  display: grid;
-  gap: 10px;
-  place-items: center;
-  padding: 16px;
-  min-height: 250px;
-}
-
-.donut {
-  display: grid;
-  width: 128px;
-  height: 128px;
-  place-items: center;
-  border-radius: 50%;
-}
-
-.donut__inner {
-  display: grid;
-  width: 76px;
-  height: 76px;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(255, 249, 237, 0.96);
-}
-
-.donut__inner strong {
-  color: var(--red);
-  font-size: 1.45rem;
-}
-
-.donut__inner span {
-  color: var(--muted);
-  font-size: 0.78rem;
-}
-
-.donut-legend {
-  display: grid;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 0.82rem;
-}
-
-.donut-legend span {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.donut-legend i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.donut-legend .grain {
-  background: #b88446;
-}
-
-.donut-legend .other {
-  background: var(--green);
-}
-
-/* ---- Chart internal styles (D3 SVG) ---- */
+/* ---- Plate card ---- */
 
 .chart-title {
   margin: 0;
@@ -730,73 +651,6 @@ svg.chart-card {
   line-height: 1.55;
   opacity: 0;
   pointer-events: none;
-}
-
-/* ---- Barn visual ---- */
-
-.barn-card {
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  min-height: 250px;
-}
-
-.barn {
-  width: 118px;
-}
-
-.barn__roof {
-  width: 0;
-  height: 0;
-  margin: 0 auto;
-  border-right: 78px solid transparent;
-  border-right-width: 62px;
-  border-bottom: 46px solid var(--brown);
-  border-left-width: 62px;
-}
-
-.barn__body {
-  position: relative;
-  height: 132px;
-  overflow: hidden;
-  border: 8px solid var(--brown);
-  border-radius: 6px 6px 18px 18px;
-  background: rgba(255, 249, 237, 0.8);
-}
-
-.barn__grain {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(180deg, #e3bd62, #b88446);
-  transition: height 700ms ease;
-}
-
-.barn__lines {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0 24px,
-    rgba(108, 74, 47, 0.2) 25px 27px
-  );
-}
-
-.barn-card__copy { text-align: center; }
-
-.barn-card__copy p,
-.barn-card__copy span {
-  display: block;
-  color: var(--muted);
-  font-size: 0.86rem;
-}
-
-.barn-card__copy strong {
-  display: block;
-  margin: 4px 0;
-  color: var(--red);
-  font-size: 2.4rem;
 }
 
 /* ---- Plate card ---- */
@@ -1557,6 +1411,58 @@ svg.chart-card {
   line-height: 1.75;
 }
 
+/* ---- Scene 1 — 真实数据增强布局 ---- */
+
+.scene1-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: visible;
+}
+
+.scene1-chart-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 76px;
+  gap: 14px;
+  align-items: stretch;
+  min-height: 0;
+  overflow: visible;
+}
+
+.scene1-chart-row > svg.chart-card {
+  height: 380px;
+  min-height: 0;
+}
+
+.scene1-chart-row--split {
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+}
+
+.scene1-side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  overflow: visible;
+}
+
+.scene1-side-stack > svg.chart-card {
+  height: 340px;
+  min-height: 0;
+}
+
+.chart-card-title {
+  font-size: 0.78rem;
+  color: #2C2C2C;
+  font-weight: 700;
+  font-family: 'Georgia', 'Noto Serif SC', serif;
+  padding: 6px 10px 0;
+  margin-bottom: -4px;
+}
+
 /* ---- Time cursor (D3 charts) ---- */
 
 .time-cursor {
@@ -1640,6 +1546,17 @@ svg.chart-card {
     grid-template-columns: repeat(2, minmax(0, 1fr)) 34px;
     align-items: stretch;
   }
+
+  .scene1-visal { gap: 8px; }
+  .scene1-chart-row {
+    grid-template-columns: minmax(0, 1fr) 34px;
+  }
+  .scene1-chart-row > svg.chart-card { height: 300px; }
+  .scene1-chart-row--split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .scene1-side-stack > svg.chart-card { height: 280px; }
+  .scene1-side-stack { gap: 8px; }
 
   .scene-grid--diet {
     grid-template-columns: minmax(0, 1fr) 34px;
