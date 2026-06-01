@@ -81,5 +81,5 @@ const metrics = computed(() => {
 .metric-card__label { font-size: 0.72rem; color: #8f806e; margin-bottom: 4px; }
 .metric-card__value { font-size: 1.5rem; font-family: 'Georgia', serif; color: #2f2821; font-weight: 800; }
 .metric-card__unit { font-size: 0.65rem; color: #8f806e; margin-left: 2px; }
-.metric-card__delta { font-size: 0.6rem; color: #7B8B8B; margin-top: 2px; }
+.metric-card__delta { font-size: 0.6rem; color: #315f49; margin-top: 2px; }
 </style>

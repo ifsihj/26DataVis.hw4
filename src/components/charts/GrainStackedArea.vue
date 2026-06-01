@@ -2,7 +2,14 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import * as d3 from 'd3';
 import { grainOutput } from '../../data/scene1Data.js';
-import { clearSvg, createTooltip, hideTooltip, showTooltip } from '../../utils/chartUtils.js';
+import {
+  clearSvg,
+  createTooltip,
+  evidenceChartTheme as theme,
+  hideTooltip,
+  showTooltip,
+  styleChartAxis,
+} from '../../utils/chartUtils.js';
 
 const props = defineProps({
   activeStep: { type: Number, default: 0 },
@@ -10,10 +17,9 @@ const props = defineProps({
 });
 
 const svgRef = ref(null);
-
 const keys = ['rice', 'wheat', 'corn', 'soybean', 'tubers'];
 const labels = { rice: '稻谷', wheat: '小麦', corn: '玉米', soybean: '大豆', tubers: '薯类' };
-const colors = { rice: '#A8B8A0', wheat: '#D4C9C3', corn: '#D4B8A0', soybean: '#C0B0A0', tubers: '#C4A494' };
+const colors = Object.fromEntries(keys.map((key, index) => [key, theme.series[index]]));
 
 const currentYear = computed(() => {
   const minYear = grainOutput[0].year;
@@ -24,93 +30,128 @@ const currentYear = computed(() => {
 function draw() {
   const width = 760;
   const height = 420;
-  const margin = { top: 42, right: 24, bottom: 42, left: 62 };
-  const svg = clearSvg(svgRef, width, height);
+  const margin = { top: 56, right: 118, bottom: 52, left: 70 };
+  const svg = clearSvg(svgRef, width, height)
+    .attr('aria-label', '1949 至 2025 年中国粮食总产量分品种堆叠面积图');
   const tooltip = createTooltip();
-
   const year = Math.round(currentYear.value);
-  const visibleData = grainOutput.filter(d => d.year <= year);
+  const visibleData = grainOutput.filter(item => item.year <= year);
 
   const x = d3.scaleLinear()
-    .domain(d3.extent(grainOutput, d => d.year))
+    .domain(d3.extent(grainOutput, item => item.year))
     .range([margin.left, width - margin.right]);
 
-  const stacker = d3.stack().keys(keys);
-  const stacked = stacker(visibleData.map(d => {
-    const row = { year: d.year };
-    keys.forEach(k => { row[k] = +d[k] || 0; });
-    return row;
-  }));
-
-  const yMax = d3.max(stacked[stacked.length - 1], d => d[1]) * 1.03;
-  const y = d3.scaleLinear().domain([0, yMax]).range([height - margin.bottom, margin.top]);
+  const stacked = d3.stack().keys(keys)(visibleData);
+  const yMax = d3.max(grainOutput, item => d3.sum(keys, key => item[key])) * 1.06;
+  const y = d3.scaleLinear()
+    .domain([0, yMax])
+    .nice()
+    .range([height - margin.bottom, margin.top]);
 
   svg.append('text')
     .attr('x', margin.left).attr('y', 22)
     .attr('class', 'chart-title')
-    .text('粮食总产量（分品种）');
+    .text('粮食增产伴随着作物结构变化');
 
   svg.append('text')
-    .attr('x', margin.left).attr('y', 40)
+    .attr('x', margin.left).attr('y', 41)
     .attr('class', 'chart-note')
-    .text('数据来源：国家统计局年度数据 (1949-2025) · 堆叠面积图');
+    .text('1949–2025 · 万吨 · 右侧直接标注各品种');
 
-  // Grid
-  svg.append('g')
-    .call(d3.axisLeft(y).tickSize(-(width - margin.left - margin.right)).tickFormat('').ticks(6))
-    .selectAll('.tick line').attr('stroke', '#E2DCD0').attr('stroke-dasharray', '2,3');
-
-  // Axes
-  svg.append('g')
+  const xAxis = svg.append('g')
     .attr('transform', `translate(0,${height - margin.bottom})`)
-    .call(d3.axisBottom(x).tickFormat(d3.format('d')).ticks(10));
+    .call(d3.axisBottom(x)
+      .tickValues([1950, 1970, 1990, 2010, 2025])
+      .tickFormat(d3.format('d')));
+  styleChartAxis(xAxis);
 
-  svg.append('g')
-    .call(d3.axisLeft(y).ticks(5).tickFormat(d => d >= 10000 ? (d / 10000).toFixed(1) + '亿' : d + '万'));
+  const yAxis = svg.append('g')
+    .attr('transform', `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y)
+      .ticks(5)
+      .tickFormat(value => value >= 10000 ? `${(value / 10000).toFixed(1)} 亿` : `${value}`));
+  styleChartAxis(yAxis);
 
-  // Areas
-  const areaGen = d3.area()
-    .x(d => x(d.data.year))
-    .y0(d => y(d[0]))
-    .y1(d => y(d[1]));
+  svg.append('text')
+    .attr('x', margin.left - 48).attr('y', margin.top - 18)
+    .attr('fill', theme.muted).attr('font-size', '0.68rem')
+    .text('万吨');
+
+  const area = d3.area()
+    .x(item => x(item.data.year))
+    .y0(item => y(item[0]))
+    .y1(item => y(item[1]))
+    .curve(d3.curveMonotoneX);
 
   svg.selectAll('.stacked-area')
     .data(stacked)
     .join('path')
-    .attr('d', areaGen)
-    .attr('fill', d => colors[d.key])
-    .attr('opacity', 0.82);
+    .attr('class', 'stacked-area')
+    .attr('d', area)
+    .attr('fill', item => colors[item.key])
+    .attr('opacity', 0.82)
+    .attr('stroke', theme.paper)
+    .attr('stroke-width', 0.7);
 
-  // Legend
-  const lg = svg.append('g').attr('transform', `translate(${margin.left}, -6)`);
-  let cx = 0;
-  keys.forEach(k => {
-    const g = lg.append('g').style('cursor', 'pointer');
-    g.append('rect').attr('x', cx).attr('y', -5)
-      .attr('width', 10).attr('height', 10)
-      .attr('fill', colors[k]).attr('rx', 1);
-    g.append('text').attr('x', cx + 14).attr('y', 3)
-      .attr('font-size', '0.7rem').attr('fill', '#666')
-      .text(labels[k]);
-    cx += g.node().getBBox().width + 18;
-  });
+  const lastVisible = visibleData[visibleData.length - 1];
+  if (lastVisible) {
+    stacked.forEach(series => {
+      const point = series[series.length - 1];
+      svg.append('text')
+        .attr('x', x(lastVisible.year) + 9)
+        .attr('y', y((point[0] + point[1]) / 2))
+        .attr('dominant-baseline', 'middle')
+        .attr('fill', colors[series.key])
+        .attr('font-size', '0.68rem')
+        .attr('font-weight', 800)
+        .text(labels[series.key]);
+    });
 
-  // Hover
+    svg.append('text')
+      .attr('x', x(lastVisible.year) - 6)
+      .attr('y', y(d3.sum(keys, key => lastVisible[key])) - 10)
+      .attr('text-anchor', 'end')
+      .attr('fill', theme.inkSoft)
+      .attr('font-size', '0.7rem')
+      .attr('font-weight', 800)
+      .text(`五类合计 ${(d3.sum(keys, key => lastVisible[key]) / 10000).toFixed(1)} 亿吨`);
+  }
+
+  const guide = svg.append('line')
+    .attr('y1', margin.top)
+    .attr('y2', height - margin.bottom)
+    .attr('stroke', theme.signal)
+    .attr('stroke-width', 1)
+    .attr('stroke-dasharray', '4,4')
+    .attr('opacity', 0);
+
   svg.append('rect')
+    .attr('x', margin.left)
+    .attr('y', margin.top)
     .attr('width', width - margin.left - margin.right)
     .attr('height', height - margin.top - margin.bottom)
-    .attr('transform', `translate(${margin.left},${margin.top})`)
-    .attr('fill', 'none').attr('pointer-events', 'all')
-    .on('mousemove', function(ev) {
-      const yr = Math.round(x.invert(d3.pointer(ev)[0] + margin.left));
-      const row = grainOutput.find(d => d.year === yr);
+    .attr('fill', 'transparent')
+    .on('mousemove', function(event) {
+      const [pointerX] = d3.pointer(event, svg.node());
+      const targetYear = Math.round(x.invert(pointerX));
+      const row = grainOutput.find(item => item.year === targetYear);
       if (!row) return;
-      const lines = keys.map(k =>
-        `<div>${labels[k]}: <strong>${Math.round(row[k]).toLocaleString()}</strong> 万吨</div>`
-      ).join('');
-      showTooltip(tooltip, ev, `<strong>${yr} 年</strong><br>${lines}`);
+      guide.attr('x1', x(row.year)).attr('x2', x(row.year)).attr('opacity', 0.55);
+      const lines = keys
+        .map(key => `<div>${labels[key]}：<strong>${Math.round(row[key]).toLocaleString()}</strong> 万吨</div>`)
+        .join('');
+      showTooltip(
+        tooltip,
+        event,
+        `<strong>${row.year} 年</strong><br/>
+         <div>粮食总产：<strong>${Math.round(row.total).toLocaleString()}</strong> 万吨</div>
+         ${lines}`,
+      );
     })
-    .on('mouseleave', () => hideTooltip(tooltip));
+    .on('mouseleave', () => {
+      guide.attr('opacity', 0);
+      hideTooltip(tooltip);
+    });
 }
 
 onMounted(draw);

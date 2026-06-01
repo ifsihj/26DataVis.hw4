@@ -468,5 +468,6 @@ watch([viewMode, filteredData], draw, { deep: true });
   display: block;
   width: 100%;
   max-width: 100%;
+  margin: 0 auto;
 }
 </style>

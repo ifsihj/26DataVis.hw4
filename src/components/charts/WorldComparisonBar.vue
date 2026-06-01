@@ -2,91 +2,119 @@
 import { onMounted, ref } from 'vue';
 import * as d3 from 'd3';
 import { worldComparison } from '../../data/scene1Data.js';
-import { clearSvg, createTooltip, hideTooltip, showTooltip } from '../../utils/chartUtils.js';
+import {
+  clearSvg,
+  createTooltip,
+  evidenceChartTheme as theme,
+  hideTooltip,
+  showTooltip,
+  styleChartAxis,
+} from '../../utils/chartUtils.js';
 
 const svgRef = ref(null);
 
 function draw() {
   const width = 760;
-  const height = 380;
-  const margin = { top: 42, right: 24, bottom: 60, left: 56 };
-  const svg = clearSvg(svgRef, width, height);
+  const height = 420;
+  const margin = { top: 58, right: 82, bottom: 46, left: 104 };
+  const svg = clearSvg(svgRef, width, height)
+    .attr('aria-label', '中国与主要国家人均粮食占有量横向柱状对比图');
   const tooltip = createTooltip();
-
-  const data = worldComparison;
+  const data = [...worldComparison].sort((a, b) => b.per_capita_kg - a.per_capita_kg);
 
   svg.append('text')
     .attr('x', margin.left).attr('y', 22)
     .attr('class', 'chart-title')
-    .text('全球人均粮食占有量对比');
+    .text('中国已越过安全线，但全球资源条件差异显著');
 
   svg.append('text')
-    .attr('x', margin.left).attr('y', 40)
+    .attr('x', margin.left).attr('y', 41)
     .attr('class', 'chart-note')
-    .text('2023年截面数据 · 单位：kg/年');
+    .text('2023 年截面数据 · kg / 人 / 年 · 中国高亮');
 
-  const x = d3.scaleBand()
-    .domain(data.map(d => d.country))
-    .range([margin.left, width - margin.right])
-    .padding(0.3);
+  const x = d3.scaleLinear()
+    .domain([0, d3.max(data, item => item.per_capita_kg) * 1.12])
+    .range([margin.left, width - margin.right]);
 
-  const y = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.per_capita_kg) * 1.12])
-    .range([height - margin.bottom, margin.top]);
+  const y = d3.scaleBand()
+    .domain(data.map(item => item.country))
+    .range([margin.top, height - margin.bottom])
+    .padding(0.28);
 
-  // Grid
-  svg.append('g')
-    .call(d3.axisLeft(y).tickSize(-(width - margin.left - margin.right)).tickFormat('').ticks(5))
-    .selectAll('.tick line').attr('stroke', '#E2DCD0').attr('stroke-dasharray', '2,3');
-
-  // Axes
-  svg.append('g')
+  const xAxis = svg.append('g')
     .attr('transform', `translate(0,${height - margin.bottom})`)
-    .call(d3.axisBottom(x).tickSize(0))
-    .selectAll('text')
-    .attr('transform', 'rotate(-25)').attr('text-anchor', 'end')
-    .attr('dx', '-0.5em').attr('dy', '0.2em')
-    .attr('font-size', '0.7rem');
+    .call(d3.axisBottom(x)
+      .tickValues([0, 400, 800, 1200])
+      .tickFormat(value => `${value}`));
+  styleChartAxis(xAxis);
 
-  svg.append('g')
-    .call(d3.axisLeft(y).ticks(5).tickFormat(d => d + 'kg'));
+  const yAxis = svg.append('g')
+    .attr('transform', `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y).tickSize(0));
+  styleChartAxis(yAxis, { hideDomain: true });
 
-  // FAO safety line
+  svg.append('text')
+    .attr('x', width - margin.right).attr('y', height - 10)
+    .attr('text-anchor', 'end')
+    .attr('fill', theme.muted).attr('font-size', '0.68rem')
+    .text('kg / 人 / 年');
+
   svg.append('line')
-    .attr('x1', margin.left).attr('y1', y(400))
-    .attr('x2', width - margin.right).attr('y2', y(400))
-    .attr('stroke', '#7B8B8B').attr('stroke-dasharray', '6,4').attr('stroke-width', 0.8);
+    .attr('x1', x(400)).attr('x2', x(400))
+    .attr('y1', margin.top - 2).attr('y2', height - margin.bottom)
+    .attr('stroke', theme.positive)
+    .attr('stroke-dasharray', '5,4')
+    .attr('stroke-width', 1.1)
+    .attr('opacity', 0.68);
 
-  // Bars
-  svg.selectAll('.bar')
+  svg.append('text')
+    .attr('x', x(400) + 6).attr('y', margin.top - 10)
+    .attr('fill', theme.positive)
+    .attr('font-size', '0.68rem')
+    .attr('font-weight', 700)
+    .text('FAO 参考线 400 kg');
+
+  svg.selectAll('.comparison-bar')
     .data(data)
     .join('rect')
-    .attr('x', d => x(d.country))
-    .attr('y', d => y(d.per_capita_kg))
-    .attr('width', x.bandwidth())
-    .attr('height', d => y(0) - y(d.per_capita_kg))
-    .attr('fill', d => d.country === '中国' ? '#9E6B6B' : '#D4C9C3')
-    .attr('rx', 2)
-    .on('mousemove', function(ev, d) {
-      d3.select(this).attr('opacity', 0.8);
-      showTooltip(tooltip, ev, `<strong>${d.country}</strong> &nbsp; ${d.per_capita_kg} kg`);
+    .attr('class', 'comparison-bar')
+    .attr('x', x(0))
+    .attr('y', item => y(item.country))
+    .attr('width', item => x(item.per_capita_kg) - x(0))
+    .attr('height', y.bandwidth())
+    .attr('fill', item => {
+      if (item.country === '中国') return theme.signal;
+      if (item.country === '世界平均') return theme.positive;
+      return theme.neutral;
     })
-    .on('mouseleave', function() {
+    .attr('opacity', item => item.country === '中国' ? 1 : 0.8)
+    .attr('rx', 2)
+    .on('mousemove', function(event, item) {
       d3.select(this).attr('opacity', 1);
+      showTooltip(
+        tooltip,
+        event,
+        `<strong>${item.country}</strong><br/>
+         人均粮食：${item.per_capita_kg} kg / 人 / 年<br/>
+         自给率：${item.self_sufficiency_pct}%`,
+      );
+    })
+    .on('mouseleave', function(event, item) {
+      d3.select(this).attr('opacity', item.country === '中国' ? 1 : 0.8);
       hideTooltip(tooltip);
     });
 
-  // Value labels
-  svg.selectAll('.bar-label')
+  svg.selectAll('.comparison-label')
     .data(data)
     .join('text')
-    .attr('x', d => x(d.country) + x.bandwidth() / 2)
-    .attr('y', d => y(d.per_capita_kg) - 5)
-    .attr('text-anchor', 'middle')
-    .attr('font-size', '0.6rem')
-    .attr('fill', '#666')
-    .attr('font-family', 'Roboto Mono, monospace')
-    .text(d => d.per_capita_kg);
+    .attr('class', 'comparison-label')
+    .attr('x', item => x(item.per_capita_kg) + 6)
+    .attr('y', item => y(item.country) + y.bandwidth() / 2)
+    .attr('dominant-baseline', 'middle')
+    .attr('fill', item => item.country === '中国' ? theme.signal : theme.inkSoft)
+    .attr('font-size', '0.68rem')
+    .attr('font-weight', item => item.country === '中国' ? 800 : 600)
+    .text(item => `${item.per_capita_kg}`);
 }
 
 onMounted(draw);

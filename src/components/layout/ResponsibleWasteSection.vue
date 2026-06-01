@@ -1,10 +1,5 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { fridgeWasteItems } from "../../data/fridgeWasteData.js";
-import {
-  plateWasteScenario,
-  reductionScenario,
-} from "../../data/wasteReductionData.js";
 import {
   wasteCounterCopy,
   wasteImpactData,
@@ -15,15 +10,6 @@ import FoodWasteEnvironmentalImpactChart from "../charts/FoodWasteEnvironmentalI
 import FoodWasteRateChart from "../charts/FoodWasteRateChart.vue";
 
 const secondsOnPage = ref(0);
-const selectedFridgeItemId = ref(fridgeWasteItems[0].id);
-const leftoverPercent = ref(10);
-const reductionPercent = ref(20);
-
-const selectedFridgeItem = computed(
-  () =>
-    fridgeWasteItems.find((item) => item.id === selectedFridgeItemId.value) ||
-    fridgeWasteItems[0],
-);
 
 const wastePerSecondTonnes =
   wasteImpactData.annualWasteTonnes / (365 * 24 * 60 * 60);
@@ -31,48 +17,12 @@ const liveWasteTonnes = computed(() =>
   Math.round(secondsOnPage.value * wastePerSecondTonnes),
 );
 
-const plateWaste = computed(() => {
-  const wastePerMealGram =
-    plateWasteScenario.mealWeightGram * (leftoverPercent.value / 100);
-  const weekKg = (wastePerMealGram * plateWasteScenario.mealsPerDay * 7) / 1000;
-  const yearKg =
-    (wastePerMealGram * plateWasteScenario.mealsPerDay * 365) / 1000;
-  const cityYearTonnes = (yearKg * plateWasteScenario.cityPopulation) / 1000;
-  return {
-    wastePerMealGram,
-    weekKg,
-    yearKg,
-    cityYearTonnes,
-  };
-});
-
-const reductionImpact = computed(() => {
-  const savedTonnes =
-    reductionScenario.baselineWasteTonnes * (reductionPercent.value / 100);
-  const savedKg = savedTonnes * 1000;
-  return {
-    savedTonnes,
-    carbonTonnes: (savedKg * reductionScenario.carbonKgPerWasteKg) / 1000,
-    peopleDays: savedKg / reductionScenario.foodPerPersonPerDayKg,
-  };
-});
-
-const plateLeftoverStyle = computed(() => ({
-  clipPath: `inset(${100 - leftoverPercent.value}% 0 0 0)`,
-}));
-
 let timerId;
 
 function formatNumber(value, maximumFractionDigits = 0) {
   return new Intl.NumberFormat("zh-CN", { maximumFractionDigits }).format(
     value,
   );
-}
-
-function formatLargeTonnes(value) {
-  if (value >= 100000000) return `${formatNumber(value / 100000000, 2)} 亿吨`;
-  if (value >= 10000) return `${formatNumber(value / 10000, 1)} 万吨`;
-  return `${formatNumber(value)} 吨`;
 }
 
 onMounted(() => {
@@ -126,123 +76,113 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div class="waste-counter">
-      <div class="waste-counter__copy">
-        <p class="eyebrow">数字放大</p>
-        <h2>{{ wasteCounterCopy.headline }}</h2>
+    <section class="responsible-part responsible-part--waste">
+      <div class="responsible-part__intro">
+        <p class="eyebrow">Part 01 / 看见浪费</p>
+        <h2>浪费发生在哪里？</h2>
         <p>
-          {{ wasteCounterCopy.note }}
-          数字每秒跳动，是为了把“全球每年十亿吨级”的抽象规模，压缩成用户正在阅读时也会发生的时间感。
+          先从“被丢掉了多少”开始。浪费并不是一个抽象概念：它发生在家庭厨房、餐饮服务和零售端，
+          也分布在果蔬、肉类、谷物等不同食物类别中。看清规模和结构，才能找到最值得优先改变的地方。
         </p>
       </div>
-      <div class="waste-counter__number">
-        <span>已浪费约</span>
-        <strong>{{ formatNumber(liveWasteTonnes) }}</strong>
-        <em>吨食物</em>
-      </div>
-      <div class="waste-counter__sources">
-        <article v-for="sector in wasteImpactData.sectors" :key="sector.key">
-          <i
-            :style="{
-              backgroundColor: sector.color,
-              width: `${sector.share}%`,
-            }"
-          />
-          <span>{{ sector.label }}</span>
-          <strong>{{ sector.share }}%</strong>
-        </article>
-      </div>
-    </div>
 
-    <div class="waste-charts">
-      <div class="waste-charts__header">
-        <p class="eyebrow">数据放大镜</p>
-        <h2>哪些食物浪费得最多？</h2>
+      <div class="waste-counter">
+        <div class="waste-counter__copy">
+          <p class="eyebrow">数字放大</p>
+          <h2>{{ wasteCounterCopy.headline }}</h2>
+          <p>
+            {{ wasteCounterCopy.note }}
+            数字每秒跳动，是为了把“全球每年十亿吨级”的抽象规模，压缩成用户正在阅读时也会发生的时间感。
+          </p>
+        </div>
+        <div class="waste-counter__number">
+          <span>已浪费约</span>
+          <strong>{{ formatNumber(liveWasteTonnes) }}</strong>
+          <em>吨食物</em>
+        </div>
+        <div class="waste-counter__sources">
+          <article v-for="sector in wasteImpactData.sectors" :key="sector.key">
+            <i
+              :style="{
+                backgroundColor: sector.color,
+                width: `${sector.share}%`,
+              }"
+            />
+            <span>{{ sector.label }}</span>
+            <strong>{{ sector.share }}%</strong>
+          </article>
+        </div>
+      </div>
+
+      <div class="waste-charts">
+        <div class="waste-charts__header">
+          <p class="eyebrow">浪费结构</p>
+          <h2>哪些食物浪费得最多？</h2>
+          <p>
+            第一张图比较各类食物的浪费总量与人均每餐浪费量；第二张图把消费规模和浪费率放在一起看。
+            总量大的类别需要规模化管理，浪费率高的类别则需要更细致的购买、储存和烹饪策略。
+          </p>
+        </div>
+        <div class="chart-reading-guide">
+          <article>
+            <strong>先看总量</strong>
+            <span>哪些食物浪费最多，决定治理时最应该优先看见哪里。</span>
+          </article>
+          <article>
+            <strong>再看比例</strong>
+            <span>消费量大的类别需要规模化管理，浪费率高的类别需要更精细的日常策略。</span>
+          </article>
+          <article>
+            <strong>找到行动入口</strong>
+            <span>按需购买、合理储存和减少过量点餐，都是可以立刻开始的改变。</span>
+          </article>
+        </div>
+        <div class="waste-charts__grid">
+          <FoodWasteCompositionChart />
+          <FoodWasteRateChart />
+        </div>
+      </div>
+    </section>
+
+    <section class="responsible-part responsible-part--impact">
+      <div class="responsible-part__intro">
+        <p class="eyebrow">Part 02 / 理解代价</p>
+        <h2>被丢掉的不只是食物</h2>
         <p>
-          蓝色柱表示各类食物的浪费总量，已经按从高到低排序；橙色点表示平均每人每餐浪费了多少克。
-          这张图不是为了责备某一种食物，而是提醒我们：浪费既有总量差异，也有日常餐桌上的习惯差异。
-          第二张图进一步把“消费量”和“浪费率”放在一起看；第三张图则把浪费背后的环境足迹拆开，
-          让一盘剩饭连接到土地、水、氮磷投入与碳排放。
+          每一份食物在到达餐桌之前，都已经消耗土地、水、能源，并带来氮磷投入和温室气体排放。
+          当食物被浪费，这些资源也随之失去价值。先看多种环境足迹，再把其中的碳足迹放大到生命周期中逐段拆解。
         </p>
       </div>
-      <div class="chart-reading-guide">
-        <article>
-          <strong>先看总量</strong>
-          <span>哪些食物浪费最多，决定了治理时最应该优先看见哪里。</span>
-        </article>
-        <article>
-          <strong>再看比例</strong>
-          <span
-            >消费量大的类别需要规模化管理，浪费率高的类别需要更细的储存和烹饪策略。</span
-          >
-        </article>
-        <article>
-          <strong>最后看代价</strong>
-          <span>浪费不是一个末端动作，它会把前面所有资源投入一并带走。</span>
-        </article>
-      </div>
-      <div class="waste-charts__grid">
-        <FoodWasteCompositionChart />
-        <FoodWasteRateChart />
-        <FoodWasteEnvironmentalImpactChart />
-      </div>
-    </div>
 
-    <div class="choice-charts">
-      <div class="waste-charts__header">
-        <p class="eyebrow">从浪费走向选择</p>
-        <h2>吃什么，比从哪里运来更重要</h2>
-        <p>
-          上一张图回答的是：食物浪费会带走哪些环境资源。接下来，我们把其中的<strong>碳足迹</strong>单独放大，
-          继续追问排放发生在哪里。下面这张图把一份食物从土地变化、农场生产、动物饲料，
-          到加工、运输、零售和包装的温室气体排放逐段展开。
-        </p>
+      <div class="choice-charts">
+        <div class="waste-charts__header">
+          <p class="eyebrow">环境账本</p>
+          <h2>从多种足迹，到碳足迹的生命周期</h2>
+          <p>
+            上图回答“浪费会带走哪些环境资源”。下图继续追问：这些温室气体排放发生在哪里？
+            它把一份食物从土地变化、农场生产和动物饲料，到加工、运输、零售和包装逐段展开。
+          </p>
+        </div>
+        <div class="chart-reading-guide">
+          <article>
+            <strong>先看多种代价</strong>
+            <span>土地、水、氮磷投入和温室气体共同构成一份食物的环境账本。</span>
+          </article>
+          <article>
+            <strong>再放大碳足迹</strong>
+            <span>绝对值比较总量；相对值把每种食物归一化为 100%，观察排放集中在哪些阶段。</span>
+          </article>
+          <article>
+            <strong>最后回到选择</strong>
+            <span>食物类别往往比运输距离更重要。减少浪费之外，也要理解选择本身的重量。</span>
+          </article>
+        </div>
+        <div class="choice-charts__grid">
+          <FoodWasteEnvironmentalImpactChart />
+          <FoodSupplyChainChart />
+        </div>
       </div>
-      <div class="chart-reading-guide">
-        <article>
-          <strong>绝对值：比较总量</strong>
-          <span>回答“哪种食物更重”。牛肉与多数植物性食物的差距可达数十倍。</span>
-        </article>
-        <article>
-          <strong>相对值：拆解结构</strong>
-          <span
-            >像上一张百分比图一样，把每种食物归一化为 100%，观察排放集中在哪些阶段。</span
-          >
-        </article>
-        <article>
-          <strong>筛选类别：控制视野</strong>
-          <span>默认只展示重点食物。按类别切换后，可进一步比较肉类、主食、果蔬和其他植物产品。</span>
-        </article>
-      </div>
-      <div class="choice-charts__grid">
-        <FoodSupplyChainChart />
-      </div>
-    </div>
-
-    <div class="responsible-timeline">
-      <p class="eyebrow">Table Timeline</p>
-      <h3>从吃得饱，到吃得好，再到吃得负责</h3>
-      <div class="responsible-timeline__nodes">
-        <article>
-          <span>01</span>
-          <strong>粮食安全</strong>
-          <p>先解决有没有饭吃。</p>
-        </article>
-        <article>
-          <span>02</span>
-          <strong>饮食丰富</strong>
-          <p>再拥有更多选择。</p>
-        </article>
-        <article>
-          <span>03</span>
-          <strong>可持续消费</strong>
-          <p>最后理解食物的代价。</p>
-        </article>
-      </div>
-      <p class="responsible-timeline__closing">
-        吃得负责，不是回到匮乏，而是在丰盛之后学会珍惜。中国餐桌的下一步，不只是在“更多”里获得满足，也是在“更少浪费”里建立新的文明尺度。
-      </p>
-    </div>
+    </section>
   </section>
 </template>
 
@@ -261,8 +201,7 @@ onBeforeUnmount(() => {
 
 .waste-opening,
 .waste-counter,
-.responsible-panel,
-.responsible-timeline {
+.responsible-panel {
   max-width: 1120px;
   margin: 0 auto;
   border: 1px solid rgba(45, 36, 26, 0.13);
@@ -288,8 +227,7 @@ onBeforeUnmount(() => {
 
 .waste-opening__copy h2,
 .waste-counter__copy h2,
-.responsible-panel__copy h3,
-.responsible-timeline h3 {
+.responsible-panel__copy h3 {
   margin: 0;
   font-family: var(--font-serif);
   color: #2d241a;
@@ -464,6 +402,40 @@ onBeforeUnmount(() => {
   align-items: center;
   margin-top: 28px;
   padding: 30px;
+}
+
+.responsible-part {
+  max-width: 1180px;
+  margin: 34px auto 0;
+  padding: 28px;
+  border: 1px solid rgba(45, 36, 26, 0.12);
+  border-radius: 12px;
+}
+
+.responsible-part--waste {
+  background: rgba(255, 249, 237, 0.2);
+}
+
+.responsible-part--impact {
+  background: rgba(49, 95, 73, 0.12);
+}
+
+.responsible-part__intro {
+  max-width: 880px;
+  margin: 0 auto 24px;
+}
+
+.responsible-part__intro h2 {
+  margin: 0 0 10px;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  line-height: 1.05;
+}
+
+.responsible-part__intro p:last-child {
+  margin: 0;
+  color: rgba(45, 36, 26, 0.72);
+  line-height: 1.85;
 }
 
 .waste-charts {
@@ -781,67 +753,6 @@ onBeforeUnmount(() => {
   color: #315f49;
 }
 
-.responsible-timeline {
-  margin-top: 28px;
-  padding: 34px;
-}
-
-.responsible-timeline__nodes {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.responsible-timeline__nodes::before {
-  position: absolute;
-  top: 38px;
-  right: 12%;
-  left: 12%;
-  height: 2px;
-  content: "";
-  background: linear-gradient(90deg, #d6ad5a, #8f3328, #315f49);
-}
-
-.responsible-timeline__nodes article {
-  position: relative;
-  display: grid;
-  gap: 8px;
-  justify-items: center;
-  padding: 18px;
-  text-align: center;
-}
-
-.responsible-timeline__nodes span {
-  display: grid;
-  width: 78px;
-  height: 78px;
-  place-items: center;
-  border: 8px solid #fff9ed;
-  border-radius: 50%;
-  background: #2d241a;
-  color: #f0c86b;
-  font-weight: 900;
-}
-
-.responsible-timeline__nodes strong {
-  font-size: 1.24rem;
-}
-
-.responsible-timeline__nodes p,
-.responsible-timeline__closing {
-  margin: 0;
-  color: rgba(45, 36, 26, 0.66);
-}
-
-.responsible-timeline__closing {
-  margin-top: 22px;
-  text-align: center;
-  font-size: 1.08rem;
-  font-weight: 800;
-}
-
 @media (max-width: 1180px) {
   .waste-opening,
   .waste-counter,
@@ -860,17 +771,16 @@ onBeforeUnmount(() => {
   .chart-reading-guide,
   .waste-charts__grid,
   .choice-charts__grid,
-  .impact-grid,
-  .responsible-timeline__nodes {
+  .impact-grid {
     grid-template-columns: 1fr;
+  }
+
+  .responsible-part {
+    padding: 16px;
   }
 
   .fridge-box {
     min-height: 360px;
-  }
-
-  .responsible-timeline__nodes::before {
-    display: none;
   }
 }
 </style>

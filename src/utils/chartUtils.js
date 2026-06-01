@@ -11,12 +11,44 @@ export const chartColors = {
   amber: '#d4a64a',
 };
 
+export const evidenceChartTheme = {
+  ink: '#2d241a',
+  inkSoft: '#5a4a3a',
+  muted: '#8f806e',
+  axis: '#b9a98f',
+  grid: '#dfd0b9',
+  paper: '#fff9ed',
+  signal: '#8f3328',
+  positive: '#315f49',
+  accent: '#d4a64a',
+  neutral: '#c8bba5',
+  neutralLight: '#e5dac7',
+  series: ['#315f49', '#d4a64a', '#b45d48', '#78956a', '#9b7258'],
+};
+
 export function clearSvg(svgRef, width = 760, height = 420) {
   const node = svgRef.value ?? svgRef.current;
   const svg = d3.select(node);
   svg.selectAll('*').remove();
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('role', 'img');
   return svg;
+}
+
+export function styleChartAxis(axis, { hideDomain = false } = {}) {
+  axis.selectAll('.domain')
+    .attr('stroke', hideDomain ? 'none' : evidenceChartTheme.axis)
+    .attr('stroke-width', 0.9);
+
+  axis.selectAll('.tick line')
+    .attr('stroke', evidenceChartTheme.axis)
+    .attr('stroke-width', 0.8);
+
+  axis.selectAll('.tick text')
+    .attr('fill', evidenceChartTheme.muted)
+    .attr('font-size', '0.68rem')
+    .attr('font-family', 'Arial, "Noto Sans SC", sans-serif');
+
+  return axis;
 }
 
 export function createTooltip() {
