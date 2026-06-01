@@ -67,19 +67,27 @@ const metrics = computed(() => {
 .metric-row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 .metric-card {
-  background: rgba(255, 249, 237, 0.88);
-  border: 1px solid rgba(45, 36, 26, 0.1);
-  padding: 14px 10px;
-  text-align: center;
-  border-radius: 8px;
-  transition: box-shadow 0.2s;
+  min-height: 118px;
+  padding: 18px 14px;
+  border-right: 1px solid var(--line);
+  background: transparent;
+  text-align: left;
+  transition: background 0.2s;
 }
-.metric-card:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
-.metric-card__label { font-size: 0.72rem; color: #8f806e; margin-bottom: 4px; }
-.metric-card__value { font-size: 1.5rem; font-family: 'Georgia', serif; color: #2f2821; font-weight: 800; }
-.metric-card__unit { font-size: 0.65rem; color: #8f806e; margin-left: 2px; }
-.metric-card__delta { font-size: 0.6rem; color: #315f49; margin-top: 2px; }
+.metric-card:last-child { border-right: 0; }
+.metric-card:hover { background: rgba(158, 61, 50, 0.04); }
+.metric-card__label { margin-bottom: 10px; color: #81776c; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; }
+.metric-card__value { color: #29251f; font-family: 'Georgia', serif; font-size: 2rem; font-weight: 400; }
+.metric-card__unit { font-size: 0.72rem; color: #8f806e; margin-left: 2px; }
+.metric-card__delta { margin-top: 8px; color: #66755c; font-size: 0.7rem; font-weight: 700; }
+
+@media (max-width: 820px) {
+  .metric-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metric-card { border-bottom: 1px solid var(--line); }
+}
 </style>

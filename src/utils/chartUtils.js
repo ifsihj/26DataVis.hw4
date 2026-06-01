@@ -36,17 +36,17 @@ export function clearSvg(svgRef, width = 760, height = 420) {
 
 export function styleChartAxis(axis, { hideDomain = false } = {}) {
   axis.selectAll('.domain')
-    .attr('stroke', hideDomain ? 'none' : evidenceChartTheme.axis)
-    .attr('stroke-width', 0.9);
+    .style('stroke', hideDomain ? 'none' : evidenceChartTheme.axis)
+    .style('stroke-width', 1);
 
   axis.selectAll('.tick line')
-    .attr('stroke', evidenceChartTheme.axis)
-    .attr('stroke-width', 0.8);
+    .style('stroke', evidenceChartTheme.axis)
+    .style('stroke-width', 0.9);
 
   axis.selectAll('.tick text')
-    .attr('fill', evidenceChartTheme.muted)
-    .attr('font-size', '0.68rem')
-    .attr('font-family', 'Arial, "Noto Sans SC", sans-serif');
+    .style('fill', evidenceChartTheme.muted)
+    .style('font-size', '0.82rem')
+    .style('font-family', 'Arial, "Noto Sans SC", sans-serif');
 
   return axis;
 }

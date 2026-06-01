@@ -14,6 +14,8 @@ import {
 const props = defineProps({
   activeStep: { type: Number, default: 0 },
   progress: { type: Number, default: 0 },
+  rangeStart: { type: Number, default: 1949 },
+  showReference: { type: Boolean, default: true },
 });
 
 const svgRef = ref(null);
@@ -42,10 +44,13 @@ function draw() {
     .attr('aria-label', '1949 至 2025 年中国人均粮食占有量折线图');
   const tooltip = createTooltip();
   const year = Math.round(currentYear.value);
-  const visibleData = perCapitaGrain.filter(item => item.year <= year);
+  const visibleData = perCapitaGrain.filter(item =>
+    item.year >= props.rangeStart && item.year <= year
+  );
+  const rangeStart = visibleData[0]?.year || props.rangeStart;
 
   const x = d3.scaleLinear()
-    .domain(d3.extent(perCapitaGrain, item => item.year))
+    .domain([rangeStart, perCapitaGrain[perCapitaGrain.length - 1].year])
     .range([margin.left, width - margin.right]);
 
   const y = d3.scaleLinear()
@@ -60,12 +65,12 @@ function draw() {
   svg.append('text')
     .attr('x', margin.left).attr('y', 41)
     .attr('class', 'chart-note')
-    .text('1949–2025 · kg / 人 / 年 · 虚线为 FAO 400 kg 参考线');
+    .text(`${rangeStart}–2025 · kg / 人 / 年${props.showReference ? ' · 虚线为 FAO 400 kg 参考线' : ''}`);
 
   const xAxis = svg.append('g')
     .attr('transform', `translate(0,${height - margin.bottom})`)
     .call(d3.axisBottom(x)
-      .tickValues([1950, 1970, 1990, 2010, 2025])
+      .ticks(5)
       .tickFormat(d3.format('d')));
   styleChartAxis(xAxis);
 
@@ -78,24 +83,26 @@ function draw() {
 
   svg.append('text')
     .attr('x', margin.left - 48).attr('y', margin.top - 18)
-    .attr('fill', theme.muted).attr('font-size', '0.68rem')
+    .attr('fill', theme.muted).attr('font-size', '0.78rem')
     .text('kg / 人 / 年');
 
-  svg.append('line')
-    .attr('x1', margin.left).attr('y1', y(400))
-    .attr('x2', width - margin.right).attr('y2', y(400))
-    .attr('stroke', theme.positive)
-    .attr('stroke-dasharray', '6,4')
-    .attr('stroke-width', 1.2)
-    .attr('opacity', 0.74);
+  if (props.showReference) {
+    svg.append('line')
+      .attr('x1', margin.left).attr('y1', y(400))
+      .attr('x2', width - margin.right).attr('y2', y(400))
+      .attr('stroke', theme.positive)
+      .attr('stroke-dasharray', '6,4')
+      .attr('stroke-width', 1.2)
+      .attr('opacity', 0.74);
 
-  svg.append('text')
-    .attr('x', width - margin.right).attr('y', y(400) - 8)
-    .attr('text-anchor', 'end')
-    .attr('fill', theme.positive)
-    .attr('font-size', '0.68rem')
-    .attr('font-weight', 700)
-    .text('FAO 参考线 400 kg');
+    svg.append('text')
+      .attr('x', width - margin.right).attr('y', y(400) - 8)
+      .attr('text-anchor', 'end')
+      .attr('fill', theme.positive)
+      .attr('font-size', '0.78rem')
+      .attr('font-weight', 700)
+      .text('FAO 参考线 400 kg');
+  }
 
   const line = d3.line()
     .x(item => x(item.year))
@@ -115,12 +122,12 @@ function draw() {
       .attr('x', x(first.year) + 8)
       .attr('y', y(first.per_capita_kg) + 18)
       .attr('fill', theme.inkSoft)
-      .attr('font-size', '0.7rem')
+      .attr('font-size', '0.8rem')
       .text(`${first.year} · ${Math.round(first.per_capita_kg)} kg`);
   }
 
   const firstSafe = perCapitaGrain.find(item => item.per_capita_kg >= 400);
-  if (firstSafe && firstSafe.year <= year) {
+  if (props.showReference && firstSafe && firstSafe.year <= year && firstSafe.year >= rangeStart) {
     svg.append('circle')
       .attr('cx', x(firstSafe.year)).attr('cy', y(firstSafe.per_capita_kg))
       .attr('r', 4.5)
@@ -132,7 +139,7 @@ function draw() {
       .attr('x', x(firstSafe.year) + 8)
       .attr('y', y(firstSafe.per_capita_kg) - 11)
       .attr('fill', theme.positive)
-      .attr('font-size', '0.68rem')
+      .attr('font-size', '0.78rem')
       .attr('font-weight', 700)
       .text(`${firstSafe.year} · 首次越过参考线`);
   }
@@ -149,7 +156,7 @@ function draw() {
     .attr('x', Math.min(x(year) + 10, width - 96))
     .attr('y', y(currentValue) - 13)
     .attr('fill', theme.signal)
-    .attr('font-size', '0.76rem')
+    .attr('font-size', '0.86rem')
     .attr('font-weight', 800)
     .text(`${year} · ${Math.round(currentValue)} kg`);
 
@@ -175,7 +182,7 @@ function draw() {
 }
 
 onMounted(draw);
-watch(() => [props.activeStep, props.progress], draw);
+watch(() => [props.activeStep, props.progress, props.rangeStart, props.showReference], draw);
 </script>
 
 <template>

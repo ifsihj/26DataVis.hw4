@@ -55,14 +55,14 @@ function draw() {
   svg.append('text')
     .attr('x', margin.left).attr('y', upper.top - 13)
     .attr('fill', theme.inkSoft)
-    .attr('font-size', '0.68rem')
+    .attr('font-size', '0.78rem')
     .attr('font-weight', 800)
     .text('a  粮食亩产（kg / 亩）');
 
   svg.append('text')
     .attr('x', margin.left).attr('y', lower.top - 13)
     .attr('fill', theme.inkSoft)
-    .attr('font-size', '0.68rem')
+    .attr('font-size', '0.78rem')
     .attr('font-weight', 800)
     .text('b  杂交稻覆盖率（%）');
 
@@ -138,7 +138,7 @@ function draw() {
     .attr('y', yYield(last.yield_per_mu))
     .attr('dominant-baseline', 'middle')
     .attr('fill', theme.positive)
-    .attr('font-size', '0.7rem')
+    .attr('font-size', '0.8rem')
     .attr('font-weight', 800)
     .text(`${last.yield_per_mu} kg / 亩`);
 
@@ -147,7 +147,7 @@ function draw() {
     .attr('y', yHybrid(last.hybrid_rice_pct))
     .attr('dominant-baseline', 'middle')
     .attr('fill', theme.inkSoft)
-    .attr('font-size', '0.7rem')
+    .attr('font-size', '0.8rem')
     .attr('font-weight', 800)
     .text(`${last.hybrid_rice_pct}%`);
 

@@ -6,7 +6,14 @@ import {
   foodSupplyChainStages,
   responsibleChoiceSources,
 } from '../../data/responsibleChoiceData.js';
-import { clearSvg, createTooltip, hideTooltip, showTooltip } from '../../utils/chartUtils.js';
+import {
+  clearSvg,
+  createTooltip,
+  evidenceChartTheme as theme,
+  hideTooltip,
+  showTooltip,
+  styleChartAxis,
+} from '../../utils/chartUtils.js';
 
 const svgRef = ref(null);
 const viewMode = ref('absolute');
@@ -209,7 +216,7 @@ function draw() {
       .attr('y', 90)
       .attr('text-anchor', 'middle')
       .attr('fill', '#fff9ed')
-      .attr('font-size', '0.86rem')
+      .attr('font-size', '0.94rem')
       .attr('font-weight', 800)
       .text(stage.label);
   });
@@ -246,24 +253,24 @@ function draw() {
     svg.selectAll('.stage-banner').style('stroke', null).style('stroke-width', null);
   }
 
-  g.append('g')
+  const xAxis = g.append('g')
     .attr('transform', `translate(0,${innerH})`)
     .call(
       d3.axisBottom(xPositive)
-        .ticks(10)
+        .ticks(6)
         .tickFormat((value) => isRelative ? `${value}%` : value)
-        .tickSize(-innerH),
-    )
-    .selectAll('line')
-    .attr('stroke', 'rgba(45,36,26,0.08)');
+    );
+  styleChartAxis(xAxis);
 
-  g.append('g')
-    .call(d3.axisLeft(y).tickSize(0))
-    .selectAll('text')
+  const yAxis = g.append('g')
+    .call(d3.axisLeft(y).tickSize(0));
+  styleChartAxis(yAxis);
+  yAxis.selectAll('text')
     .attr('x', (food) => food === '坚果' ? -negativeGutter - 14 : -14)
-    .attr('fill', 'var(--ink-soft)')
-    .attr('font-family', 'var(--font-serif)')
-    .attr('font-size', '0.82rem')
+    .style('fill', theme.inkSoft)
+    .style('font-family', 'var(--font-serif)')
+    .style('font-size', '0.92rem')
+    .style('font-weight', 700)
     .style('cursor', 'pointer')
     .on('mouseenter', (event, food) => {
       const item = data.find((row) => row.food === food);
@@ -279,11 +286,6 @@ function draw() {
       clearStageHighlight();
       hideTooltip(tooltip);
     });
-
-  g.selectAll('.domain').attr('stroke', 'var(--line)');
-  g.selectAll('.tick text')
-    .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.74rem');
 
   g.append('line')
     .attr('x1', x(0))
@@ -334,7 +336,7 @@ function draw() {
       .attr('y', y.bandwidth() / 2 + 4)
       .attr('fill', 'var(--muted)')
       .attr('font-family', 'var(--font-serif)')
-      .attr('font-size', '0.68rem')
+      .attr('font-size', '0.78rem')
       .attr('font-weight', 800)
       .text((d) => formatValue(d.total));
   }
@@ -344,7 +346,7 @@ function draw() {
     .attr('y', height - 42)
     .attr('text-anchor', 'middle')
     .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.86rem')
+    .attr('font-size', '0.96rem')
     .attr('font-weight', 800)
     .text(isRelative ? '各生命周期阶段在正向排放中的占比（%）' : '每千克食物产生的温室气体排放（kg CO₂e / kg）');
 
@@ -352,7 +354,7 @@ function draw() {
     .attr('x', 24)
     .attr('y', height - 12)
     .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.66rem')
+    .attr('font-size', '0.74rem')
     .text(`数据来源：${responsibleChoiceSources.foodImpacts.label}`);
 }
 
@@ -362,72 +364,101 @@ watch([viewMode, filteredData], draw, { deep: true });
 
 <template>
   <div class="supply-chain-panel chart-card" @mouseleave="resetHoverState">
-    <div class="supply-chain-controls">
-      <div>
-        <span class="control-label">阅读方式</span>
-        <div class="control-buttons" role="group" aria-label="选择绝对值或相对值">
-          <button
-            type="button"
-            :class="{ 'is-active': viewMode === 'absolute' }"
-            :aria-pressed="viewMode === 'absolute'"
-            @click="viewMode = 'absolute'"
-          >
-            绝对值
-          </button>
-          <button
-            type="button"
-            :class="{ 'is-active': viewMode === 'relative' }"
-            :aria-pressed="viewMode === 'relative'"
-            @click="viewMode = 'relative'"
-          >
-            相对值
-          </button>
+    <aside class="supply-chain-sidebar">
+      <div class="supply-chain-controls">
+        <div>
+          <span class="control-label">阅读方式</span>
+          <div class="control-buttons" role="group" aria-label="选择绝对值或相对值">
+            <button
+              type="button"
+              :class="{ 'is-active': viewMode === 'absolute' }"
+              :aria-pressed="viewMode === 'absolute'"
+              @click="viewMode = 'absolute'"
+            >
+              绝对值
+            </button>
+            <button
+              type="button"
+              :class="{ 'is-active': viewMode === 'relative' }"
+              :aria-pressed="viewMode === 'relative'"
+              @click="viewMode = 'relative'"
+            >
+              相对值
+            </button>
+          </div>
+        </div>
+        <div>
+          <span class="control-label">展示食物类别</span>
+          <div class="control-buttons control-buttons--stack" role="group" aria-label="筛选展示的食物类别">
+            <button
+              v-for="group in foodGroupOptions"
+              :key="group.key"
+              type="button"
+              :class="{ 'is-active': selectedGroups.includes(group.key) }"
+              :aria-pressed="selectedGroups.includes(group.key)"
+              @click="toggleGroup(group.key)"
+            >
+              {{ group.label }}
+            </button>
+          </div>
         </div>
       </div>
-      <div>
-        <span class="control-label">展示食物类别</span>
-        <div class="control-buttons control-buttons--wrap" role="group" aria-label="筛选展示的食物类别">
-          <button
-            v-for="group in foodGroupOptions"
-            :key="group.key"
-            type="button"
-            :class="{ 'is-active': selectedGroups.includes(group.key) }"
-            :aria-pressed="selectedGroups.includes(group.key)"
-            @click="toggleGroup(group.key)"
-          >
-            {{ group.label }}
-          </button>
-        </div>
-      </div>
+      <p class="supply-chain-hint">
+        {{ viewMode === 'absolute'
+          ? '绝对值用于比较不同食物的总体碳足迹。'
+          : '相对值将每种食物的正向排放归一化为 100%，用于比较生命周期结构。' }}
+        当前展示 {{ filteredData.length }} 类食物。
+      </p>
+    </aside>
+    <div class="supply-chain-visual">
+      <svg ref="svgRef" class="food-supply-chain-chart" />
     </div>
-    <p class="supply-chain-hint">
-      {{ viewMode === 'absolute'
-        ? '绝对值用于比较不同食物的总体碳足迹。'
-        : '相对值将每种食物的正向排放归一化为 100%，用于比较生命周期结构。' }}
-      当前展示 {{ filteredData.length }} 类食物。
-    </p>
-    <svg ref="svgRef" class="food-supply-chain-chart" />
   </div>
 </template>
 
 <style scoped>
 .supply-chain-panel {
   grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1fr);
+  gap: 26px;
+  align-items: start;
   min-height: 0;
-  padding: 20px;
+  padding: 22px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.supply-chain-sidebar {
+  position: sticky;
+  top: 24px;
+  padding: 0 22px 18px 0;
+  border-right: 1px solid var(--line);
+}
+
+.supply-chain-sidebar::before {
+  display: block;
+  margin-bottom: 18px;
+  color: var(--red);
+  content: "FILTER / 过滤";
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
 }
 
 .supply-chain-controls {
   display: grid;
-  gap: 14px;
-  margin-bottom: 12px;
+  gap: 20px;
 }
 
 .control-label {
   display: block;
   margin-bottom: 7px;
   color: var(--ink-soft);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -437,31 +468,38 @@ watch([viewMode, filteredData], draw, { deep: true });
   gap: 8px;
 }
 
-.control-buttons--wrap {
-  flex-wrap: wrap;
+.control-buttons--stack {
+  display: grid;
 }
 
 .control-buttons button {
-  padding: 7px 13px;
+  padding: 8px 10px;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(255, 249, 237, 0.66);
+  border-radius: 0;
+  background: transparent;
   color: var(--ink-soft);
   cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: left;
   transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 
 .control-buttons button.is-active {
-  border-color: var(--green);
-  background: var(--green);
-  color: #fff9ed;
+  border-color: var(--red);
+  background: var(--red);
+  color: #fbf8f2;
 }
 
 .supply-chain-hint {
-  margin: 0 0 6px;
+  margin: 20px 0 0;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   line-height: 1.6;
+}
+
+.supply-chain-visual {
+  min-width: 0;
 }
 
 .food-supply-chain-chart {
@@ -469,5 +507,29 @@ watch([viewMode, filteredData], draw, { deep: true });
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
+}
+
+@media (max-width: 820px) {
+  .supply-chain-panel {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 14px;
+  }
+
+  .supply-chain-sidebar {
+    position: static;
+    padding: 0 0 14px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .supply-chain-sidebar::before {
+    margin-bottom: 14px;
+  }
+
+  .control-buttons--stack {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 </style>

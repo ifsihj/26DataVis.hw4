@@ -69,7 +69,7 @@ function draw() {
       .attr('y', 98)
       .attr('text-anchor', 'middle')
       .attr('fill', theme.muted)
-      .attr('font-size', '0.72rem')
+      .attr('font-size', '0.82rem')
       .attr('font-weight', 800)
       .text(phase.label);
   });
@@ -122,7 +122,7 @@ function draw() {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', side < 0 ? 'auto' : 'hanging')
       .attr('fill', theme.signal)
-      .attr('font-size', '0.7rem')
+      .attr('font-size', '0.8rem')
       .attr('font-weight', 800)
       .text(event.year);
 
@@ -132,7 +132,7 @@ function draw() {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', side < 0 ? 'auto' : 'hanging')
       .attr('fill', theme.inkSoft)
-      .attr('font-size', '0.68rem')
+      .attr('font-size', '0.78rem')
       .attr('font-weight', 700)
       .text(shortLabels[event.label] || event.label);
   });

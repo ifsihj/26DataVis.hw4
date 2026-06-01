@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import * as d3 from 'd3';
 import { worldComparison } from '../../data/scene1Data.js';
 import {
@@ -12,6 +12,9 @@ import {
 } from '../../utils/chartUtils.js';
 
 const svgRef = ref(null);
+const props = defineProps({
+  filter: { type: String, default: 'all' },
+});
 
 function draw() {
   const width = 760;
@@ -20,7 +23,13 @@ function draw() {
   const svg = clearSvg(svgRef, width, height)
     .attr('aria-label', '中国与主要国家人均粮食占有量横向柱状对比图');
   const tooltip = createTooltip();
-  const data = [...worldComparison].sort((a, b) => b.per_capita_kg - a.per_capita_kg);
+  const data = [...worldComparison]
+    .filter(item => {
+      if (props.filter === 'above') return item.per_capita_kg >= 400;
+      if (props.filter === 'below') return item.per_capita_kg < 400;
+      return true;
+    })
+    .sort((a, b) => b.per_capita_kg - a.per_capita_kg);
 
   svg.append('text')
     .attr('x', margin.left).attr('y', 22)
@@ -30,7 +39,7 @@ function draw() {
   svg.append('text')
     .attr('x', margin.left).attr('y', 41)
     .attr('class', 'chart-note')
-    .text('2023 年截面数据 · kg / 人 / 年 · 中国高亮');
+    .text(`2023 年截面数据 · kg / 人 / 年 · ${props.filter === 'all' ? '中国高亮' : `当前显示 ${data.length} 个国家或地区`}`);
 
   const x = d3.scaleLinear()
     .domain([0, d3.max(data, item => item.per_capita_kg) * 1.12])
@@ -56,7 +65,7 @@ function draw() {
   svg.append('text')
     .attr('x', width - margin.right).attr('y', height - 10)
     .attr('text-anchor', 'end')
-    .attr('fill', theme.muted).attr('font-size', '0.68rem')
+    .attr('fill', theme.muted).attr('font-size', '0.78rem')
     .text('kg / 人 / 年');
 
   svg.append('line')
@@ -70,7 +79,7 @@ function draw() {
   svg.append('text')
     .attr('x', x(400) + 6).attr('y', margin.top - 10)
     .attr('fill', theme.positive)
-    .attr('font-size', '0.68rem')
+    .attr('font-size', '0.78rem')
     .attr('font-weight', 700)
     .text('FAO 参考线 400 kg');
 
@@ -112,12 +121,13 @@ function draw() {
     .attr('y', item => y(item.country) + y.bandwidth() / 2)
     .attr('dominant-baseline', 'middle')
     .attr('fill', item => item.country === '中国' ? theme.signal : theme.inkSoft)
-    .attr('font-size', '0.68rem')
+    .attr('font-size', '0.78rem')
     .attr('font-weight', item => item.country === '中国' ? 800 : 600)
     .text(item => `${item.per_capita_kg}`);
 }
 
 onMounted(draw);
+watch(() => props.filter, draw);
 </script>
 
 <template>

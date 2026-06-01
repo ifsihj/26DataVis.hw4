@@ -7,16 +7,16 @@ export const environmentalImpactTypes = [
 ];
 
 export const environmentalImpactCategories = [
-  { key: 'meat', label: '肉类', color: '#6f94d4' },
-  { key: 'poultry', label: '禽肉', color: '#f3a15f' },
-  { key: 'aquatic', label: '水产品', color: '#b7b7b7' },
-  { key: 'eggs', label: '蛋类', color: '#ffd84f' },
-  { key: 'vegetables', label: '蔬菜', color: '#7fb5dc' },
-  { key: 'mushrooms', label: '菌菇类', color: '#92c878' },
-  { key: 'roots', label: '根茎薯类', color: '#5d6f93' },
-  { key: 'cereals', label: '谷物', color: '#c17a45' },
-  { key: 'legumes', label: '豆类', color: '#8e8e8e' },
-  { key: 'fruits', label: '水果', color: '#bba247' },
+  { key: 'meat', label: '肉类', color: '#8f3328' },
+  { key: 'poultry', label: '禽肉', color: '#b45d48' },
+  { key: 'aquatic', label: '水产品', color: '#82939a' },
+  { key: 'eggs', label: '蛋类', color: '#d4a64a' },
+  { key: 'vegetables', label: '蔬菜', color: '#315f49' },
+  { key: 'mushrooms', label: '菌菇类', color: '#78956a' },
+  { key: 'roots', label: '根茎薯类', color: '#9b7258' },
+  { key: 'cereals', label: '谷物', color: '#c49c6b' },
+  { key: 'legumes', label: '豆类', color: '#648568' },
+  { key: 'fruits', label: '水果', color: '#b99a56' },
 ];
 
 export const foodWasteEnvironmentalImpactData = [

@@ -1,17 +1,18 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import AgriTechnologyTrend from '../charts/AgriTechnologyTrend.vue';
-import GrainStackedArea from '../charts/GrainStackedArea.vue';
-import KeyEventsTimeline from '../charts/KeyEventsTimeline.vue';
-import MetricCards from '../charts/MetricCards.vue';
-import PerCapitaLineChart from '../charts/PerCapitaLineChart.vue';
-import WorldComparisonBar from '../charts/WorldComparisonBar.vue';
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import EnoughDetailExplorer from "./EnoughDetailExplorer.vue";
+import AgriTechnologyTrend from "../charts/AgriTechnologyTrend.vue";
+import GrainStackedArea from "../charts/GrainStackedArea.vue";
+import KeyEventsTimeline from "../charts/KeyEventsTimeline.vue";
+import MetricCards from "../charts/MetricCards.vue";
+import PerCapitaLineChart from "../charts/PerCapitaLineChart.vue";
+import WorldComparisonBar from "../charts/WorldComparisonBar.vue";
 import {
   agriTechnology,
   grainOutput,
   perCapitaGrain,
   worldComparison,
-} from '../../data/scene1Data.js';
+} from "../../data/scene1Data.js";
 
 const flippedCards = ref(new Set());
 const activeDetailId = ref(null);
@@ -19,63 +20,77 @@ const activeDetailId = ref(null);
 const latestPerCapita = perCapitaGrain[perCapitaGrain.length - 1];
 const latestOutput = grainOutput[grainOutput.length - 1];
 const latestTechnology = agriTechnology[agriTechnology.length - 1];
-const chinaComparison = worldComparison.find(item => item.country === '中国');
+const chinaComparison = worldComparison.find((item) => item.country === "中国");
 
 const cards = [
   {
-    id: 'per-capita',
-    index: '01',
-    kicker: '从不足到安全',
-    title: '人均粮食占有量',
+    id: "per-capita",
+    index: "01",
+    kicker: "从不足到安全",
+    title: "人均粮食占有量",
     value: `${Math.round(latestPerCapita.per_capita_kg)} kg`,
-    note: '1949 年为 209 kg，如今稳定越过 FAO 400 kg 安全线。',
+    note: "1949 年为 209 kg，如今稳定越过 FAO 400 kg 安全线。",
     chart: PerCapitaLineChart,
     chartProps: { progress: 1 },
-    detailTitle: '一条曲线，记录从温饱压力到粮食安全',
-    detailCopy: '人均粮食占有量并不是一条平滑上升的直线。困难时期、结构调整与持续增产都留在曲线上。越过 400 kg 安全线之后，问题才逐渐从“有没有”转向“吃什么”。',
-    detailFacts: ['1949 年：209 kg', '2025 年：508 kg', 'FAO 参考线：400 kg'],
+    detailTitle: "一条曲线，记录从温饱压力到粮食安全",
+    detailCopy:
+      "人均粮食占有量并不是一条平滑上升的直线。困难时期、结构调整与持续增产都留在曲线上。越过 400 kg 安全线之后，问题才逐渐从“有没有”转向“吃什么”。",
+    detailFacts: ["1949 年：209 kg", "2025 年：508 kg", "FAO 参考线：400 kg"],
   },
   {
-    id: 'production',
-    index: '02',
-    kicker: '七亿吨背后',
-    title: '粮食总产结构',
+    id: "production",
+    index: "02",
+    kicker: "七亿吨背后",
+    title: "粮食总产结构",
     value: `${(latestOutput.total / 10000).toFixed(1)} 亿吨`,
-    note: '稻麦稳、玉米增。总量增长背后，作物结构也在改变。',
+    note: "稻麦稳、玉米增。总量增长背后，作物结构也在改变。",
     chart: GrainStackedArea,
     chartProps: { progress: 1 },
-    detailTitle: '增产不只是数字变大，也是结构在重组',
-    detailCopy: '稻谷和小麦构成口粮基础，玉米的增长则连接起饲料、养殖与更丰富的餐桌。分品种面积图让“吃得饱”和后续的“吃得好”自然衔接。',
-    detailFacts: ['1949 年：1.13 亿吨', `2025 年：${(latestOutput.total / 10000).toFixed(1)} 亿吨`, '玉米成为增长最显著的品种'],
+    detailTitle: "增产不只是数字变大，也是结构在重组",
+    detailCopy:
+      "稻谷和小麦构成口粮基础，玉米的增长则连接起饲料、养殖与更丰富的餐桌。分品种面积图让“吃得饱”和后续的“吃得好”自然衔接。",
+    detailFacts: [
+      "1949 年：1.13 亿吨",
+      `2025 年：${(latestOutput.total / 10000).toFixed(1)} 亿吨`,
+      "玉米成为增长最显著的品种",
+    ],
   },
   {
-    id: 'world',
-    index: '03',
-    kicker: '放进全球坐标',
-    title: '全球人均粮食对比',
+    id: "world",
+    index: "03",
+    kicker: "放进全球坐标",
+    title: "全球人均粮食对比",
     value: `${Math.round(chinaComparison.per_capita_kg)} kg`,
-    note: '全球坐标帮助我们理解：中国已经跨过安全线，但资源条件仍然有自身约束。',
+    note: "全球坐标帮助我们理解：中国已经跨过安全线，但资源条件仍然有自身约束。",
     chart: WorldComparisonBar,
-    detailTitle: '跨过安全线之后，还要看见资源禀赋的差异',
-    detailCopy: '人均粮食占有量并不等同于饮食质量，但它提供了一个清晰的全球坐标。不同国家的人口规模、土地条件与农业结构差异很大，中国的答案必须建立在自身资源条件上。',
-    detailFacts: ['中国：494 kg', '世界平均：370 kg', 'FAO 参考线：400 kg'],
+    detailTitle: "跨过安全线之后，还要看见资源禀赋的差异",
+    detailCopy:
+      "人均粮食占有量并不等同于饮食质量，但它提供了一个清晰的全球坐标。不同国家的人口规模、土地条件与农业结构差异很大，中国的答案必须建立在自身资源条件上。",
+    detailFacts: ["中国：494 kg", "世界平均：370 kg", "FAO 参考线：400 kg"],
   },
   {
-    id: 'technology',
-    index: '04',
-    kicker: '土地之外的增量',
-    title: '农业科技与亩产',
+    id: "technology",
+    index: "04",
+    kicker: "土地之外的增量",
+    title: "农业科技与亩产",
     value: `${Math.round(latestTechnology.yield_per_mu)} kg`,
-    unit: '每亩',
-    note: '耕地有限，稳定增产越来越依赖单产提升与农业技术积累。',
+    unit: "每亩",
+    note: "耕地有限，稳定增产越来越依赖单产提升与农业技术积累。",
     chart: AgriTechnologyTrend,
-    detailTitle: '有限土地上的增量，越来越依赖农业科技',
-    detailCopy: '耕地不是无限扩张的变量。长期粮食安全更依赖品种改良、农业基础设施与生产技术积累。亩产的持续提升，是总产量增长的重要基础。',
-    detailFacts: ['1949 年：69 kg / 亩', `2025 年：${Math.round(latestTechnology.yield_per_mu)} kg / 亩`, '杂交稻覆盖率持续提升'],
+    detailTitle: "有限土地上的增量，越来越依赖农业科技",
+    detailCopy:
+      "耕地不是无限扩张的变量。长期粮食安全更依赖品种改良、农业基础设施与生产技术积累。亩产的持续提升，是总产量增长的重要基础。",
+    detailFacts: [
+      "1949 年：69 kg / 亩",
+      `2025 年：${Math.round(latestTechnology.yield_per_mu)} kg / 亩`,
+      "杂交稻覆盖率持续提升",
+    ],
   },
 ];
 
-const activeDetail = computed(() => cards.find(card => card.id === activeDetailId.value) || null);
+const activeDetail = computed(
+  () => cards.find((card) => card.id === activeDetailId.value) || null,
+);
 
 function isFlipped(id) {
   return flippedCards.value.has(id);
@@ -97,11 +112,11 @@ function closeDetail() {
 }
 
 function handleKeydown(event) {
-  if (event.key === 'Escape') closeDetail();
+  if (event.key === "Escape") closeDetail();
 }
 
-onMounted(() => window.addEventListener('keydown', handleKeydown));
-onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
+onMounted(() => window.addEventListener("keydown", handleKeydown));
+onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
 </script>
 
 <template>
@@ -109,7 +124,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
     <div class="enough-section__inner">
       <header class="enough-opening">
         <div>
-          <p class="eyebrow">Scene 01 / Food Security</p>
+          <p class="eyebrow">Scene 01</p>
           <h2>从二百公斤<br />到五百公斤</h2>
         </div>
         <p>
@@ -123,7 +138,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
         <div class="enough-subheading">
           <p class="eyebrow">关键指标</p>
           <h3>先看今天的粮食安全底盘</h3>
-          <p>总量、人均、口粮自给率、亩产和耕地，共同构成“吃得饱”的基本条件。</p>
+          <p>
+            总量、人均、口粮自给率、亩产和耕地，共同构成“吃得饱”的基本条件。
+          </p>
         </div>
         <MetricCards />
       </section>
@@ -179,8 +196,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
                 </div>
                 <span>点击空白处返回</span>
               </div>
-              <component :is="card.chart" v-if="isFlipped(card.id)" v-bind="card.chartProps || {}" />
-              <button type="button" @click.stop="openDetail(card.id)">展开侧边详情</button>
+              <component
+                :is="card.chart"
+                v-if="isFlipped(card.id)"
+                v-bind="card.chartProps || {}"
+              />
+              <button type="button" @click.stop="openDetail(card.id)">
+                展开侧边详情
+              </button>
             </div>
           </div>
         </article>
@@ -207,17 +230,31 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
   <Teleport to="body">
     <Transition name="enough-panel">
       <div v-if="activeDetail" class="enough-detail-layer">
-        <button class="enough-detail-layer__backdrop" type="button" aria-label="关闭侧边详情" @click="closeDetail" />
+        <button
+          class="enough-detail-layer__backdrop"
+          type="button"
+          aria-label="关闭侧边详情"
+          @click="closeDetail"
+        />
         <aside class="enough-detail" aria-label="吃得饱图表详情">
-          <button class="enough-detail__close" type="button" aria-label="关闭侧边详情" @click="closeDetail">×</button>
+          <button
+            class="enough-detail__close"
+            type="button"
+            aria-label="关闭侧边详情"
+            @click="closeDetail"
+          >
+            ×
+          </button>
           <p class="eyebrow">{{ activeDetail.kicker }}</p>
           <h2>{{ activeDetail.detailTitle }}</h2>
           <p class="enough-detail__copy">{{ activeDetail.detailCopy }}</p>
           <div class="enough-detail__chart">
-            <component :is="activeDetail.chart" v-bind="activeDetail.chartProps || {}" />
+            <EnoughDetailExplorer :detail-id="activeDetail.id" />
           </div>
           <div class="enough-detail__facts">
-            <span v-for="fact in activeDetail.detailFacts" :key="fact">{{ fact }}</span>
+            <span v-for="fact in activeDetail.detailFacts" :key="fact">{{
+              fact
+            }}</span>
           </div>
         </aside>
       </div>
@@ -230,7 +267,11 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
   padding: 56px 5vw 92px;
   color: #2d241a;
   background:
-    radial-gradient(circle at 18% 7%, rgba(143, 51, 40, 0.14), transparent 26rem),
+    radial-gradient(
+      circle at 18% 7%,
+      rgba(143, 51, 40, 0.14),
+      transparent 26rem
+    ),
     linear-gradient(180deg, #efe1c7 0%, #d5c09e 54%, #70836d 100%);
 }
 
@@ -255,7 +296,11 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
   align-items: end;
   padding: 38px;
   background:
-    linear-gradient(135deg, rgba(255, 249, 237, 0.94), rgba(234, 216, 183, 0.86)),
+    linear-gradient(
+      135deg,
+      rgba(255, 249, 237, 0.94),
+      rgba(234, 216, 183, 0.86)
+    ),
     #fff9ed;
 }
 
@@ -371,9 +416,15 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
   justify-content: space-between;
   padding: 26px;
   background:
-    linear-gradient(135deg, rgba(255, 249, 237, 0.94), rgba(234, 216, 183, 0.82)),
+    linear-gradient(
+      135deg,
+      rgba(255, 249, 237, 0.94),
+      rgba(234, 216, 183, 0.82)
+    ),
     #fff9ed;
-  transition: border-color 220ms ease, transform 220ms ease;
+  transition:
+    border-color 220ms ease,
+    transform 220ms ease;
 }
 
 .enough-card:hover .enough-card__front {
@@ -502,7 +553,11 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
   margin-top: 28px;
   padding: 30px;
   background:
-    linear-gradient(135deg, rgba(255, 249, 237, 0.94), rgba(208, 222, 200, 0.74)),
+    linear-gradient(
+      135deg,
+      rgba(255, 249, 237, 0.94),
+      rgba(208, 222, 200, 0.74)
+    ),
     #fff9ed;
 }
 
@@ -543,12 +598,16 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(760px, 92vw);
+  width: min(860px, 94vw);
   overflow-y: auto;
   padding: 48px 42px;
   border-left: 1px solid rgba(45, 36, 26, 0.14);
   background:
-    radial-gradient(circle at 84% 12%, rgba(49, 95, 73, 0.16), transparent 24rem),
+    radial-gradient(
+      circle at 84% 12%,
+      rgba(49, 95, 73, 0.16),
+      transparent 24rem
+    ),
     linear-gradient(180deg, #efe1c7, #d5c09e);
   box-shadow: -24px 0 72px rgba(45, 36, 26, 0.3);
   color: #2d241a;

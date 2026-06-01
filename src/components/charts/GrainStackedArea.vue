@@ -14,6 +14,8 @@ import {
 const props = defineProps({
   activeStep: { type: Number, default: 0 },
   progress: { type: Number, default: 0 },
+  mode: { type: String, default: 'absolute' },
+  crop: { type: String, default: 'all' },
 });
 
 const svgRef = ref(null);
@@ -36,13 +38,27 @@ function draw() {
   const tooltip = createTooltip();
   const year = Math.round(currentYear.value);
   const visibleData = grainOutput.filter(item => item.year <= year);
+  const visibleKeys = props.crop === 'all' ? keys : keys.filter(key => key === props.crop);
+  const chartData = props.mode === 'relative'
+    ? visibleData.map(item => {
+      const total = d3.sum(keys, key => item[key]);
+      return {
+        ...item,
+        ...Object.fromEntries(keys.map(key => [key, (item[key] / total) * 100])),
+      };
+    })
+    : visibleData;
 
   const x = d3.scaleLinear()
     .domain(d3.extent(grainOutput, item => item.year))
     .range([margin.left, width - margin.right]);
 
-  const stacked = d3.stack().keys(keys)(visibleData);
-  const yMax = d3.max(grainOutput, item => d3.sum(keys, key => item[key])) * 1.06;
+  const stacked = d3.stack().keys(visibleKeys)(chartData);
+  const yMax = props.mode === 'relative'
+    ? (props.crop === 'all'
+      ? 100
+      : d3.max(chartData, item => d3.sum(visibleKeys, key => item[key])) * 1.14)
+    : d3.max(grainOutput, item => d3.sum(visibleKeys, key => item[key])) * 1.06;
   const y = d3.scaleLinear()
     .domain([0, yMax])
     .nice()
@@ -56,7 +72,7 @@ function draw() {
   svg.append('text')
     .attr('x', margin.left).attr('y', 41)
     .attr('class', 'chart-note')
-    .text('1949–2025 · 万吨 · 右侧直接标注各品种');
+    .text(`1949–2025 · ${props.mode === 'relative' ? '五类作物构成占比' : '万吨'} · 右侧直接标注各品种`);
 
   const xAxis = svg.append('g')
     .attr('transform', `translate(0,${height - margin.bottom})`)
@@ -69,13 +85,15 @@ function draw() {
     .attr('transform', `translate(${margin.left},0)`)
     .call(d3.axisLeft(y)
       .ticks(5)
-      .tickFormat(value => value >= 10000 ? `${(value / 10000).toFixed(1)} 亿` : `${value}`));
+      .tickFormat(value => props.mode === 'relative'
+        ? `${value}%`
+        : (value >= 10000 ? `${(value / 10000).toFixed(1)} 亿` : `${value}`)));
   styleChartAxis(yAxis);
 
   svg.append('text')
     .attr('x', margin.left - 48).attr('y', margin.top - 18)
-    .attr('fill', theme.muted).attr('font-size', '0.68rem')
-    .text('万吨');
+    .attr('fill', theme.muted).attr('font-size', '0.78rem')
+    .text(props.mode === 'relative' ? '占比' : '万吨');
 
   const area = d3.area()
     .x(item => x(item.data.year))
@@ -93,7 +111,7 @@ function draw() {
     .attr('stroke', theme.paper)
     .attr('stroke-width', 0.7);
 
-  const lastVisible = visibleData[visibleData.length - 1];
+  const lastVisible = chartData[chartData.length - 1];
   if (lastVisible) {
     stacked.forEach(series => {
       const point = series[series.length - 1];
@@ -102,7 +120,7 @@ function draw() {
         .attr('y', y((point[0] + point[1]) / 2))
         .attr('dominant-baseline', 'middle')
         .attr('fill', colors[series.key])
-        .attr('font-size', '0.68rem')
+        .attr('font-size', '0.78rem')
         .attr('font-weight', 800)
         .text(labels[series.key]);
     });
@@ -112,9 +130,11 @@ function draw() {
       .attr('y', y(d3.sum(keys, key => lastVisible[key])) - 10)
       .attr('text-anchor', 'end')
       .attr('fill', theme.inkSoft)
-      .attr('font-size', '0.7rem')
+      .attr('font-size', '0.8rem')
       .attr('font-weight', 800)
-      .text(`五类合计 ${(d3.sum(keys, key => lastVisible[key]) / 10000).toFixed(1)} 亿吨`);
+      .text(props.mode === 'relative'
+        ? (props.crop === 'all' ? '五类作物构成 100%' : `${labels[props.crop]}占比 ${lastVisible[props.crop].toFixed(1)}%`)
+        : `${props.crop === 'all' ? '五类合计' : labels[props.crop]} ${(d3.sum(visibleKeys, key => lastVisible[key]) / 10000).toFixed(1)} 亿吨`);
   }
 
   const guide = svg.append('line')
@@ -137,8 +157,9 @@ function draw() {
       const row = grainOutput.find(item => item.year === targetYear);
       if (!row) return;
       guide.attr('x1', x(row.year)).attr('x2', x(row.year)).attr('opacity', 0.55);
-      const lines = keys
-        .map(key => `<div>${labels[key]}：<strong>${Math.round(row[key]).toLocaleString()}</strong> 万吨</div>`)
+      const total = d3.sum(keys, key => row[key]);
+      const lines = visibleKeys
+        .map(key => `<div>${labels[key]}：<strong>${props.mode === 'relative' ? `${((row[key] / total) * 100).toFixed(1)}%` : `${Math.round(row[key]).toLocaleString()} 万吨`}</strong></div>`)
         .join('');
       showTooltip(
         tooltip,
@@ -155,7 +176,7 @@ function draw() {
 }
 
 onMounted(draw);
-watch(() => [props.activeStep, props.progress], draw);
+watch(() => [props.activeStep, props.progress, props.mode, props.crop], draw);
 </script>
 
 <template>

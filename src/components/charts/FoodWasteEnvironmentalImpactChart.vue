@@ -5,7 +5,14 @@ import {
   environmentalImpactCategories,
   foodWasteEnvironmentalImpactData,
 } from '../../data/foodWasteEnvironmentalImpactData.js';
-import { clearSvg, createTooltip, hideTooltip, showTooltip } from '../../utils/chartUtils.js';
+import {
+  clearSvg,
+  createTooltip,
+  evidenceChartTheme as theme,
+  hideTooltip,
+  showTooltip,
+  styleChartAxis,
+} from '../../utils/chartUtils.js';
 
 const svgRef = ref(null);
 
@@ -42,25 +49,18 @@ function draw() {
     .attr('y', 48)
     .text('每一行表示一种环境足迹，色块表示不同食物类别对该足迹的贡献比例。');
 
-  g.append('g')
+  const xAxis = g.append('g')
     .attr('transform', `translate(0,${innerH})`)
-    .call(d3.axisBottom(x).ticks(10).tickFormat((d) => `${d}%`).tickSize(-innerH))
-    .selectAll('line')
-    .attr('stroke', 'rgba(45,36,26,0.08)');
+    .call(d3.axisBottom(x).tickValues([0, 25, 50, 75, 100]).tickFormat((d) => `${d}%`));
+  styleChartAxis(xAxis);
 
-  g.selectAll('.domain').attr('stroke', 'var(--line)');
-  g.selectAll('.tick text')
-    .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.78rem');
-
-  g.append('g')
-    .call(d3.axisLeft(y).tickSize(0))
-    .selectAll('text')
-    .attr('fill', 'var(--ink)')
-    .attr('font-size', '0.92rem')
-    .attr('font-weight', 800);
-
-  g.selectAll('.domain').attr('stroke', 'var(--line)');
+  const yAxis = g.append('g')
+    .call(d3.axisLeft(y).tickSize(0));
+  styleChartAxis(yAxis);
+  yAxis.selectAll('text')
+    .style('fill', theme.ink)
+    .style('font-size', '0.98rem')
+    .style('font-weight', 800);
 
   foodWasteEnvironmentalImpactData.forEach((row) => {
     let offset = 0;
@@ -112,7 +112,7 @@ function draw() {
       .attr('y', barHeight / 2 + 5)
       .attr('text-anchor', 'middle')
       .attr('fill', '#2d241a')
-      .attr('font-size', '0.72rem')
+      .attr('font-size', '0.8rem')
       .attr('font-weight', 800)
       .attr('opacity', 0)
       .text((d) => `${d.value}%`)
@@ -127,7 +127,7 @@ function draw() {
     .attr('y', height - 76)
     .attr('text-anchor', 'middle')
     .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.86rem')
+    .attr('font-size', '0.94rem')
     .attr('font-weight', 800)
     .text('各食物类别在环境足迹中的占比（%）');
 
@@ -150,7 +150,7 @@ function draw() {
       .attr('x', 18)
       .attr('y', 11)
       .attr('fill', 'var(--muted)')
-      .attr('font-size', '0.8rem')
+      .attr('font-size', '0.88rem')
       .text(category.label);
   });
 }

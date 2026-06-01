@@ -1,298 +1,346 @@
 <script setup>
 const heroBackground = `
-  linear-gradient(90deg, rgba(5, 4, 3, 0.9), rgba(5, 4, 3, 0.32) 48%, rgba(5, 4, 3, 0.82)),
-  linear-gradient(180deg, rgba(5, 4, 3, 0.26), rgba(5, 4, 3, 0.92)),
-  url('${import.meta.env.BASE_URL}assets/hero-table-grain.png') center / cover
+  linear-gradient(90deg, rgba(244, 239, 230, 1) 0%, rgba(244, 239, 230, 0.98) 42%, rgba(244, 239, 230, 0.72) 62%, rgba(244, 239, 230, 0.12) 100%),
+  linear-gradient(180deg, rgba(244, 239, 230, 0.12), rgba(244, 239, 230, 0.54)),
+  url('${import.meta.env.BASE_URL}assets/hero-table-grain.png') 72% center / cover
 `;
+
+const chapters = [
+  { index: "01", title: "吃得饱", subtitle: "粮食安全" },
+  { index: "02", title: "吃得好", subtitle: "饮食丰富" },
+  { index: "03", title: "吃得负责", subtitle: "可持续消费" },
+];
 </script>
 
 <template>
   <section class="hero">
     <div class="hero__backdrop" :style="{ background: heroBackground }" />
-    <div class="hero__noise" />
 
-    <div class="hero__chrome hero__chrome--top">
-      <span>SCROLL DATA STORY</span>
+    <header class="hero__masthead">
+      <span>CHINA TABLE</span>
       <i />
-      <span>CHINA TABLE / 1980-2023</span>
+      <span>1949 — PRESENT</span>
+    </header>
+
+    <div class="hero__edition" aria-hidden="true">
+      <span>DATA ESSAY</span>
+      <b>01</b>
+      <small>FOOD SYSTEMS<br />IN TRANSITION</small>
     </div>
 
     <div class="hero__content">
-      <p class="eyebrow">A documentary data narrative</p>
-      <h1>
-        从吃得饱
-        <span>到吃得好</span>
+      <p class="hero__kicker">一部关于中国人餐桌变迁的数据故事</p>
+      <h1>中国人的餐桌</h1>
+      <p class="hero__deck">
+        从吃得饱，到吃得好，<br />
         再到吃得负责
-      </h1>
-      <p class="hero__subtitle">一部关于中国人餐桌变迁的数据故事</p>
+      </p>
+      <p class="hero__summary">
+        粮食安全、饮食结构与消费责任，如何共同塑造一张餐桌。
+      </p>
     </div>
 
-    <div class="hero__plate" aria-hidden="true">
-      <span class="hero__plate-ring hero__plate-ring--outer" />
-      <span class="hero__plate-ring hero__plate-ring--inner" />
-      <span class="hero__food hero__food--rice" />
-      <span class="hero__food hero__food--veg" />
-      <span class="hero__food hero__food--meat" />
-      <span class="hero__food hero__food--fruit" />
-      <span class="hero__chopsticks" />
-    </div>
+    <p class="hero__caption">
+      中国人的餐桌，记录着七十余年的发展，也连接着下一次选择。
+    </p>
 
-    <div class="hero__chapters" aria-label="故事章节">
-      <span><b>01</b> 粮食安全</span>
-      <span><b>02</b> 饮食丰富</span>
-      <span><b>03</b> 可持续消费</span>
-    </div>
-
-    <div class="scroll-hint">
-      <span>向下滚动</span>
-      <div class="scroll-hint__line" />
-    </div>
+    <footer class="hero__footer">
+      <p class="hero__scroll">向下阅读</p>
+      <nav class="hero__chapters" aria-label="故事章节">
+        <div v-for="chapter in chapters" :key="chapter.index">
+          <b>{{ chapter.index }}</b>
+          <span>{{ chapter.title }}</span>
+          <small>{{ chapter.subtitle }}</small>
+        </div>
+      </nav>
+    </footer>
   </section>
 </template>
 
 <style scoped>
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: clamp(680px, 88vh, 900px);
   overflow: hidden;
-  background: #050403;
-  color: #fff7e8;
+  background: #f4efe6;
+  color: #29251f;
 }
 
 .hero__backdrop {
   position: absolute;
   inset: 0;
-  transform: scale(1.04);
-  animation: heroSlowZoom 12s ease-in-out infinite alternate;
 }
 
-.hero__noise {
+.hero__masthead {
   position: absolute;
-  inset: 0;
-  opacity: 0.18;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px),
-    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px);
-  background-size: 24px 24px, 38px 38px;
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-
-.hero__chrome {
-  position: absolute;
-  z-index: 3;
-  left: 48px;
-  right: 48px;
+  top: 30px;
+  right: 5vw;
+  left: 5vw;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 18px;
-  color: rgba(255, 247, 232, 0.62);
-  font-size: 0.72rem;
+  color: rgba(41, 37, 31, 0.62);
+  font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
 }
 
-.hero__chrome--top {
-  top: 34px;
-}
-
-.hero__chrome i {
+.hero__masthead i {
   flex: 1;
   height: 1px;
-  background: rgba(255, 247, 232, 0.22);
+  background: rgba(41, 37, 31, 0.2);
 }
 
 .hero__content {
   position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  min-height: clamp(680px, 88vh, 900px);
+  width: min(1180px, 90vw);
+  margin: 0 auto;
+  padding: 108px 0 170px;
+}
+
+.hero__edition {
+  position: absolute;
+  top: 108px;
+  right: 5vw;
   z-index: 2;
   display: grid;
-  min-height: 100vh;
-  align-content: center;
-  width: min(1120px, 88vw);
-  margin: 0 auto;
-  padding: 10vh 0 18vh;
+  justify-items: end;
+  color: rgba(41, 37, 31, 0.62);
+  text-align: right;
+}
+
+.hero__edition span,
+.hero__edition small {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1.65;
+}
+
+.hero__edition b {
+  margin: 8px -0.08em 10px 0;
+  color: rgba(158, 61, 50, 0.76);
+  font-family: Georgia, serif;
+  font-size: 5rem;
+  font-weight: 400;
+  letter-spacing: -0.14em;
+  line-height: 0.9;
+}
+
+.hero__kicker,
+.hero__summary,
+.hero__scroll {
+  margin: 0;
+}
+
+.hero__caption {
+  position: absolute;
+  right: 5vw;
+  bottom: 124px;
+  z-index: 2;
+  width: min(300px, 22vw);
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(41, 37, 31, 0.26);
+  color: rgba(41, 37, 31, 0.62);
+  font-size: 0.74rem;
+  line-height: 1.7;
+}
+
+.hero__kicker {
+  color: #9e3d32;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
 }
 
 .hero h1 {
-  display: grid;
-  gap: 0.04em;
-  max-width: 980px;
-  margin: 0;
+  max-width: 1040px;
+  margin: 24px 0 0;
   font-family: var(--font-serif);
-  font-size: clamp(4.8rem, 9.2vw, 10.8rem);
+  font-size: clamp(5.4rem, 8vw, 8.6rem);
   font-weight: 900;
-  line-height: 0.92;
-  letter-spacing: 0;
-  text-shadow: 0 18px 70px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.09em;
+  line-height: 0.94;
 }
 
-.hero h1 span {
-  padding-left: 0.42em;
-  color: #f0c86b;
-  font-style: italic;
-}
-
-.hero__subtitle {
+.hero__deck {
   max-width: 720px;
-  margin: 28px 0 0;
-  color: rgba(255, 247, 232, 0.78);
-  font-size: 1.28rem;
+  margin: 22px 0 0;
+  color: #9e3d32;
+  font-family: var(--font-serif);
+  font-size: clamp(2.15rem, 4vw, 4.1rem);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1.12;
+}
+
+.hero__summary {
+  max-width: 560px;
+  margin-top: 24px;
+  color: rgba(41, 37, 31, 0.7);
+  font-size: 1.02rem;
   line-height: 1.8;
 }
 
-.hero__plate {
+.hero__footer {
   position: absolute;
-  right: min(8vw, 112px);
-  bottom: 14vh;
+  right: 5vw;
+  bottom: 30px;
+  left: 5vw;
   z-index: 2;
-  width: 300px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: rgba(255, 249, 232, 0.06);
-  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.48));
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(540px, 720px);
+  gap: 34px;
+  align-items: end;
+  border-top: 1px solid rgba(41, 37, 31, 0.22);
 }
 
-.hero__plate-ring {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(255, 247, 232, 0.22);
-  border-radius: 50%;
-}
-
-.hero__plate-ring--outer {
-  animation: rotatePlate 18s linear infinite;
-}
-
-.hero__plate-ring--inner {
-  inset: 62px;
-  border-color: rgba(240, 200, 107, 0.26);
-  animation: rotatePlate 12s linear infinite reverse;
-}
-
-.hero__food {
-  position: absolute;
-  display: block;
-  border-radius: 999px;
-  box-shadow: inset 0 -10px rgba(0, 0, 0, 0.16);
-}
-
-.hero__food--rice {
-  top: 92px;
-  left: 86px;
-  width: 82px;
-  height: 54px;
-  background: #fff0c8;
-}
-
-.hero__food--veg {
-  top: 74px;
-  right: 82px;
-  width: 66px;
-  height: 66px;
-  background: #5f8d4e;
-}
-
-.hero__food--meat {
-  right: 94px;
-  bottom: 82px;
-  width: 88px;
-  height: 52px;
-  background: #a54235;
-}
-
-.hero__food--fruit {
-  left: 82px;
-  bottom: 88px;
-  width: 58px;
-  height: 58px;
-  background: #d88d40;
-}
-
-.hero__chopsticks {
-  position: absolute;
-  top: 76px;
-  right: -18px;
-  width: 190px;
-  height: 5px;
-  border-radius: 999px;
-  background: #e6bd72;
-  transform: rotate(-28deg);
-  box-shadow: 0 16px 0 #c89652;
+.hero__scroll {
+  padding-top: 18px;
+  color: rgba(41, 37, 31, 0.62);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
 }
 
 .hero__chapters {
-  position: absolute;
-  right: 48px;
-  bottom: 42px;
-  z-index: 3;
-  display: flex;
-  gap: 18px;
-  color: rgba(255, 247, 232, 0.68);
-  font-size: 0.82rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.hero__chapters span {
-  padding: 10px 12px;
-  border: 1px solid rgba(255, 247, 232, 0.16);
-  border-radius: 999px;
-  background: rgba(5, 4, 3, 0.32);
-  backdrop-filter: blur(12px);
+.hero__chapters div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 10px;
+  padding: 16px 14px 0;
+  border-left: 1px solid rgba(41, 37, 31, 0.22);
 }
 
 .hero__chapters b {
-  margin-right: 8px;
-  color: #f0c86b;
+  grid-row: 1 / 3;
+  color: #9e3d32;
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  line-height: 1;
 }
 
-.scroll-hint {
-  position: absolute;
-  bottom: 42px;
-  left: 48px;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  color: rgba(255, 247, 232, 0.72);
-  font-size: 0.78rem;
+.hero__chapters span {
+  color: #29251f;
+  font-family: var(--font-serif);
+  font-size: 1rem;
   font-weight: 800;
-  letter-spacing: 0.16em;
-  animation: floatHint 3s ease-in-out infinite;
 }
 
-.scroll-hint__line {
-  width: 1px;
-  height: 52px;
-  background: linear-gradient(180deg, rgba(255, 247, 232, 0.7), transparent);
+.hero__chapters small {
+  color: rgba(41, 37, 31, 0.58);
+  font-size: 0.72rem;
 }
 
-@keyframes heroSlowZoom {
-  from { transform: scale(1.04); }
-  to { transform: scale(1.1); }
-}
+@media (max-width: 720px) {
+  .hero {
+    min-height: 760px;
+  }
 
-@keyframes rotatePlate {
-  to { transform: rotate(360deg); }
-}
+  .hero__backdrop {
+    background-position: 62% center !important;
+  }
 
-@keyframes floatHint {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
+  .hero__masthead {
+    top: 24px;
+    right: 24px;
+    left: 24px;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+  }
 
-@media (max-width: 980px) {
-  .hero__plate,
-  .hero__chapters {
+  .hero__masthead i {
     display: none;
   }
 
-  .hero__chrome {
-    left: 28px;
-    right: 28px;
+  .hero__content {
+    align-content: start;
+    min-height: 760px;
+    width: auto;
+    padding: 148px 24px 230px;
   }
 
-  .scroll-hint {
-    left: 28px;
+  .hero__edition,
+  .hero__caption {
+    display: none;
+  }
+
+  .hero__kicker {
+    max-width: 210px;
+    font-size: 0.7rem;
+    line-height: 1.7;
+  }
+
+  .hero h1 {
+    max-width: 340px;
+    margin-top: 18px;
+    font-size: clamp(4rem, 18vw, 5rem);
+    letter-spacing: -0.1em;
+    line-height: 0.98;
+  }
+
+  .hero__deck {
+    max-width: 340px;
+    margin-top: 18px;
+    font-size: clamp(2.15rem, 10vw, 3rem);
+    letter-spacing: -0.08em;
+    line-height: 1.14;
+  }
+
+  .hero__summary {
+    max-width: 290px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  .hero__footer {
+    right: 24px;
+    bottom: 24px;
+    left: 24px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .hero__scroll {
+    padding-top: 14px;
+  }
+
+  .hero__chapters div {
+    display: block;
+    padding: 12px 8px 0;
+  }
+
+  .hero__chapters b,
+  .hero__chapters span,
+  .hero__chapters small {
+    display: block;
+  }
+
+  .hero__chapters b {
+    margin-bottom: 6px;
+    font-size: 1.2rem;
+  }
+
+  .hero__chapters span {
+    font-size: 0.82rem;
+  }
+
+  .hero__chapters small {
+    margin-top: 3px;
+    font-size: 0.62rem;
   }
 }
 </style>

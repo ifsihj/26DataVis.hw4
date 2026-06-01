@@ -1,31 +1,31 @@
 :root {
   /* Brand palette — warm earth tones for a food/agriculture narrative */
-  --cream:        #f7efe0;
-  --cream-deep:   #ead8b7;
-  --paper:        #fff9ed;
-  --ink:          #2d241a;
-  --ink-soft:     #5a4a3a;
-  --muted:        #8f7a66;
-  --muted-light:  #b8a894;
+  --cream:        #f4efe6;
+  --cream-deep:   #e8dfd1;
+  --paper:        #fbf8f2;
+  --ink:          #29251f;
+  --ink-soft:     #575047;
+  --muted:        #81776c;
+  --muted-light:  #b7ada1;
 
   /* Semantic accents */
-  --red:          #8f2f24;
-  --red-light:    #b84a3a;
-  --green:        #315f49;
-  --green-light:  #4a8a66;
-  --brown:        #6c4a2f;
-  --amber:        #d4a64a;
-  --amber-light:  #e8c86a;
+  --red:          #9e3d32;
+  --red-light:    #b75b50;
+  --green:        #66755c;
+  --green-light:  #87947e;
+  --brown:        #67594b;
+  --amber:        #b18b52;
+  --amber-light:  #cfb17b;
 
   /* Surface & chrome */
-  --line:         rgba(45, 36, 26, 0.12);
-  --line-light:   rgba(45, 36, 26, 0.06);
-  --shadow-sm:    0 4px 20px rgba(45, 36, 26, 0.08);
-  --shadow-md:    0 12px 40px rgba(45, 36, 26, 0.12);
-  --shadow-lg:    0 24px 80px rgba(45, 36, 26, 0.18);
-  --radius-sm:    6px;
-  --radius-md:    10px;
-  --radius-lg:    16px;
+  --line:         rgba(41, 37, 31, 0.16);
+  --line-light:   rgba(41, 37, 31, 0.08);
+  --shadow-sm:    0 2px 10px rgba(41, 37, 31, 0.05);
+  --shadow-md:    0 8px 24px rgba(41, 37, 31, 0.08);
+  --shadow-lg:    0 18px 48px rgba(41, 37, 31, 0.12);
+  --radius-sm:    4px;
+  --radius-md:    6px;
+  --radius-lg:    8px;
 
   /* Typography */
   --font-serif:   "Noto Serif SC", Georgia, "Noto Serif CJK SC", serif;

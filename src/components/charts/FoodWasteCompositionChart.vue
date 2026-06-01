@@ -2,7 +2,14 @@
 import { computed, onMounted, ref } from 'vue';
 import * as d3 from 'd3';
 import { foodWasteCompositionData } from '../../data/foodWasteCompositionData.js';
-import { clearSvg, createTooltip, hideTooltip, showTooltip } from '../../utils/chartUtils.js';
+import {
+  clearSvg,
+  createTooltip,
+  evidenceChartTheme as theme,
+  hideTooltip,
+  showTooltip,
+  styleChartAxis,
+} from '../../utils/chartUtils.js';
 
 const svgRef = ref(null);
 
@@ -50,46 +57,36 @@ function draw() {
     .attr('class', 'chart-note')
     .attr('x', margin.left)
     .attr('y', 48)
-    .text('蓝色柱为浪费总量，按降序排列；橙色点为人均每餐浪费量。');
+    .text('红棕柱为浪费总量，按降序排列；绿色点为人均每餐浪费量。');
 
-  g.append('g')
-    .call(d3.axisLeft(yLeft).ticks(5).tickSize(-innerW).tickFormat(''))
-    .selectAll('line')
-    .attr('stroke', 'rgba(45,36,26,0.09)');
-
-  g.append('g')
+  const xAxis = g.append('g')
     .attr('transform', `translate(0,${innerH})`)
-    .call(d3.axisBottom(x).tickSize(0))
-    .selectAll('text')
-    .attr('fill', 'var(--ink-soft)')
-    .attr('font-size', '0.82rem')
-    .attr('font-weight', 700)
+    .call(d3.axisBottom(x).tickSize(0));
+  styleChartAxis(xAxis);
+  xAxis.selectAll('text')
+    .style('fill', theme.inkSoft)
+    .style('font-size', '0.92rem')
+    .style('font-weight', 700)
     .attr('text-anchor', 'end')
     .attr('dx', '-0.45em')
     .attr('dy', '0.75em')
     .attr('transform', 'rotate(-38)');
 
-  g.append('g')
-    .call(d3.axisLeft(yLeft).ticks(5))
-    .selectAll('text')
-    .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.78rem');
+  const yLeftAxis = g.append('g')
+    .call(d3.axisLeft(yLeft).ticks(5));
+  styleChartAxis(yLeftAxis);
 
-  g.append('g')
+  const yRightAxis = g.append('g')
     .attr('transform', `translate(${innerW},0)`)
-    .call(d3.axisRight(yRight).ticks(5))
-    .selectAll('text')
-    .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.78rem');
-
-  g.selectAll('.domain').attr('stroke', 'var(--line)');
+    .call(d3.axisRight(yRight).ticks(5));
+  styleChartAxis(yRightAxis);
 
   svg.append('text')
     .attr('x', 22)
     .attr('y', margin.top + innerH / 2)
     .attr('transform', `rotate(-90, 22, ${margin.top + innerH / 2})`)
     .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.85rem')
+    .attr('font-size', '0.94rem')
     .attr('font-weight', 700)
     .attr('text-anchor', 'middle')
     .text('食物浪费数量（百万吨）');
@@ -99,7 +96,7 @@ function draw() {
     .attr('y', margin.top + innerH / 2)
     .attr('transform', `rotate(90, ${width - 22}, ${margin.top + innerH / 2})`)
     .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.85rem')
+    .attr('font-size', '0.94rem')
     .attr('font-weight', 700)
     .attr('text-anchor', 'middle')
     .text('人均每餐浪费量（克）');
@@ -115,7 +112,8 @@ function draw() {
     .attr('width', x.bandwidth())
     .attr('height', 0)
     .attr('rx', 4)
-    .attr('fill', '#2f6eb8')
+    .attr('fill', theme.signal)
+    .attr('opacity', 0.84)
     .on('mousemove', (event, d) => {
       showTooltip(tooltip, event, `
         <strong>${d.category}</strong><br/>
@@ -138,14 +136,14 @@ function draw() {
     .attr('cx', (d) => x(d.category) + x.bandwidth() / 2)
     .attr('cy', (d) => yRight(d.perMealGram))
     .attr('r', 0)
-    .attr('fill', '#f28c28')
-    .attr('stroke', '#fff9ed')
+    .attr('fill', theme.positive)
+    .attr('stroke', theme.paper)
     .attr('stroke-width', 3)
     .on('mousemove', (event, d) => {
       showTooltip(tooltip, event, `
         <strong>${d.category}</strong><br/>
         人均每餐浪费量：${d.perMealGram.toFixed(1)} 克<br/>
-        蓝色柱排序值：${d.wasteQuantityMt.toFixed(2)} 百万吨
+        红棕柱排序值：${d.wasteQuantityMt.toFixed(2)} 百万吨
       `);
     })
     .on('mouseleave', () => hideTooltip(tooltip))
@@ -161,8 +159,8 @@ function draw() {
     .attr('x', (d) => x(d.category) + x.bandwidth() / 2)
     .attr('y', (d) => yLeft(d.wasteQuantityMt) - 8)
     .attr('text-anchor', 'middle')
-    .attr('fill', '#2f5f95')
-    .attr('font-size', '0.72rem')
+    .attr('fill', theme.signal)
+    .attr('font-size', '0.8rem')
     .attr('font-weight', 800)
     .attr('opacity', 0)
     .text((d) => `${d.wasteQuantityMt.toFixed(2)}百万吨`)
@@ -178,24 +176,24 @@ function draw() {
     .attr('width', 14)
     .attr('height', 14)
     .attr('rx', 2)
-    .attr('fill', '#2f6eb8');
+    .attr('fill', theme.signal);
   legend.append('text')
     .attr('x', 22)
     .attr('y', 12)
     .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.82rem')
+    .attr('font-size', '0.88rem')
     .text('食物浪费数量（百万吨）');
 
   legend.append('circle')
     .attr('cx', 216)
     .attr('cy', 7)
     .attr('r', 7)
-    .attr('fill', '#f28c28');
+    .attr('fill', theme.positive);
   legend.append('text')
     .attr('x', 230)
     .attr('y', 12)
     .attr('fill', 'var(--muted)')
-    .attr('font-size', '0.82rem')
+    .attr('font-size', '0.88rem')
     .text('人均每餐浪费量（克）');
 }
 
