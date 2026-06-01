@@ -9,11 +9,10 @@ import {
   wasteCounterCopy,
   wasteImpactData,
 } from "../../data/wasteImpactData.js";
-import CarbonFootprintBarChart from "../charts/CarbonFootprintBarChart.vue";
+import FoodSupplyChainChart from "../charts/FoodSupplyChainChart.vue";
 import FoodWasteCompositionChart from "../charts/FoodWasteCompositionChart.vue";
 import FoodWasteEnvironmentalImpactChart from "../charts/FoodWasteEnvironmentalImpactChart.vue";
 import FoodWasteRateChart from "../charts/FoodWasteRateChart.vue";
-import FoodWasteTrendChart from "../charts/FoodWasteTrendChart.vue";
 
 const secondsOnPage = ref(0);
 const selectedFridgeItemId = ref(fridgeWasteItems[0].id);
@@ -94,14 +93,23 @@ onBeforeUnmount(() => {
         <p class="eyebrow">Scene 03 / 一盘剩饭</p>
         <h2>吃得负责</h2>
         <p>
-          食品浪费加剧了粮食不安全，并导致了1/3全球温室气体排放，其中餐饮业浪费尤为突出。中国作为最大的发展中国家，减少事物浪费对实现国家<strong>双碳</strong>目标和联合国<strong
+          食品浪费加剧了粮食不安全。与此同时，整个食物系统贡献了约1/3的全球温室气体排放，其中餐饮业浪费尤为突出。中国作为最大的发展中国家，减少食物浪费对实现国家<strong>双碳</strong>目标和联合国<strong
             >SDG 12.3</strong
           >目标具有重要意义。明晰食物浪费现状、组成及特征是实施有效干预的基础。
         </p>
         <div class="broadcast-beats">
-          <span><b>从餐盘看见浪费</b>剩下的一口饭，不只是餐桌上的残余，也是已经投入的土地、水、能源和劳动。</span>
-          <span><b>从类别看见差异</b>有些食物浪费总量更大，有些食物单次浪费不显眼，却在频繁消费中累积。</span>
-          <span><b>从选择看见未来</b>负责任的饮食不是降低生活质量，而是在丰盛之后学会更准确地珍惜。</span>
+          <span
+            ><b>从餐盘看见浪费</b
+            >剩下的一口饭，不只是餐桌上的残余，也是已经投入的土地、水、能源和劳动。</span
+          >
+          <span
+            ><b>从类别看见差异</b
+            >有些食物浪费总量更大，有些食物单次浪费不显眼，却在频繁消费中累积。</span
+          >
+          <span
+            ><b>从选择看见未来</b
+            >负责任的饮食不是降低生活质量，而是在丰盛之后学会更准确地珍惜。</span
+          >
         </div>
       </div>
 
@@ -153,7 +161,8 @@ onBeforeUnmount(() => {
         <p>
           蓝色柱表示各类食物的浪费总量，已经按从高到低排序；橙色点表示平均每人每餐浪费了多少克。
           这张图不是为了责备某一种食物，而是提醒我们：浪费既有总量差异，也有日常餐桌上的习惯差异。
-          第二张图进一步把“消费量”和“浪费率”放在一起看；第三张图则把浪费背后的环境足迹拆开，让一盘剩饭连接到土地、水、氮磷投入与碳排放。
+          第二张图进一步把“消费量”和“浪费率”放在一起看；第三张图则把浪费背后的环境足迹拆开，
+          让一盘剩饭连接到土地、水、氮磷投入与碳排放。
         </p>
       </div>
       <div class="chart-reading-guide">
@@ -163,7 +172,9 @@ onBeforeUnmount(() => {
         </article>
         <article>
           <strong>再看比例</strong>
-          <span>消费量大的类别需要规模化管理，浪费率高的类别需要更细的储存和烹饪策略。</span>
+          <span
+            >消费量大的类别需要规模化管理，浪费率高的类别需要更细的储存和烹饪策略。</span
+          >
         </article>
         <article>
           <strong>最后看代价</strong>
@@ -174,8 +185,37 @@ onBeforeUnmount(() => {
         <FoodWasteCompositionChart />
         <FoodWasteRateChart />
         <FoodWasteEnvironmentalImpactChart />
-        <CarbonFootprintBarChart />
-        <FoodWasteTrendChart />
+      </div>
+    </div>
+
+    <div class="choice-charts">
+      <div class="waste-charts__header">
+        <p class="eyebrow">从浪费走向选择</p>
+        <h2>吃什么，比从哪里运来更重要</h2>
+        <p>
+          上一张图回答的是：食物浪费会带走哪些环境资源。接下来，我们把其中的<strong>碳足迹</strong>单独放大，
+          继续追问排放发生在哪里。下面这张图把一份食物从土地变化、农场生产、动物饲料，
+          到加工、运输、零售和包装的温室气体排放逐段展开。
+        </p>
+      </div>
+      <div class="chart-reading-guide">
+        <article>
+          <strong>绝对值：比较总量</strong>
+          <span>回答“哪种食物更重”。牛肉与多数植物性食物的差距可达数十倍。</span>
+        </article>
+        <article>
+          <strong>相对值：拆解结构</strong>
+          <span
+            >像上一张百分比图一样，把每种食物归一化为 100%，观察排放集中在哪些阶段。</span
+          >
+        </article>
+        <article>
+          <strong>筛选类别：控制视野</strong>
+          <span>默认只展示重点食物。按类别切换后，可进一步比较肉类、主食、果蔬和其他植物产品。</span>
+        </article>
+      </div>
+      <div class="choice-charts__grid">
+        <FoodSupplyChainChart />
       </div>
     </div>
 
@@ -433,7 +473,27 @@ onBeforeUnmount(() => {
   border: 1px solid rgba(45, 36, 26, 0.13);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(255, 249, 237, 0.92), rgba(234, 216, 183, 0.84)),
+    linear-gradient(
+      135deg,
+      rgba(255, 249, 237, 0.92),
+      rgba(234, 216, 183, 0.84)
+    ),
+    #fff9ed;
+  box-shadow: 0 28px 70px rgba(45, 36, 26, 0.16);
+}
+
+.choice-charts {
+  max-width: 1120px;
+  margin: 28px auto 0;
+  padding: 34px;
+  border: 1px solid rgba(45, 36, 26, 0.13);
+  border-radius: 8px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 249, 237, 0.92),
+      rgba(208, 222, 200, 0.74)
+    ),
     #fff9ed;
   box-shadow: 0 28px 70px rgba(45, 36, 26, 0.16);
 }
@@ -460,6 +520,12 @@ onBeforeUnmount(() => {
 }
 
 .waste-charts__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.choice-charts__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -793,6 +859,7 @@ onBeforeUnmount(() => {
   .waste-counter__sources,
   .chart-reading-guide,
   .waste-charts__grid,
+  .choice-charts__grid,
   .impact-grid,
   .responsible-timeline__nodes {
     grid-template-columns: 1fr;
