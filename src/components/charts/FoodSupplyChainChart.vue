@@ -405,9 +405,9 @@ watch([viewMode, filteredData], draw, { deep: true });
       </div>
       <p class="supply-chain-hint">
         {{ viewMode === 'absolute'
-          ? '绝对值用于比较不同食物的总体碳足迹。'
-          : '相对值将每种食物的正向排放归一化为 100%，用于比较生命周期结构。' }}
-        当前展示 {{ filteredData.length }} 类食物。
+          ? '比较不同食物的总体碳足迹。'
+          : '将每种食物的正向排放归一化为 100%，比较生命周期结构。' }}
+        已选 {{ filteredData.length }} 类食物。
       </p>
     </aside>
     <div class="supply-chain-visual">

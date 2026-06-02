@@ -75,14 +75,14 @@ onBeforeUnmount(() => {
     <SceneTitle
       eyebrow="Scene 01"
       title="吃得饱"
-      subtitle="七十六年，从人均二百公斤到五百公斤。粮食安全不是一条单调上升的曲线，而是土地、技术与制度共同写下的答案。"
+      subtitle="从匮乏到稳定供给，粮食安全并非一条单调上升的曲线。土地、技术与制度，共同写下这份答案。"
     />
     <EnoughSection />
 
     <SceneTitle
       eyebrow="Scene 02"
       title="吃得好"
-      subtitle="从一碗主食，到一张更丰富的餐桌。饮食质量的变化，不只是总量增加，也是类别增多与城乡结构逐步靠近。"
+      subtitle="当主食不再占据餐桌的全部，丰富开始成为新的尺度。饮食结构的变化，也映照城乡生活的靠近。"
       :image="assetUrl('scene-rich-table.png')"
     />
     <BetterDietSection />
@@ -90,7 +90,7 @@ onBeforeUnmount(() => {
     <SceneTitle
       eyebrow="Scene 03"
       title="吃得负责"
-      subtitle="从看见浪费，到理解代价。每一次丢弃和选择，都牵动着餐桌之外的土地、水、能源与气候。"
+      subtitle="丰盛之后，问题不再只是拥有多少。每一次丢弃与选择，都牵动餐桌之外的土地、水与气候。"
       :image="assetUrl('scene-responsible-table.png')"
     />
     <ResponsibleWasteSection />

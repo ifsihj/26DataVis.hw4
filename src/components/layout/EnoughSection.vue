@@ -29,12 +29,12 @@ const cards = [
     kicker: "从不足到安全",
     title: "人均粮食占有量",
     value: `${Math.round(latestPerCapita.per_capita_kg)} kg`,
-    note: "1949 年为 209 kg，如今稳定越过 FAO 400 kg 安全线。",
+    note: "从 209 kg 到 508 kg，温饱压力退场，安全线成为新的起点。",
     chart: PerCapitaLineChart,
     chartProps: { progress: 1 },
-    detailTitle: "一条曲线，记录从温饱压力到粮食安全",
+    detailTitle: "一条曲线，标记温饱压力的退场",
     detailCopy:
-      "人均粮食占有量并不是一条平滑上升的直线。困难时期、结构调整与持续增产都留在曲线上。越过 400 kg 安全线之后，问题才逐渐从“有没有”转向“吃什么”。",
+      "人均粮食占有量从来不是平滑上升的直线。困难时期、结构调整与持续增产，都留在曲线上。跨过 400 kg 参考线之后，问题才从“有没有”转向“吃什么”。",
     detailFacts: ["1949 年：209 kg", "2025 年：508 kg", "FAO 参考线：400 kg"],
   },
   {
@@ -43,12 +43,12 @@ const cards = [
     kicker: "七亿吨背后",
     title: "粮食总产结构",
     value: `${(latestOutput.total / 10000).toFixed(1)} 亿吨`,
-    note: "稻麦稳、玉米增。总量增长背后，作物结构也在改变。",
+    note: "稻麦守住口粮底盘，玉米连接起养殖与更丰富的餐桌。",
     chart: GrainStackedArea,
     chartProps: { progress: 1 },
-    detailTitle: "增产不只是数字变大，也是结构在重组",
+    detailTitle: "七亿吨粮食背后，结构也在改变",
     detailCopy:
-      "稻谷和小麦构成口粮基础，玉米的增长则连接起饲料、养殖与更丰富的餐桌。分品种面积图让“吃得饱”和后续的“吃得好”自然衔接。",
+      "稻谷与小麦构成口粮基础，玉米的增长则连接饲料、养殖与更丰富的餐桌。总量的上升，也悄然改变了中国人的饮食结构。",
     detailFacts: [
       "1949 年：1.13 亿吨",
       `2025 年：${(latestOutput.total / 10000).toFixed(1)} 亿吨`,
@@ -61,11 +61,11 @@ const cards = [
     kicker: "放进全球坐标",
     title: "全球人均粮食对比",
     value: `${Math.round(chinaComparison.per_capita_kg)} kg`,
-    note: "全球坐标帮助我们理解：中国已经跨过安全线，但资源条件仍然有自身约束。",
+    note: "跨过安全线，并不意味着资源约束就此消失。",
     chart: WorldComparisonBar,
-    detailTitle: "跨过安全线之后，还要看见资源禀赋的差异",
+    detailTitle: "跨过安全线之后，仍要看见资源边界",
     detailCopy:
-      "人均粮食占有量并不等同于饮食质量，但它提供了一个清晰的全球坐标。不同国家的人口规模、土地条件与农业结构差异很大，中国的答案必须建立在自身资源条件上。",
+      "人均粮食占有量并不等同于饮食质量，却提供了一个清晰坐标。人口规模、土地条件与农业结构各不相同，中国的答案始终需要立足自身资源边界。",
     detailFacts: ["中国：494 kg", "世界平均：370 kg", "FAO 参考线：400 kg"],
   },
   {
@@ -75,11 +75,11 @@ const cards = [
     title: "农业科技与亩产",
     value: `${Math.round(latestTechnology.yield_per_mu)} kg`,
     unit: "每亩",
-    note: "耕地有限，稳定增产越来越依赖单产提升与农业技术积累。",
+    note: "耕地有限，真正可持续的增量来自单产与技术积累。",
     chart: AgriTechnologyTrend,
-    detailTitle: "有限土地上的增量，越来越依赖农业科技",
+    detailTitle: "有限土地上的增量，来自技术",
     detailCopy:
-      "耕地不是无限扩张的变量。长期粮食安全更依赖品种改良、农业基础设施与生产技术积累。亩产的持续提升，是总产量增长的重要基础。",
+      "耕地不是可以无限扩张的变量。长期粮食安全更依赖品种改良、农业基础设施与生产技术的积累。亩产提升，是总产增长最安静也最坚实的底座。",
     detailFacts: [
       "1949 年：69 kg / 亩",
       `2025 年：${Math.round(latestTechnology.yield_per_mu)} kg / 亩`,
@@ -128,18 +128,18 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
           <h2>从二百公斤<br />到五百公斤</h2>
         </div>
         <p>
-          七十六年里，中国人的餐桌先解决了最朴素的问题：有没有足够的粮食。
-          这不是一条单调上升的曲线，而是土地、技术与制度共同写下的答案。
-          先读关键指标，再点击卡片翻到背面，从结论进入图表。
+          七十余年里，中国人的餐桌先回答了最基本的问题：有没有足够的粮食。
+          答案并非来自单一变量，而是土地、技术与制度共同作用的结果。
+          四组数据，勾勒出这条从匮乏走向稳定供给的路径。
         </p>
       </header>
 
       <section class="enough-metrics">
         <div class="enough-subheading">
-          <p class="eyebrow">关键指标</p>
-          <h3>先看今天的粮食安全底盘</h3>
+          <p class="eyebrow">今日底盘</p>
+          <h3>粮食安全，落在五个数字上</h3>
           <p>
-            总量、人均、口粮自给率、亩产和耕地，共同构成“吃得饱”的基本条件。
+            总量、人均、口粮自给率、亩产与耕地，共同构成供给安全的现实底座。
           </p>
         </div>
         <MetricCards />
@@ -147,16 +147,16 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
 
       <div class="enough-reading-guide">
         <article>
-          <strong>先看有没有</strong>
-          <span>人均粮食占有量跨过 400 kg 安全线，回答最基本的供给问题。</span>
+          <strong>跨过安全线</strong>
+          <span>人均粮食占有量跨过 400 kg 参考线，供给问题获得基本确定性。</span>
         </article>
         <article>
-          <strong>再看怎么增长</strong>
-          <span>稻麦稳、玉米增，亩产提升与科技积累共同支撑七亿吨粮食。</span>
+          <strong>看见结构变化</strong>
+          <span>稻麦守住口粮底盘，玉米增长、亩产提升与科技积累共同支撑总量。</span>
         </article>
         <article>
-          <strong>最后放进坐标</strong>
-          <span>全球比较帮助我们理解成绩，也提醒我们看见土地与人口约束。</span>
+          <strong>放回全球坐标</strong>
+          <span>比较不仅呈现成绩，也提醒我们看见土地、人口与资源边界。</span>
         </article>
       </div>
 
@@ -185,7 +185,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
                 <em v-if="card.unit">{{ card.unit }}</em>
                 <p>{{ card.note }}</p>
               </div>
-              <div class="enough-card__action">点击翻面 <i>↗</i></div>
+              <div class="enough-card__action">翻至图表 <i>↗</i></div>
             </div>
 
             <div class="enough-card__face enough-card__back">
@@ -194,7 +194,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
                   <small>{{ card.kicker }}</small>
                   <h3>{{ card.title }}</h3>
                 </div>
-                <span>点击空白处返回</span>
+                <span>再次点击返回</span>
               </div>
               <component
                 :is="card.chart"
@@ -202,7 +202,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
                 v-bind="card.chartProps || {}"
               />
               <button type="button" @click.stop="openDetail(card.id)">
-                展开侧边详情
+                展开分析
               </button>
             </div>
           </div>
@@ -211,18 +211,19 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
 
       <section class="enough-timeline">
         <div class="enough-subheading">
-          <p class="eyebrow">七十六年回望</p>
-          <h3>曲线的每一次转折，都有历史背景</h3>
+          <p class="eyebrow">历史切面</p>
+          <h3>每一次转折，都有它的时代背景</h3>
           <p>
-            从土地改革、杂交稻突破，到家庭联产承包责任制和取消农业税。
-            粮食安全不是单一技术指标，而是一条由政策、生产方式和农业科技共同推动的长线进程。
+            从土地改革、杂交稻突破，到家庭联产承包责任制与取消农业税，
+            粮食安全并非一个孤立指标。它由政策、生产方式与农业科技共同推动，
+            最终沉淀为餐桌上最基本的确定性。
           </p>
         </div>
         <KeyEventsTimeline />
       </section>
 
       <p class="enough-section__footnote">
-        注：粮食总产量与人均粮食占有量采用统计数据；农业科技、耕地和部分综合指标序列包含趋势估算，用于呈现长期变化。
+        数据说明：粮食总产量与人均粮食占有量采用统计数据；农业科技、耕地和部分综合指标序列包含趋势估算，用于呈现长期变化。
       </p>
     </div>
   </section>

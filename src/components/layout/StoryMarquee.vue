@@ -12,7 +12,7 @@ const chapters = [
   <section class="story-index" aria-label="专题索引">
     <div class="story-index__header">
       <span>CONTENTS</span>
-      <small>中国餐桌变迁专题</small>
+      <small>一张餐桌的五个切面</small>
     </div>
     <div class="story-index__items">
       <div v-for="chapter in chapters" :key="chapter.index">

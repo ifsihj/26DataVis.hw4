@@ -29,23 +29,23 @@ const chapters = [
     </div>
 
     <div class="hero__content">
-      <p class="hero__kicker">一部关于中国人餐桌变迁的数据故事</p>
+      <p class="hero__kicker">一张餐桌，七十余年的中国变迁</p>
       <h1>中国人的餐桌</h1>
       <p class="hero__deck">
         从吃得饱，到吃得好，<br />
         再到吃得负责
       </p>
       <p class="hero__summary">
-        粮食安全、饮食结构与消费责任，如何共同塑造一张餐桌。
+        从温饱、丰盛到节制，食物记录发展的尺度，也提出面向未来的问题。
       </p>
     </div>
 
     <p class="hero__caption">
-      中国人的餐桌，记录着七十余年的发展，也连接着下一次选择。
+      餐桌从来不只是日常。它映照土地、技术与收入，也容纳我们对未来的选择。
     </p>
 
     <footer class="hero__footer">
-      <p class="hero__scroll">向下阅读</p>
+      <p class="hero__scroll">向下展开叙事</p>
       <nav class="hero__chapters" aria-label="故事章节">
         <div v-for="chapter in chapters" :key="chapter.index">
           <b>{{ chapter.index }}</b>

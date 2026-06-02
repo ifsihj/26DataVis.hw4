@@ -19,25 +19,25 @@ const metrics = [
     label: "农村主食消费",
     value: `${rural1990.staple.toFixed(0)} → ${rural2024.staple.toFixed(0)}`,
     unit: "kg / 人 / 年",
-    note: "主食仍是底盘，但不再独占餐桌。",
+    note: "主食仍是底色，却不再占据全部。",
   },
   {
     label: "农村蛋奶消费",
     value: `${rural1990.dairy.toFixed(1)} → ${rural2024.dairy.toFixed(1)}`,
     unit: "kg / 人 / 年",
-    note: "增长近十倍，丰富度显著提升。",
+    note: "近十倍增长，丰富度进入日常。",
   },
   {
     label: "城镇水果坚果",
     value: `${urban1990.fruit.toFixed(0)} → ${urban2024.fruit.toFixed(0)}`,
     unit: "kg / 人 / 年",
-    note: "从补充项逐渐进入日常。",
+    note: "从补充项，成为日常选择。",
   },
   {
     label: "城乡禽肉差距",
     value: `${Math.abs(urban2024.poultry - rural2024.poultry).toFixed(1)}`,
     unit: "kg / 人 / 年",
-    note: "2024 年已经非常接近。",
+    note: "差距收窄至几乎重合。",
   },
 ];
 </script>
@@ -51,15 +51,15 @@ const metrics = [
           <h2>从一碗主食<br />到一张餐桌</h2>
         </div>
         <p>
-          “吃得好”不是简单地吃得更多，而是餐盘里的选择变多。
-          主食仍然重要，但蛋奶、水产、禽肉和水果逐步进入日常；
-          农村与城镇的饮食结构，也在长期变化中彼此靠近。
+          吃得更好，并不是简单地吃得更多。主食仍然是底色，蛋奶、水产、
+          禽肉与水果逐步进入日常；城乡餐桌也在长期变化中彼此靠近。
+          丰盛，最终体现为选择。
         </p>
       </header>
 
       <section class="better-metrics">
         <p class="eyebrow">结构信号</p>
-        <h3>先看四个变化，再进入完整图表</h3>
+        <h3>餐桌的变化，先落在四个数字上</h3>
         <div class="better-metrics__grid">
           <article v-for="metric in metrics" :key="metric.label">
             <span>{{ metric.label }}</span>
@@ -72,21 +72,21 @@ const metrics = [
 
       <div class="better-reading-guide">
         <article>
-          <strong>先看消费升级</strong>
+          <strong>压力退场</strong>
           <span
-            >恩格尔系数下降，意味着食品支出压力减轻，也为更丰富的饮食选择释放空间。</span
+            >恩格尔系数下降，为更多样的饮食选择释放空间。</span
           >
         </article>
         <article>
-          <strong>再看四个餐盘</strong>
+          <strong>餐盘重组</strong>
           <span
-            >把九类食物归并为四个大类，观察城乡餐桌如何从主食集中走向更多类别共同构成。</span
+            >九类食物归入四个切面，主食之外，更多类别共同构成日常。</span
           >
         </article>
         <article>
-          <strong>最后展开细节</strong>
+          <strong>城乡靠近</strong>
           <span
-            >小倍数趋势图拆开量级，2024 年哑铃图再比较城乡差距，避免大数值遮住小类别。</span
+            >小倍数趋势与 2024 年哑铃图，呈现差距如何被时间重新书写。</span
           >
         </article>
       </div>
@@ -94,10 +94,10 @@ const metrics = [
       <section class="better-chart-block better-chart-block--hero">
         <div class="better-chart-block__copy">
           <p class="eyebrow">Part 01 / 消费升级</p>
-          <h3>食品支出压力下降，餐桌才有更多选择</h3>
+          <h3>当食品支出压力下降，选择开始变多</h3>
           <p>
-            恩格尔系数是食品支出占消费支出的比重。长期下降不等同于饮食质量本身，
-            但它解释了为什么家庭能够逐步把预算分配给更丰富的食品类别。
+            恩格尔系数记录食品支出在消费中的比重。它并不直接等同于饮食质量，
+            却解释了一个重要前提：当基本压力逐步退场，餐桌才有空间容纳更多选择。
           </p>
         </div>
         <EngelCoefficientChart />
@@ -106,10 +106,10 @@ const metrics = [
       <section class="better-chart-block">
         <div class="better-chart-block__copy">
           <p class="eyebrow">Part 02 / 餐盘快照</p>
-          <h3>四个环形餐盘，看见结构如何重组</h3>
+          <h3>四个餐盘，呈现结构的重新分配</h3>
           <p>
-            环形图先把九类食物归并为主食、动物性蛋白、蔬菜水果和油脂糖盐四个大类。
-            它不是精确比较工具，而是视觉入口：悬停一个扇区，可以同步对照城乡和年份变化。
+            环形图将九类食物归入四个大类。它不是精确比较的终点，而是一眼看见变化的入口：
+            主食之外，动物性蛋白、蔬果与其他类别逐渐获得更多位置。
           </p>
         </div>
         <DietStructureDonutChart />
@@ -118,10 +118,10 @@ const metrics = [
       <section class="better-chart-block better-chart-block--hero">
         <div class="better-chart-block__copy">
           <p class="eyebrow">Part 03 / 长期趋势</p>
-          <h3>同一种食物，才放在同一条纵轴里比较</h3>
+          <h3>同一种食物，放回同一条纵轴</h3>
           <p>
-            原始折线图把量级差异巨大的食物放进一张图，主食的大数值遮住了小类别的变化。
-            这里改成六个小图：每个类别独立缩放纵轴，城乡曲线仍保持一致的颜色语义。
+            当量级差异过大，一张图会掩盖细微变化。六个小倍数图各自保留尺度，
+            让城乡之间的接近与分离重新变得可见。
           </p>
         </div>
         <DietConsumptionTrendChart />
@@ -130,10 +130,10 @@ const metrics = [
       <section class="better-chart-block">
         <div class="better-chart-block__copy">
           <p class="eyebrow">Part 04 / 城乡对照</p>
-          <h3>用两组量程，看见 2024 年的差距与靠近</h3>
+          <h3>2024：差距仍在，但餐桌正在靠近</h3>
           <p>
-            雷达图不适合精确比较真实数值，因此改为哑铃图。左侧保留大宗食物，右侧放大多样化食品；
-            禽肉已经接近，蛋奶和水果仍然存在明显差距。
+            哑铃图把大宗食物与多样化食品分开观察。禽肉消费已经接近，
+            蛋奶与水果仍保留清晰差距。
           </p>
         </div>
         <DietUrbanRuralSnapshotChart />

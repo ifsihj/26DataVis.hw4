@@ -40,25 +40,25 @@ onBeforeUnmount(() => {
   <section id="responsible" class="responsible-waste">
     <div class="waste-opening">
       <div class="waste-opening__copy">
-        <p class="eyebrow">Scene 03 / 一盘剩饭</p>
+        <p class="eyebrow">Scene 03 / 丰盛之后</p>
         <h2>吃得负责</h2>
         <p>
-          食品浪费加剧了粮食不安全。与此同时，整个食物系统贡献了约1/3的全球温室气体排放，其中餐饮业浪费尤为突出。中国作为最大的发展中国家，减少食物浪费对实现国家<strong>双碳</strong>目标和联合国<strong
-            >SDG 12.3</strong
-          >目标具有重要意义。明晰食物浪费现状、组成及特征是实施有效干预的基础。
+          当餐桌变得丰盛，浪费开始成为必须正视的另一面。食物系统贡献了约 1/3 的全球温室气体排放；
+          每一次丢弃，都让已经投入的土地、水、能源与劳动失去价值。减少浪费，不只是生活习惯，
+          也是通往<strong>双碳</strong>与联合国<strong>SDG 12.3</strong>的现实路径。
         </p>
         <div class="broadcast-beats">
           <span
-            ><b>从餐盘看见浪费</b
-            >剩下的一口饭，不只是餐桌上的残余，也是已经投入的土地、水、能源和劳动。</span
+            ><b>一口剩饭</b
+            >看似微小，却已经包含土地、水、能源与劳动。</span
           >
           <span
-            ><b>从类别看见差异</b
-            >有些食物浪费总量更大，有些食物单次浪费不显眼，却在频繁消费中累积。</span
+            ><b>不同食物，不同代价</b
+            >总量与比例共同决定，改变应该从哪里开始。</span
           >
           <span
-            ><b>从选择看见未来</b
-            >负责任的饮食不是降低生活质量，而是在丰盛之后学会更准确地珍惜。</span
+            ><b>丰盛之后的选择</b
+            >负责并非降低生活质量，而是更准确地珍惜。</span
           >
         </div>
       </div>
@@ -70,19 +70,19 @@ onBeforeUnmount(() => {
           <span class="public-plate__sauce" />
         </div>
         <div class="public-caption">
-          <strong>一顿饭剩 10%</strong>
-          <span>看起来很少，乘以时间和人数就不再小。</span>
+          <strong>一顿饭，剩下 10%</strong>
+          <span>看起来很少。乘以时间与人数，便不再微小。</span>
         </div>
       </div>
     </div>
 
     <section class="responsible-part responsible-part--waste">
       <div class="responsible-part__intro">
-        <p class="eyebrow">Part 01 / 看见浪费</p>
-        <h2>浪费发生在哪里？</h2>
+        <p class="eyebrow">Part 01 / 浪费的尺度</p>
+        <h2>浪费，发生在每一段日常</h2>
         <p>
-          先从“被丢掉了多少”开始。浪费并不是一个抽象概念：它发生在家庭厨房、餐饮服务和零售端，
-          也分布在果蔬、肉类、谷物等不同食物类别中。看清规模和结构，才能找到最值得优先改变的地方。
+          浪费并不是抽象概念。它发生在家庭厨房、餐饮服务与零售端，
+          也分布在果蔬、肉类、谷物等不同类别中。规模与结构，决定改变从哪里开始。
         </p>
       </div>
 
@@ -92,11 +92,11 @@ onBeforeUnmount(() => {
           <h2>{{ wasteCounterCopy.headline }}</h2>
           <p>
             {{ wasteCounterCopy.note }}
-            数字每秒跳动，是为了把“全球每年十亿吨级”的抽象规模，压缩成用户正在阅读时也会发生的时间感。
+            数字持续跳动，是为了把十亿吨级的年度规模，压缩为阅读此刻仍在发生的现实。
           </p>
         </div>
         <div class="waste-counter__number">
-          <span>已浪费约</span>
+          <span>此刻已浪费约</span>
           <strong>{{ formatNumber(liveWasteTonnes) }}</strong>
           <em>吨食物</em>
         </div>
@@ -117,24 +117,24 @@ onBeforeUnmount(() => {
       <div class="waste-charts">
         <div class="waste-charts__header">
           <p class="eyebrow">浪费结构</p>
-          <h2>哪些食物浪费得最多？</h2>
+          <h2>哪些食物，被浪费得更多？</h2>
           <p>
-            第一张图比较各类食物的浪费总量与人均每餐浪费量；第二张图把消费规模和浪费率放在一起看。
-            总量大的类别需要规模化管理，浪费率高的类别则需要更细致的购买、储存和烹饪策略。
+            总量揭示治理优先级，人均每餐浪费量与浪费率则指向日常策略。
+            规模与比例，需要被同时看见。
           </p>
         </div>
         <div class="chart-reading-guide">
           <article>
-            <strong>先看总量</strong>
-            <span>哪些食物浪费最多，决定治理时最应该优先看见哪里。</span>
+            <strong>规模</strong>
+            <span>总量更大的类别，值得优先进入治理视野。</span>
           </article>
           <article>
-            <strong>再看比例</strong>
-            <span>消费量大的类别需要规模化管理，浪费率高的类别需要更精细的日常策略。</span>
+            <strong>比例</strong>
+            <span>浪费率更高的类别，需要更细致的购买、储存与烹饪。</span>
           </article>
           <article>
-            <strong>找到行动入口</strong>
-            <span>按需购买、合理储存和减少过量点餐，都是可以立刻开始的改变。</span>
+            <strong>行动</strong>
+            <span>按需购买、合理储存、减少过量点餐，改变从日常开始。</span>
           </article>
         </div>
         <div class="waste-charts__grid">
@@ -146,35 +146,35 @@ onBeforeUnmount(() => {
 
     <section class="responsible-part responsible-part--impact">
       <div class="responsible-part__intro">
-        <p class="eyebrow">Part 02 / 理解代价</p>
-        <h2>被丢掉的不只是食物</h2>
+        <p class="eyebrow">Part 02 / 代价的形状</p>
+        <h2>被丢掉的，从来不只是食物</h2>
         <p>
-          每一份食物在到达餐桌之前，都已经消耗土地、水、能源，并带来氮磷投入和温室气体排放。
-          当食物被浪费，这些资源也随之失去价值。先看多种环境足迹，再把其中的碳足迹放大到生命周期中逐段拆解。
+          一份食物抵达餐桌之前，已经消耗土地、水与能源，也留下氮磷投入和温室气体排放。
+          当食物被丢弃，这些资源也随之失去价值。
         </p>
       </div>
 
       <div class="choice-charts">
         <div class="waste-charts__header">
           <p class="eyebrow">环境账本</p>
-          <h2>从多种足迹，到碳足迹的生命周期</h2>
+          <h2>从资源足迹，到一份食物的生命周期</h2>
           <p>
-            上图回答“浪费会带走哪些环境资源”。下图继续追问：这些温室气体排放发生在哪里？
-            它把一份食物从土地变化、农场生产和动物饲料，到加工、运输、零售和包装逐段展开。
+            上图呈现浪费带走的环境资源；下图继续追问，温室气体排放究竟发生在哪里。
+            从土地变化、农场生产与动物饲料，到加工、运输、零售与包装，一份食物的代价被逐段展开。
           </p>
         </div>
         <div class="chart-reading-guide">
           <article>
-            <strong>先看多种代价</strong>
-            <span>土地、水、氮磷投入和温室气体共同构成一份食物的环境账本。</span>
+            <strong>资源账本</strong>
+            <span>土地、水、氮磷投入与温室气体，共同构成一份食物的环境代价。</span>
           </article>
           <article>
-            <strong>再放大碳足迹</strong>
-            <span>绝对值比较总量；相对值把每种食物归一化为 100%，观察排放集中在哪些阶段。</span>
+            <strong>生命周期</strong>
+            <span>切换绝对值与相对值，观察排放总量与阶段结构。</span>
           </article>
           <article>
-            <strong>最后回到选择</strong>
-            <span>食物类别往往比运输距离更重要。减少浪费之外，也要理解选择本身的重量。</span>
+            <strong>回到选择</strong>
+            <span>食物类别往往比运输距离更重要。选择本身，也有重量。</span>
           </article>
         </div>
         <div class="choice-charts__grid">
