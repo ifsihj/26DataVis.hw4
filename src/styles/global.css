@@ -988,12 +988,17 @@ svg.chart-card {
   border: 1px solid rgba(255, 247, 232, 0.16);
   border-radius: 2px;
   background: rgba(255, 247, 232, 0.06);
+<<<<<<< HEAD
   cursor: pointer;
   transition: background var(--dur-fast) ease, transform var(--dur-fast) ease, border-color var(--dur-fast) ease;
+=======
+  transition: background var(--dur-fast) ease, transform var(--dur-fast) ease;
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
 }
 
 .timeline__item:hover {
   background: rgba(255, 247, 232, 0.12);
+<<<<<<< HEAD
   border-color: rgba(255, 247, 232, 0.32);
   transform: translateY(-3px);
 }
@@ -1007,6 +1012,11 @@ svg.chart-card {
   transform: translateY(-1px);
 }
 
+=======
+  transform: translateY(-3px);
+}
+
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
 .timeline__dot {
   display: grid;
   width: 38px;

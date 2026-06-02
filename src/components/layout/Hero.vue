@@ -10,6 +10,7 @@ const chapters = [
   { index: "02", title: "吃得好", subtitle: "饮食丰富" },
   { index: "03", title: "吃得负责", subtitle: "可持续消费" },
 ];
+<<<<<<< HEAD
 
 function scrollToChapter(chapterIndex) {
   const sceneTitles = document.querySelectorAll(".scene-title");
@@ -18,6 +19,8 @@ function scrollToChapter(chapterIndex) {
     target.scrollIntoView({ behavior: "smooth" });
   }
 }
+=======
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
 </script>
 
 <template>
@@ -55,6 +58,7 @@ function scrollToChapter(chapterIndex) {
     <footer class="hero__footer">
       <p class="hero__scroll">向下展开叙事</p>
       <nav class="hero__chapters" aria-label="故事章节">
+<<<<<<< HEAD
         <div
           v-for="(chapter, idx) in chapters"
           :key="chapter.index"
@@ -65,6 +69,9 @@ function scrollToChapter(chapterIndex) {
           @keydown.enter="scrollToChapter(idx)"
           @keydown.space.prevent="scrollToChapter(idx)"
         >
+=======
+        <div v-for="chapter in chapters" :key="chapter.index">
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
           <b>{{ chapter.index }}</b>
           <span>{{ chapter.title }}</span>
           <small>{{ chapter.subtitle }}</small>
@@ -237,6 +244,7 @@ function scrollToChapter(chapterIndex) {
   gap: 3px 10px;
   padding: 16px 14px 0;
   border-left: 1px solid rgba(41, 37, 31, 0.22);
+<<<<<<< HEAD
   cursor: pointer;
   transition:
     background 220ms ease,
@@ -258,6 +266,8 @@ function scrollToChapter(chapterIndex) {
   outline: 2px solid var(--red);
   outline-offset: -2px;
   border-radius: 2px;
+=======
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
 }
 
 .hero__chapters b {

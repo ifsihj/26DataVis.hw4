@@ -4,6 +4,7 @@ const items = [
   { stage: '吃得好', keyword: '饮食丰富', text: '生活的选择' },
   { stage: '吃得负责', keyword: '可持续消费', text: '丰盛之后的回答' },
 ];
+<<<<<<< HEAD
 
 function scrollToChapter(chapterIndex) {
   const sceneTitles = document.querySelectorAll('.scene-title');
@@ -12,10 +13,13 @@ function scrollToChapter(chapterIndex) {
     target.scrollIntoView({ behavior: 'smooth' });
   }
 }
+=======
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
 </script>
 
 <template>
   <div class="timeline">
+<<<<<<< HEAD
     <div
       v-for="(item, index) in items"
       :key="item.stage"
@@ -27,6 +31,9 @@ function scrollToChapter(chapterIndex) {
       @keydown.enter="scrollToChapter(index)"
       @keydown.space.prevent="scrollToChapter(index)"
     >
+=======
+    <div v-for="(item, index) in items" :key="item.stage" class="timeline__item">
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
       <span class="timeline__dot">{{ index + 1 }}</span>
       <h3>{{ item.stage }}</h3>
       <strong>{{ item.keyword }}</strong>
