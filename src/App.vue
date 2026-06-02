@@ -7,6 +7,7 @@ import FinalSection from "./components/layout/FinalSection.vue";
 import EnoughSection from "./components/layout/EnoughSection.vue";
 import BetterDietSection from "./components/layout/BetterDietSection.vue";
 import ResponsibleWasteSection from "./components/layout/ResponsibleWasteSection.vue";
+import PresentationDeck from "./components/layout/PresentationDeck.vue";
 import { useScrollReveal } from "./utils/useScrollReveal.js";
 
 const scrollProgress = ref(0);
@@ -96,4 +97,6 @@ onBeforeUnmount(() => {
     <ResponsibleWasteSection />
     <FinalSection />
   </main>
+
+  <PresentationDeck v-if="presentationMode" @close="setPresentationMode(false)" />
 </template>

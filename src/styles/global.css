@@ -94,91 +94,17 @@ button, input { font: inherit; }
 }
 
 .presentation-mode .presentation-toggle {
-  border-color: rgba(251, 248, 242, 0.34);
-  background: rgba(35, 45, 40, 0.94);
-  color: #fbf8f2;
+  display: none;
 }
 
-.presentation-mode .presentation-toggle span {
-  color: #cfb17b;
+.presentation-mode,
+.presentation-mode body {
+  overflow: hidden;
 }
 
-.presentation-mode .scroll-progress {
-  height: 3px;
-  background: rgba(251, 248, 242, 0.12);
-}
-
-.presentation-mode .story-index,
-.presentation-mode .enough-reading-guide,
-.presentation-mode .better-reading-guide,
-.presentation-mode .chart-reading-guide,
-.presentation-mode .enough-section__footnote,
-.presentation-mode .better-diet__footnote {
-  display: none !important;
-}
-
-.presentation-mode .scene-title {
-  min-height: 68vh;
-  padding-top: 10vh;
-  padding-bottom: 10vh;
-}
-
-.presentation-mode .scene-title h2 {
-  font-size: clamp(4.6rem, 7vw, 7rem);
-}
-
-.presentation-mode .scene-title p:last-child {
-  max-width: 720px;
-  font-size: 1.14rem;
-}
-
-.presentation-mode .scene-title__image {
-  width: min(410px, 100%);
-  justify-self: end;
-}
-
-.presentation-mode .enough-section__inner,
-.presentation-mode .better-diet__inner {
-  max-width: 1360px;
-}
-
-.presentation-mode .enough-section,
-.presentation-mode .better-diet,
-.presentation-mode .responsible-waste {
-  padding-right: 4vw !important;
-  padding-left: 4vw !important;
-}
-
-.presentation-mode .enough-opening,
-.presentation-mode .better-opening {
-  grid-template-columns: minmax(0, 0.7fr) minmax(380px, 1fr);
-  gap: 70px;
-}
-
-.presentation-mode .enough-section__cards {
-  gap: 14px;
-}
-
-.presentation-mode .better-chart-block {
-  margin-top: 64px;
-  padding-top: 40px;
-}
-
-.presentation-mode .waste-opening,
-.presentation-mode .waste-counter,
-.presentation-mode .waste-charts,
-.presentation-mode .choice-charts {
-  max-width: 1320px;
-}
-
-.presentation-mode .responsible-part {
-  max-width: 1380px;
-}
-
-.presentation-mode .final-section {
-  min-height: 100vh;
-  display: grid;
-  align-items: center;
+.presentation-mode .scroll-progress,
+.presentation-mode main {
+  display: none;
 }
 
 @media (max-width: 820px) {
@@ -189,19 +115,6 @@ button, input { font: inherit; }
     padding: 8px 10px 9px;
   }
 
-  .presentation-mode .scene-title {
-    min-height: auto;
-  }
-
-  .presentation-mode .scene-title h2 {
-    font-size: 3.2rem;
-  }
-
-  .presentation-mode .enough-opening,
-  .presentation-mode .better-opening {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
 }
 
 /* ---- Moving story keywords ---- */
