@@ -8,6 +8,10 @@ import EnoughSection from "./components/layout/EnoughSection.vue";
 import BetterDietSection from "./components/layout/BetterDietSection.vue";
 import ResponsibleWasteSection from "./components/layout/ResponsibleWasteSection.vue";
 import PresentationDeck from "./components/layout/PresentationDeck.vue";
+<<<<<<< HEAD
+import SectionNav from "./components/layout/SectionNav.vue";
+=======
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
 import { useScrollReveal } from "./utils/useScrollReveal.js";
 
 const scrollProgress = ref(0);
@@ -58,6 +62,11 @@ onBeforeUnmount(() => {
     />
   </div>
 
+<<<<<<< HEAD
+  <SectionNav />
+
+=======
+>>>>>>> fb68221a5bfecc63f4139d931012ea1e4cd72cd0
   <button
     class="presentation-toggle"
     type="button"
