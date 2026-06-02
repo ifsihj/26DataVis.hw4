@@ -1,0 +1,39 @@
+:root {
+  /* Brand palette — warm earth tones for a food/agriculture narrative */
+  --cream:        #f4efe6;
+  --cream-deep:   #e8dfd1;
+  --paper:        #fbf8f2;
+  --ink:          #29251f;
+  --ink-soft:     #575047;
+  --muted:        #81776c;
+  --muted-light:  #b7ada1;
+
+  /* Semantic accents */
+  --red:          #9e3d32;
+  --red-light:    #b75b50;
+  --green:        #66755c;
+  --green-light:  #87947e;
+  --brown:        #67594b;
+  --amber:        #b18b52;
+  --amber-light:  #cfb17b;
+
+  /* Surface & chrome */
+  --line:         rgba(41, 37, 31, 0.16);
+  --line-light:   rgba(41, 37, 31, 0.08);
+  --shadow-sm:    0 2px 10px rgba(41, 37, 31, 0.05);
+  --shadow-md:    0 8px 24px rgba(41, 37, 31, 0.08);
+  --shadow-lg:    0 18px 48px rgba(41, 37, 31, 0.12);
+  --radius-sm:    4px;
+  --radius-md:    6px;
+  --radius-lg:    8px;
+
+  /* Typography */
+  --font-serif:   "Noto Serif SC", Georgia, "Noto Serif CJK SC", serif;
+  --font-sans:    "Noto Sans SC", Inter, "Microsoft YaHei", system-ui, sans-serif;
+
+  /* Transitions */
+  --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:     200ms;
+  --dur-slow:     500ms;
+}
