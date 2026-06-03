@@ -1,311 +1,134 @@
-# 从吃得饱到吃得好，再到吃得负责：中国人的餐桌变迁
+# 中国人的餐桌
 
-## 项目简介
+一个基于 Vue 3 + D3 的数据叙事可视化项目，主题是中国人的餐桌如何从“吃得饱”，走向“吃得好”，再到“吃得负责”。
 
-这是一个基于 Vue + D3.js 的 scroll-driven storytelling 数据可视化项目，展示中国人的餐桌如何从粮食安全、饮食丰富，走向食品浪费、碳足迹与可持续消费的反思。
+项目不是传统 dashboard，而是一篇可滚动阅读的数据专题：用户沿页面向下阅读，依次进入粮食安全、饮食结构、食品浪费与环境代价等章节。页面同时提供章节导航、滚动淡入动画、图表交互，以及一页式 presentation 模式用于说明数据来源。
 
-页面采用纵向滚动叙事结构，不是传统 dashboard。用户向下滚动时，会依次进入三个场景：
+## 在线部署
 
-- 吃得饱：粮食安全与温饱问题的解决
-- 吃得好：饮食结构丰富化与外卖兴起
-- 吃得负责：食品浪费、碳足迹与可持续消费
+本项目通过 GitHub Pages 部署，Vite `base` 已配置为：
 
-目前项目使用 mock data，后续可以替换为真实数据。
+```js
+base: "/26DataVis.hw4/";
+```
+
+推送到 `main` 后会触发 `.github/workflows/deploy.yml`，自动构建并发布 `dist/`。
 
 ## 技术栈
 
+- Vue 3
 - Vite
-- Vue
 - D3.js
 - CSS
 - IntersectionObserver
+- GitHub Actions + GitHub Pages
 
-## 如何运行项目
-
-1. 克隆仓库
-
-```bash
-git clone https://github.com/ifsihj/26DataVis.hw4.git
-```
-
-2. 进入项目目录
-
-```bash
-cd 26DataVis.hw4
-```
-
-3. 安装依赖
+## 本地运行
 
 ```bash
 npm install
-```
-
-4. 启动项目
-
-```bash
 npm run dev
 ```
 
-5. 打开浏览器访问终端中显示的地址，一般是：
+本地预览生产构建：
 
-```text
-http://localhost:5173
+```bash
+npm run build
+npm run preview
 ```
 
-## 项目结构说明
+## 页面结构
 
 ```text
 src/
   App.vue
   main.js
 
-  data/
-    grainData.js
-    dietStructureData.js
-    takeoutData.js
-    carbonFootprintData.js
-    foodWasteData.js
-
   components/
     layout/
       Hero.vue
-      ScrollSection.vue
+      StoryMarquee.vue
+      SectionNav.vue
       SceneTitle.vue
-      StepText.vue
+      EnoughSection.vue
+      BetterDietSection.vue
+      ResponsibleWasteSection.vue
       FinalSection.vue
+      PresentationDeck.vue
 
     charts/
-      GrainLineChart.vue
-      DietStackedAreaChart.vue
-      TakeoutGrowthChart.vue
-      CarbonBarChart.vue
-      FoodWasteFlow.vue
+      MetricCards.vue
+      PerCapitaLineChart.vue
+      GrainStackedArea.vue
+      WorldComparisonBar.vue
+      AgriTechnologyTrend.vue
+      EngelCoefficientChart.vue
+      DietStructureDonutChart.vue
+      DietConsumptionTrendChart.vue
+      DietUrbanRuralSnapshotChart.vue
+      FoodWasteCompositionChart.vue
+      FoodWasteRateChart.vue
+      FoodWasteEnvironmentalImpactChart.vue
+      FoodSupplyChainChart.vue
       FinalTimeline.vue
 
-    visuals/
-      GrainBarnVisual.vue
-      PlateComparison.vue
-      ResponsiblePlate.vue
+  data/
+    scene1Data.js
+    dietConsumptionData.js
+    wasteImpactData.js
+    foodWasteCompositionData.js
+    foodWasteRateData.js
+    foodWasteEnvironmentalImpactData.js
+    responsibleChoiceData.js
 
   styles/
-    global.css
     variables.css
+    global.css
 
   utils/
-    useScrollStep.js
     chartUtils.js
+    useScrollReveal.js
 ```
 
-`src/data/` 存放 mock 数据，之后可以替换为真实数据。
-
-`src/components/charts/` 存放 D3 图表组件。
-
-`src/components/layout/` 存放页面布局和滚动叙事组件。
-
-`src/components/visuals/` 存放非传统图表的视觉隐喻组件，比如粮仓、餐盘等。
-
-`src/utils/` 存放滚动监听和图表辅助函数。
-
-## 协作方式：所有修改都通过 Pull Request
-
-本项目采用 Pull Request 协作方式：
-
-- main 分支保持稳定
-- 不直接向 main push
-- 每个功能开一个 feature 分支
-- 修改完成后提交 PR
-- 至少一名队友 review 后再 merge
-- merge 前需要确认 npm run dev 可以正常运行
-
-## 第一次参与项目
-
-```bash
-git clone https://github.com/ifsihj/26DataVis.hw4.git
-cd 26DataVis.hw4
-npm install
-```
-
-## 每次开始写代码前
-
-```bash
-git checkout main
-git pull origin main
-```
-
-## 新建自己的分支
-
-分支命名建议：
-
-```text
-feature/你的名字-功能名
-```
-
-例如：
-
-```bash
-git checkout -b feature/zhangsan-carbon-chart
-```
-
-## 修改代码后提交
-
-```bash
-git status
-git add .
-git commit -m "add carbon footprint chart"
-```
-
-## 推送自己的分支
-
-```bash
-git push -u origin feature/zhangsan-carbon-chart
-```
-
-## 创建 Pull Request
-
-1. 打开 GitHub 仓库页面
-2. 点击 Compare & pull request
-3. base 选择 main
-4. compare 选择自己的分支
-5. 填写这次修改内容
-6. 点击 Create pull request
-
-## PR 描述模板
-
-```markdown
-### 本次修改内容
-
--
-
-### 修改了哪些文件
-
--
-
-### 如何测试
-
-- [ ] 本地运行 npm run dev 没有报错
-- [ ] 页面可以正常滚动
-- [ ] 图表可以正常显示
-
-### 是否需要队友重点检查
-
--
-```
-
-## 分支命名规范
-
-- feature/姓名-功能
-- fix/姓名-问题
-- docs/姓名-文档
-- style/姓名-样式
-
-示例：
-
-- feature/lisi-takeout-chart
-- fix/wangwu-scroll-bug
-- docs/zhaoliu-update-readme
-- style/chenqi-hero-section
-
-## commit 信息规范
-
-推荐写法：
-
-- add grain line chart
-- fix carbon chart tooltip
-- update README collaboration guide
-- style hero section background
-- refactor scroll step hook
-
-不要写：
-
-- update
-- 111
-- fix
-- 改了一下
-
-## 常见问题
-
-### 1. 如果 git push 被拒绝怎么办？
-
-先执行：
-
-```bash
-git pull origin main
-```
-
-然后根据提示解决冲突，再重新提交和 push。
-
-### 2. 如果不小心在 main 上改了怎么办？
-
-先新建分支保存当前修改：
-
-```bash
-git checkout -b feature/your-name-temp
-git add .
-git commit -m "save changes"
-git push -u origin feature/your-name-temp
-```
-
-然后在 GitHub 上从这个分支创建 PR。
-
-### 3. 如果 npm install 报错怎么办？
-
-macOS / Linux 可以尝试：
-
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
-
-Windows 用户可以手动删除 `node_modules` 文件夹和 `package-lock.json` 文件，然后重新运行：
-
-```bash
-npm install
-```
-
-### 4. 如果页面打不开怎么办？
-
-检查是否已经运行：
-
-```bash
-npm run dev
-```
-
-并确认浏览器访问的是终端显示的本地地址。
-
-## 数据替换说明
-
-目前 `src/data/` 目录下是 mock data。
-
-后续如果找到真实数据，只需要替换 `src/data/` 中对应文件的数据结构即可。替换时尽量保持字段名不变，否则图表组件也要同步修改。
-
-建议替换数据时先只改一个文件，并运行 `npm run dev` 检查页面是否还能正常显示。
-
-## 推荐分工
-
-- A 同学：负责场景一“吃得饱”的数据和图表
-- B 同学：负责场景二“吃得好”的数据和图表
-- C 同学：负责场景三“吃得负责”的数据和图表
-- D 同学：负责整体视觉风格、滚动动画和 README
-- E 同学：负责真实数据收集和数据来源整理
+## 主要交互
+
+- 右侧章节导航：快速跳转到封面、三章正文和结尾。
+- Hero 章节索引：点击后跳转到对应章节。
+- 滚动动效：章节标题、阅读卡片和图表区块会随滚动淡入。
+- 粮食安全卡片：点击卡片翻面查看图表，并可展开侧边分析。
+- 图表 tooltip：多数 D3 图表支持悬停查看详细数值。
+- 碳足迹生命周期图：左侧筛选面板可切换阅读方式和食物类别。
+- Presentation 模式：右下角按钮打开一页“数据从哪里来”的演示页，按 `Esc` 或点击退出按钮返回正文。
 
 ## 数据来源
 
-目前使用 mock data。
+当前项目混合使用官方统计、国际组织报告、同行评议研究与课程子项目整理数据。
 
-后续替换真实数据时，请在这里记录：
+| 模块         | 数据来源                                            | 用途                                              |
+| ------------ | --------------------------------------------------- | ------------------------------------------------- |
+| 粮食安全     | 国家统计局 / FAO                                    | 粮食总产、人均粮食占有量、FAO 400 kg 参考线等     |
+| 城乡饮食     | 子项目整理数据                                      | 城乡九类食物消费、恩格尔系数与 2024 年快照        |
+| 全球食品浪费 | UNEP Food Waste Index Report 2024                   | 2022 年全球食品浪费估计与家庭、餐饮服务、零售占比 |
+| 食物碳足迹   | Poore & Nemecek (2018), Science / Our World in Data | 不同食物的生命周期温室气体排放拆解                |
 
-- 数据名称
-- 来源链接
-- 时间范围
-- 字段说明
-- 负责同学
+需要注意：
 
-示例：
+- 城乡饮食序列存在观测缺口，图中以虚线连接缺口两端。
+- 农业科技、耕地等部分指标包含趋势估算，用于呈现长期变化。
+- 分类浪费率与环境足迹数组在正式发布前仍需补齐外部引用。
 
-```text
-数据名称：
-来源链接：
-时间范围：
-字段说明：
-负责同学：
+## 协作建议
+
+- `main` 分支保持可部署状态。
+- 大改动建议开 feature 分支，通过 Pull Request 合并。
+- 合并前确认没有冲突标记，并运行 `npm run build`。
+- 如果修改了数据结构，同步检查依赖这些字段的 D3 图表。
+
+## 常用命令
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run preview
 ```
